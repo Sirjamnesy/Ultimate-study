@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --turbopack)",
+      "Read(//c/Users/hp/Desktop/**)",
+      "Bash(npx create-next-app@latest ultimate-study-app --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --turbopack)",
+      "Bash(printf \"no\\\\nyes\\\\n\")",
+      "Bash(rm -rf \"C:/Users/hp/Desktop/ultimate-study-app\")",
+      "Bash(npx create-next-app@latest ultimate-study-app --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --turbopack --agents-md --yes)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init -d)"
+    ]
+  }
+}
