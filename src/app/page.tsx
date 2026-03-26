@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   BookOpen,
@@ -8,183 +10,167 @@ import {
   Zap,
   GraduationCap,
   Map,
+  Sparkles,
+  Star,
+  Pencil,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Header } from "@/components/shared/header";
+import { useProgress } from "@/components/shared/progress-provider";
 import { phases, weeks, getTotalResources, getTotalXP } from "@/lib/data/roadmap";
-import { getLevelForXP, getXPProgress } from "@/lib/gamification/xp-engine";
-
-// For MVP, we use static demo state. Supabase integration comes in Sprint 2.
-const demoState = {
-  xp: 0,
-  streak: 0,
-  completedResources: [] as string[],
-  currentWeek: 1,
-};
+import { getXPProgress } from "@/lib/gamification/xp-engine";
 
 const phaseColors: Record<string, string> = {
-  emerald: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  blue: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  violet: "bg-violet-500/10 text-violet-400 border-violet-500/20",
-  amber: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  rose: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+  emerald: "border-emerald-500 text-emerald-500",
+  blue: "border-blue-500 text-blue-500",
+  violet: "border-violet-500 text-violet-500",
+  amber: "border-amber-500 text-amber-500",
+  rose: "border-rose-500 text-rose-500",
 };
 
-const phaseAccents: Record<string, string> = {
-  emerald: "border-l-emerald-500",
-  blue: "border-l-blue-500",
-  violet: "border-l-violet-500",
-  amber: "border-l-amber-500",
-  rose: "border-l-rose-500",
+const phaseBgs: Record<string, string> = {
+  emerald: "bg-emerald-500/5",
+  blue: "bg-blue-500/5",
+  violet: "bg-violet-500/5",
+  amber: "bg-amber-500/5",
+  rose: "bg-rose-500/5",
+};
+
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+};
+const item = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0 },
 };
 
 export default function Home() {
-  const { xp, streak, completedResources, currentWeek } = demoState;
+  const { progress, mounted } = useProgress();
+  const xp = mounted ? progress.xp : 0;
+  const streak = mounted ? progress.streak : 0;
+  const completedCount = mounted ? progress.completedResources.length : 0;
   const levelInfo = getXPProgress(xp);
   const totalResources = getTotalResources();
   const totalXP = getTotalXP();
-  const completionPercent = Math.round(
-    (completedResources.length / totalResources) * 100
+  const currentWeekData = weeks.find(
+    (w) => w.id === (mounted ? progress.currentWeek : 1)
   );
-  const currentWeekData = weeks.find((w) => w.id === currentWeek);
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-violet-600 flex items-center justify-center">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <h1 className="text-lg font-semibold tracking-tight">
-              Ultimate Study
-            </h1>
-          </div>
-          <nav className="flex items-center gap-1">
-            <Link
-              href="/roadmap"
-              className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors"
-            >
-              Roadmap
-            </Link>
-            <Link
-              href="/dashboard"
-              className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors"
-            >
-              Dashboard
-            </Link>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen notebook-bg">
+      <Header />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-        {/* Hero Section */}
-        <section className="text-center space-y-4 py-8">
-          <Badge variant="secondary" className="text-xs font-mono">
-            26-WEEK AI ENGINEERING JOURNEY
-          </Badge>
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+      <motion.main
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8"
+      >
+        {/* Hero */}
+        <motion.section variants={item} className="text-center space-y-5 py-6 relative">
+          {/* Doodle decorations */}
+          <span className="absolute top-2 left-8 text-3xl opacity-20 animate-wiggle hidden sm:block">
+            ✏️
+          </span>
+          <span className="absolute top-12 right-12 text-2xl opacity-20 animate-wiggle hidden sm:block" style={{ animationDelay: "0.5s" }}>
+            💡
+          </span>
+
+          <div className="inline-block">
+            <span className="sticker border-violet-400 bg-violet-500/10 text-violet-400 font-mono text-xs tracking-wider">
+              <Pencil className="h-3 w-3" />
+              26-WEEK AI ENGINEERING JOURNEY
+            </span>
+          </div>
+          <h2 className="text-4xl sm:text-6xl font-bold tracking-tight">
             Become a{" "}
-            <span className="text-violet-400">Claude Architect</span>
+            <span className="sketch-underline font-sketch text-violet-400 text-5xl sm:text-7xl">
+              Claude Architect
+            </span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            An interactive, gamified roadmap from AI fundamentals to certified
-            architect. Track your progress, earn XP, and level up.
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg leading-relaxed">
+            An interactive, gamified notebook to track your AI learning journey.
+            Check off resources, earn XP, level up, and get certified.
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
             <Link href="/roadmap">
-              <Button size="lg" className="gap-2">
+              <Button size="lg" className="gap-2 sketch-border-sm">
                 <Map className="h-4 w-4" />
                 View Roadmap
               </Button>
             </Link>
-            <Link href={`/roadmap/1/1`}>
-              <Button size="lg" variant="outline" className="gap-2">
+            <Link href="/roadmap/1/1">
+              <Button size="lg" variant="outline" className="gap-2 sketch-border-sm">
                 Start Week 1
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
-        </section>
+        </motion.section>
 
         {/* Stats Grid */}
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="pt-6">
+        <motion.section variants={item} className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            {
+              icon: <Trophy className="h-5 w-5" />,
+              value: xp,
+              label: `/ ${totalXP.toLocaleString()} XP`,
+              color: "text-violet-400 bg-violet-500/10",
+              rotate: "-1deg",
+            },
+            {
+              icon: <Flame className="h-5 w-5" />,
+              value: streak,
+              label: "Day Streak",
+              color: "text-amber-400 bg-amber-500/10",
+              rotate: "0.5deg",
+            },
+            {
+              icon: <BookOpen className="h-5 w-5" />,
+              value: completedCount,
+              label: `/ ${totalResources} Done`,
+              color: "text-emerald-400 bg-emerald-500/10",
+              rotate: "-0.5deg",
+            },
+            {
+              icon: <GraduationCap className="h-5 w-5" />,
+              value: `Lv.${levelInfo.current.level}`,
+              label: levelInfo.current.title,
+              color: "text-blue-400 bg-blue-500/10",
+              rotate: "1deg",
+            },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              className="sketch-card bg-card p-4 relative"
+              style={{ transform: `rotate(${stat.rotate})` }}
+            >
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
-                  <Trophy className="h-5 w-5 text-violet-400" />
+                <div
+                  className={`h-10 w-10 rounded-xl flex items-center justify-center ${stat.color}`}
+                >
+                  {stat.icon}
                 </div>
                 <div>
-                  <p className="text-2xl font-bold font-mono">{xp}</p>
-                  <p className="text-xs text-muted-foreground">
-                    / {totalXP.toLocaleString()} XP
-                  </p>
+                  <p className="text-2xl font-bold font-mono">{stat.value}</p>
+                  <p className="text-[11px] text-muted-foreground">{stat.label}</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                  <Flame className="h-5 w-5 text-amber-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold font-mono">{streak}</p>
-                  <p className="text-xs text-muted-foreground">Day Streak</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                  <BookOpen className="h-5 w-5 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold font-mono">
-                    {completedResources.length}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    / {totalResources} Done
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                  <GraduationCap className="h-5 w-5 text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold font-mono">
-                    Lv.{levelInfo.current.level}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {levelInfo.current.title}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+            </div>
+          ))}
+        </motion.section>
 
         {/* Level Progress */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">
-                Level {levelInfo.current.level}: {levelInfo.current.title}
+        <motion.div variants={item}>
+          <div className="sketch-card bg-card p-5 relative">
+            <div className="tape" />
+            <div className="flex items-center justify-between mb-3 pt-2">
+              <span className="font-sketch text-lg font-bold">
+                {levelInfo.current.title}
               </span>
               {levelInfo.next && (
                 <span className="text-xs text-muted-foreground font-mono">
@@ -192,156 +178,175 @@ export default function Home() {
                 </span>
               )}
             </div>
-            <Progress value={levelInfo.progress} className="h-2" />
+            <div className="sketch-progress h-3">
+              <div
+                className="h-full bg-gradient-to-r from-violet-500 to-violet-400 rounded-[6px] transition-all duration-500"
+                style={{ width: `${levelInfo.progress}%` }}
+              />
+            </div>
             {levelInfo.next && (
-              <p className="text-xs text-muted-foreground mt-1">
-                {levelInfo.next.xpRequired - xp} XP to{" "}
-                <span className="text-foreground">
+              <p className="text-xs text-muted-foreground mt-2">
+                <span className="font-mono">{levelInfo.next.xpRequired - xp}</span> XP to{" "}
+                <span className="text-foreground font-sketch text-sm">
                   {levelInfo.next.title}
                 </span>
               </p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </motion.div>
 
-        {/* Current Week Highlight */}
+        {/* Current Week */}
         {currentWeekData && (
-          <Card className="border-violet-500/30 bg-violet-500/5">
-            <CardHeader>
+          <motion.div variants={item}>
+            <div className="sketch-card bg-violet-500/5 border-violet-500/30 p-5 relative">
               <div className="flex items-center justify-between">
                 <div>
-                  <Badge variant="secondary" className="mb-2 text-xs">
-                    <Target className="h-3 w-3 mr-1" />
-                    CURRENT WEEK
-                  </Badge>
-                  <CardTitle className="text-xl">
-                    Week {currentWeekData.id}: {currentWeekData.title}
-                  </CardTitle>
+                  <span className="sticker border-violet-400/50 bg-violet-500/10 text-violet-400 text-[10px] mb-2">
+                    <Target className="h-3 w-3" />
+                    THIS WEEK
+                  </span>
+                  <h3 className="text-xl font-bold mt-2">
+                    <span className="font-sketch text-2xl">W{currentWeekData.id}</span>{" "}
+                    {currentWeekData.title}
+                  </h3>
                   <p className="text-sm text-muted-foreground mt-1">
                     {currentWeekData.description}
                   </p>
                 </div>
                 <Link href={`/roadmap/${currentWeekData.phase}/${currentWeekData.id}`}>
-                  <Button variant="outline" size="sm" className="gap-1">
+                  <Button variant="outline" size="sm" className="gap-1 sketch-border-sm shrink-0">
                     Open <ChevronRight className="h-3 w-3" />
                   </Button>
                 </Link>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
                 <span>{currentWeekData.resources.length} resources</span>
-                <span className="font-mono text-violet-400">
-                  +{currentWeekData.xp} XP
-                </span>
+                <span className="font-mono text-violet-400">+{currentWeekData.xp} XP</span>
                 {currentWeekData.badge && (
-                  <Badge variant="outline" className="text-xs">
+                  <span className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[10px]">
+                    <Star className="h-2.5 w-2.5" />
                     {currentWeekData.badge}
-                  </Badge>
+                  </span>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </motion.div>
         )}
 
         {/* Phase Overview */}
-        <section className="space-y-4">
-          <h3 className="text-xl font-semibold tracking-tight">
+        <motion.section variants={item} className="space-y-4">
+          <h3 className="font-sketch text-3xl font-bold flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-violet-400" />
             Your Learning Path
           </h3>
           <div className="space-y-3">
-            {phases.map((phase) => {
+            {phases.map((phase, i) => {
               const phaseWeeks = weeks.filter((w) => w.phase === phase.id);
               const phaseXP = phaseWeeks.reduce((s, w) => s + w.xp, 0);
               const phaseResources = phaseWeeks.reduce(
                 (s, w) => s + w.resources.length,
                 0
               );
+              const completedInPhase = mounted
+                ? phaseWeeks.reduce(
+                    (s, w) =>
+                      s +
+                      w.resources.filter((r) =>
+                        progress.completedResources.includes(r.id)
+                      ).length,
+                    0
+                  )
+                : 0;
+
               return (
-                <Link
-                  key={phase.id}
-                  href={`/roadmap?phase=${phase.id}`}
-                >
-                  <Card
-                    className={`border-l-4 ${phaseAccents[phase.color]} hover:bg-muted/50 transition-colors cursor-pointer`}
+                <Link key={phase.id} href={`/roadmap?phase=${phase.id}`}>
+                  <motion.div
+                    variants={item}
+                    className={`sketch-card ${phaseBgs[phase.color]} p-4 border-l-4 ${phaseColors[phase.color]}`}
+                    style={{ transform: `rotate(${i % 2 === 0 ? "-0.3" : "0.3"}deg)` }}
                   >
-                    <CardContent className="py-4">
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Badge
-                              variant="outline"
-                              className={phaseColors[phase.color]}
-                            >
-                              Phase {phase.id}
-                            </Badge>
-                            <h4 className="font-medium">{phase.title}</h4>
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {phase.description}
-                          </p>
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`sticker ${phaseColors[phase.color]} bg-transparent text-[10px]`}
+                          >
+                            Phase {phase.id}
+                          </span>
+                          <h4 className="font-semibold">{phase.title}</h4>
                         </div>
-                        <div className="text-right text-sm space-y-1 shrink-0 ml-4">
-                          <p className="text-muted-foreground">
-                            Weeks {phase.weeks[0]}-
-                            {phase.weeks[phase.weeks.length - 1]}
+                        <p className="text-sm text-muted-foreground">
+                          {phase.description}
+                        </p>
+                        {completedInPhase > 0 && (
+                          <p className="text-xs font-mono text-emerald-400">
+                            {completedInPhase}/{phaseResources} completed
                           </p>
-                          <p className="font-mono text-xs">
-                            {phaseResources} resources &middot; {phaseXP} XP
-                          </p>
-                        </div>
+                        )}
                       </div>
-                    </CardContent>
-                  </Card>
+                      <div className="text-right text-sm space-y-1 shrink-0 ml-4">
+                        <p className="text-muted-foreground text-xs">
+                          Weeks {phase.weeks[0]}-{phase.weeks[phase.weeks.length - 1]}
+                        </p>
+                        <p className="font-mono text-xs">
+                          {phaseResources} resources
+                        </p>
+                        <p className="font-mono text-xs text-violet-400">
+                          {phaseXP} XP
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </Link>
               );
             })}
           </div>
-        </section>
+        </motion.section>
 
-        {/* Exam Info */}
-        <Card className="bg-gradient-to-r from-violet-500/5 to-blue-500/5 border-violet-500/20">
-          <CardContent className="py-6">
-            <div className="flex items-start gap-4">
-              <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
-                <GraduationCap className="h-6 w-6 text-violet-400" />
+        {/* Exam Card */}
+        <motion.div variants={item}>
+          <div className="sketch-card bg-gradient-to-br from-violet-500/5 to-blue-500/5 p-6 relative">
+            <div className="tape" />
+            <div className="flex items-start gap-4 pt-2">
+              <div className="h-14 w-14 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 sketch-border-sm border-violet-500/30">
+                <GraduationCap className="h-7 w-7 text-violet-400" />
               </div>
               <div className="space-y-2">
-                <h4 className="font-semibold text-lg">
-                  Claude Certified Architect - Foundations
+                <h4 className="font-sketch text-2xl font-bold">
+                  Claude Certified Architect
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  5 domains &middot; 30 task statements &middot; 6 scenarios
-                  &middot; Passing score: 720/1000
+                  5 domains &middot; 30 task statements &middot; 6 scenarios &middot;
+                  Passing: 720/1000
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {[
-                    { name: "D1: Agentic Architecture", weight: "27%" },
-                    { name: "D2: Tool Design & MCP", weight: "18%" },
-                    { name: "D3: Claude Code", weight: "20%" },
-                    { name: "D4: Prompt Engineering", weight: "20%" },
-                    { name: "D5: Context & Reliability", weight: "15%" },
+                    { name: "Agentic Architecture", weight: "27%", color: "border-rose-400 text-rose-400" },
+                    { name: "Tool Design & MCP", weight: "18%", color: "border-blue-400 text-blue-400" },
+                    { name: "Claude Code", weight: "20%", color: "border-emerald-400 text-emerald-400" },
+                    { name: "Prompt Engineering", weight: "20%", color: "border-amber-400 text-amber-400" },
+                    { name: "Context & Reliability", weight: "15%", color: "border-violet-400 text-violet-400" },
                   ].map((d) => (
-                    <Badge
+                    <span
                       key={d.name}
-                      variant="outline"
-                      className="text-xs font-mono"
+                      className={`sticker ${d.color} bg-transparent text-[10px]`}
                     >
                       {d.name} ({d.weight})
-                    </Badge>
+                    </span>
                   ))}
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </motion.div>
 
         {/* Footer */}
-        <footer className="text-center py-8 text-xs text-muted-foreground">
-          Built with Next.js, Tailwind CSS, and shadcn/ui. Powered by the desire
-          to learn.
-        </footer>
-      </main>
+        <motion.footer variants={item} className="text-center py-8">
+          <p className="font-sketch text-lg text-muted-foreground">
+            Built with love, caffeine, and Claude ☕
+          </p>
+        </motion.footer>
+      </motion.main>
     </div>
   );
 }

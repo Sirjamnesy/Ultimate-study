@@ -1,28 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  ArrowLeft,
   BookOpen,
   Code,
   FileText,
   Video,
   Wrench,
   HelpCircle,
-  Zap,
   ExternalLink,
   ChevronLeft,
   ChevronRight,
   Trophy,
   Star,
+  Sparkles,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Header } from "@/components/shared/header";
+import { useProgress } from "@/components/shared/progress-provider";
+import { Confetti, XPToast } from "@/components/shared/confetti";
 import { getWeek, getPhase, weeks, type Resource } from "@/lib/data/roadmap";
 import { use } from "react";
 
@@ -38,10 +39,10 @@ const resourceIcons: Record<string, React.ReactNode> = {
 
 const resourceLabels: Record<string, string> = {
   course: "Course",
-  docs: "Documentation",
+  docs: "Docs",
   video: "Video",
   practice: "Practice",
-  build: "Build Project",
+  build: "Build",
   quiz: "Quiz",
   reading: "Reading",
 };
@@ -56,9 +57,12 @@ function ResourceItem({
   onToggle: () => void;
 }) {
   return (
-    <div
-      className={`flex items-start gap-3 p-3 rounded-lg transition-colors ${
-        checked ? "bg-muted/30" : "hover:bg-muted/50"
+    <motion.div
+      layout
+      className={`flex items-start gap-3 p-3 rounded-xl transition-all ${
+        checked
+          ? "bg-emerald-500/5 border border-dashed border-emerald-500/20"
+          : "hover:bg-muted/50 border border-transparent"
       }`}
     >
       <Checkbox
@@ -72,29 +76,30 @@ function ResourceItem({
           {resourceIcons[resource.type]}
           <label
             htmlFor={resource.id}
-            className={`text-sm font-medium cursor-pointer ${
+            className={`text-sm font-medium cursor-pointer transition-all ${
               checked ? "line-through text-muted-foreground" : ""
             }`}
           >
             {resource.title}
           </label>
           {resource.optional && (
-            <Badge variant="outline" className="text-[10px]">
+            <span className="sticker border-muted-foreground/30 text-muted-foreground text-[9px] bg-transparent">
               Optional
-            </Badge>
+            </span>
           )}
+          {checked && <span className="text-xs">✅</span>}
         </div>
-        <div className="flex items-center gap-2 mt-1 flex-wrap">
-          <Badge variant="secondary" className="text-[10px]">
+        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+          <span className="sticker border-border text-muted-foreground text-[9px] bg-transparent">
             {resourceLabels[resource.type]}
-          </Badge>
+          </span>
           {resource.duration && (
             <span className="text-[10px] text-muted-foreground font-mono">
               {resource.duration}
             </span>
           )}
           {resource.source && (
-            <span className="text-[10px] text-muted-foreground">
+            <span className="text-[10px] text-muted-foreground italic">
               {resource.source}
             </span>
           )}
@@ -103,7 +108,7 @@ function ResourceItem({
               href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors"
+              className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors font-medium"
               onClick={(e) => e.stopPropagation()}
             >
               Open <ExternalLink className="h-2.5 w-2.5" />
@@ -111,7 +116,7 @@ function ResourceItem({
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -126,30 +131,52 @@ export default function WeekPage({
   const week = getWeek(weekId);
   const phase = getPhase(phaseId);
 
-  // Local state for MVP - will be replaced with Supabase in Sprint 2
-  const [completed, setCompleted] = useState<Set<string>>(new Set());
+  const { progress, toggleResource, logStudyDay, isCompleted, mounted } =
+    useProgress();
+
+  const [xpToast, setXpToast] = useState({ amount: 0, show: false });
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [confettiMsg, setConfettiMsg] = useState("");
+
+  // Log study day on visit
+  useEffect(() => {
+    if (mounted) logStudyDay();
+  }, [mounted, logStudyDay]);
 
   if (!week || !phase) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Week not found</p>
+      <div className="min-h-screen flex items-center justify-center notebook-bg">
+        <Header />
+        <p className="text-muted-foreground font-sketch text-2xl">
+          Week not found 📝
+        </p>
       </div>
     );
   }
 
-  const toggleResource = (id: string) => {
-    setCompleted((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
+  const handleToggle = (resource: Resource) => {
+    const result = toggleResource(resource.id, resource.type);
+
+    // Show XP toast
+    setXpToast({ amount: result.xpDelta, show: true });
+    setTimeout(() => setXpToast((t) => ({ ...t, show: false })), 2000);
+
+    // Check if week is now complete
+    if (result.added) {
+      const allCompleted = week.resources.every(
+        (r) => r.id === resource.id || isCompleted(r.id)
+      );
+      if (allCompleted && week.badge) {
+        setConfettiMsg(`🏆 Week Complete! Badge: "${week.badge}"`);
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 100);
       }
-      return next;
-    });
+    }
   };
 
-  const completedCount = completed.size;
+  const completedCount = mounted
+    ? week.resources.filter((r) => isCompleted(r.id)).length
+    : 0;
   const totalCount = week.resources.length;
   const progressPercent =
     totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
@@ -158,75 +185,78 @@ export default function WeekPage({
   const prevWeek = weeks.find((w) => w.id === weekId - 1);
   const nextWeek = weeks.find((w) => w.id === weekId + 1);
 
-  // Group resources by type
   const requiredResources = week.resources.filter((r) => !r.optional);
   const optionalResources = week.resources.filter((r) => r.optional);
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Link
-            href="/roadmap"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Roadmap
-          </Link>
-          <div className="flex items-center gap-2">
-            {prevWeek && (
-              <Link href={`/roadmap/${prevWeek.phase}/${prevWeek.id}`}>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-              </Link>
-            )}
-            <span className="text-sm font-mono text-muted-foreground">
-              W{weekId}/26
-            </span>
-            {nextWeek && (
-              <Link href={`/roadmap/${nextWeek.phase}/${nextWeek.id}`}>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen notebook-bg">
+      <Header />
+      <Confetti trigger={showConfetti} message={confettiMsg} />
+      <XPToast amount={xpToast.amount} show={xpToast.show} />
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        {/* Week Header */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">
-              Phase {phase.id}: {phase.title}
-            </Badge>
-            {week.examDomains && week.examDomains.length > 0 && (
-              <Badge variant="secondary" className="text-xs font-mono">
-                {week.examDomains.map((d) => `D${d}`).join(", ")}
-              </Badge>
-            )}
-          </div>
-          <h2 className="text-3xl font-bold tracking-tight">
-            Week {week.id}: {week.title}
-          </h2>
-          <p className="text-muted-foreground">{week.description}</p>
+        {/* Week nav */}
+        <div className="flex items-center justify-end gap-2">
+          {prevWeek && (
+            <Link href={`/roadmap/${prevWeek.phase}/${prevWeek.id}`}>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+          )}
+          <span className="text-sm font-mono text-muted-foreground">
+            W{weekId}/26
+          </span>
+          {nextWeek && (
+            <Link href={`/roadmap/${nextWeek.phase}/${nextWeek.id}`}>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          )}
         </div>
 
-        {/* Progress + XP */}
-        <Card>
-          <CardContent className="pt-6">
+        {/* Week Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <span className="sticker border-border text-muted-foreground bg-transparent text-[10px]">
+              Phase {phase.id}: {phase.title}
+            </span>
+            {week.examDomains && week.examDomains.length > 0 && (
+              <span className="sticker border-violet-400/50 text-violet-400 bg-transparent text-[10px]">
+                {week.examDomains.map((d) => `D${d}`).join(", ")}
+              </span>
+            )}
+          </div>
+          <h2 className="font-sketch text-4xl sm:text-5xl font-bold">
+            <span className="text-muted-foreground">W{week.id}.</span>{" "}
+            {week.title}
+          </h2>
+          <p className="text-muted-foreground text-lg">{week.description}</p>
+        </motion.div>
+
+        {/* Progress Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <div className="sketch-card bg-card p-5 relative">
+            {isComplete && <div className="tape" />}
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium">
-                  {completedCount} / {totalCount} resources
+                <span className="font-sketch text-lg font-bold">
+                  {completedCount} / {totalCount}
                 </span>
                 {isComplete && (
-                  <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
-                    <Star className="h-3 w-3 mr-1" /> Complete!
-                  </Badge>
+                  <span className="sticker border-emerald-400 text-emerald-400 bg-emerald-500/10 text-[10px]">
+                    <Sparkles className="h-3 w-3" />
+                    Complete!
+                  </span>
                 )}
               </div>
               <div className="flex items-center gap-2">
@@ -236,60 +266,73 @@ export default function WeekPage({
                 </span>
               </div>
             </div>
-            <Progress value={progressPercent} className="h-2" />
+            <div className="sketch-progress h-3">
+              <motion.div
+                className="h-full bg-gradient-to-r from-violet-500 to-emerald-400 rounded-[6px]"
+                initial={{ width: 0 }}
+                animate={{ width: `${progressPercent}%` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              />
+            </div>
             {week.badge && (
               <p className="text-xs text-muted-foreground mt-2">
-                Complete this week to earn the{" "}
-                <span className="text-foreground font-medium">
+                Complete to earn{" "}
+                <span className="font-sketch text-sm text-foreground">
                   &ldquo;{week.badge}&rdquo;
                 </span>{" "}
-                badge
+                <Star className="inline h-3 w-3 text-amber-400" />
               </p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </motion.div>
 
-        {/* Resource Checklist */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Resources</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {requiredResources.map((resource) => (
-              <ResourceItem
-                key={resource.id}
-                resource={resource}
-                checked={completed.has(resource.id)}
-                onToggle={() => toggleResource(resource.id)}
-              />
-            ))}
+        {/* Resources */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="sketch-card bg-card p-5">
+            <h3 className="font-sketch text-xl font-bold mb-4 flex items-center gap-2">
+              📚 Resources
+            </h3>
+            <div className="space-y-1">
+              {requiredResources.map((resource) => (
+                <ResourceItem
+                  key={resource.id}
+                  resource={resource}
+                  checked={mounted ? isCompleted(resource.id) : false}
+                  onToggle={() => handleToggle(resource)}
+                />
+              ))}
 
-            {optionalResources.length > 0 && (
-              <>
-                <Separator className="my-3" />
-                <p className="text-xs text-muted-foreground font-medium px-3 pb-1">
-                  OPTIONAL
-                </p>
-                {optionalResources.map((resource) => (
-                  <ResourceItem
-                    key={resource.id}
-                    resource={resource}
-                    checked={completed.has(resource.id)}
-                    onToggle={() => toggleResource(resource.id)}
-                  />
-                ))}
-              </>
-            )}
-          </CardContent>
-        </Card>
+              {optionalResources.length > 0 && (
+                <>
+                  <Separator className="my-4 border-dashed" />
+                  <p className="font-sketch text-sm text-muted-foreground px-3 pb-2">
+                    ✨ Bonus Resources
+                  </p>
+                  {optionalResources.map((resource) => (
+                    <ResourceItem
+                      key={resource.id}
+                      resource={resource}
+                      checked={mounted ? isCompleted(resource.id) : false}
+                      onToggle={() => handleToggle(resource)}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        </motion.div>
 
         {/* Navigation */}
         <div className="flex items-center justify-between pt-4">
           {prevWeek ? (
             <Link href={`/roadmap/${prevWeek.phase}/${prevWeek.id}`}>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2 sketch-border-sm text-sm">
                 <ChevronLeft className="h-4 w-4" />
-                Week {prevWeek.id}: {prevWeek.title}
+                W{prevWeek.id}: {prevWeek.title}
               </Button>
             </Link>
           ) : (
@@ -297,8 +340,8 @@ export default function WeekPage({
           )}
           {nextWeek ? (
             <Link href={`/roadmap/${nextWeek.phase}/${nextWeek.id}`}>
-              <Button variant="outline" className="gap-2">
-                Week {nextWeek.id}: {nextWeek.title}
+              <Button variant="outline" className="gap-2 sketch-border-sm text-sm">
+                W{nextWeek.id}: {nextWeek.title}
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>

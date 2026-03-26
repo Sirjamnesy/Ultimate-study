@@ -128,3 +128,143 @@
     @apply font-sans;
   }
 }
+
+/* ========= SKETCH DESIGN SYSTEM ========= */
+
+/* Hand-drawn font for headings & decorative text */
+.font-sketch {
+  font-family: var(--font-caveat), "Segoe Print", "Comic Sans MS", cursive;
+  letter-spacing: 0.02em;
+}
+
+/* Notebook paper background - light mode */
+:root {
+  --notebook-line: oklch(0.92 0 0);
+  --notebook-margin: oklch(0.85 0.08 20);
+}
+.dark {
+  --notebook-line: oklch(0.22 0 0);
+  --notebook-margin: oklch(0.35 0.06 20);
+}
+
+.notebook-bg {
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      var(--notebook-line) 31px,
+      var(--notebook-line) 32px
+    );
+  background-size: 100% 32px;
+}
+
+/* Sketch-style borders - rough, hand-drawn feel */
+.sketch-border {
+  border: 2px solid currentColor;
+  border-radius: 12px 8px 14px 6px;
+  box-shadow:
+    2px 2px 0px 0px oklch(0 0 0 / 8%),
+    inset 0 0 0 1px oklch(1 0 0 / 3%);
+}
+.dark .sketch-border {
+  box-shadow:
+    2px 2px 0px 0px oklch(0 0 0 / 30%),
+    inset 0 0 0 1px oklch(1 0 0 / 3%);
+}
+
+.sketch-border-sm {
+  border: 1.5px solid currentColor;
+  border-radius: 8px 6px 10px 5px;
+}
+
+/* Sketch-style cards */
+.sketch-card {
+  border: 2px dashed var(--border);
+  border-radius: 14px 8px 12px 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.sketch-card:hover {
+  transform: rotate(-0.5deg) translateY(-2px);
+  box-shadow: 4px 4px 0px 0px oklch(0.5 0.2 280 / 15%);
+}
+
+/* Sticker-style badges */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px 16px 22px 14px;
+  border: 2px solid;
+  font-weight: 600;
+  font-size: 0.75rem;
+  transform: rotate(-1deg);
+  transition: transform 0.15s ease;
+}
+.sticker:hover {
+  transform: rotate(1deg) scale(1.05);
+}
+
+/* Underline sketch effect */
+.sketch-underline {
+  position: relative;
+  display: inline-block;
+}
+.sketch-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  background: oklch(0.65 0.25 280);
+  border-radius: 3px 1px 4px 2px;
+  transform: rotate(-0.5deg);
+  opacity: 0.7;
+}
+
+/* Wiggle animation for playful elements */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+/* Doodle decorations */
+.doodle-star::before {
+  content: "✦";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+/* Progress bar sketch style override */
+.sketch-progress {
+  border: 1.5px dashed var(--border);
+  border-radius: 8px 6px 10px 4px;
+  overflow: hidden;
+  background: oklch(0 0 0 / 5%);
+}
+.dark .sketch-progress {
+  background: oklch(1 0 0 / 5%);
+}
+
+/* Tape effect for sticky-note feel */
+.tape::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px;
+  height: 12px;
+  background: oklch(0.85 0.04 90 / 60%);
+  border-radius: 2px;
+}
+.dark .tape::before {
+  background: oklch(0.45 0.04 90 / 40%);
+}
