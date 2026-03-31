@@ -3,6 +3,8 @@
 // localStorage-based progress store for MVP.
 // Will be replaced with Supabase in a future sprint.
 
+import type { QuizResult } from "@/lib/gamification/quiz-engine";
+
 export type ProgressData = {
   completedResources: string[];
   xp: number;
@@ -11,6 +13,7 @@ export type ProgressData = {
   dailyLog: string[]; // ISO date strings of study days
   earnedBadges: string[];
   currentWeek: number;
+  quizResults: QuizResult[]; // all quiz attempts
 };
 
 const STORAGE_KEY = "us-progress";
@@ -23,6 +26,7 @@ const defaultProgress: ProgressData = {
   dailyLog: [],
   earnedBadges: [],
   currentWeek: 1,
+  quizResults: [],
 };
 
 export function loadProgress(): ProgressData {
@@ -112,4 +116,18 @@ export function setCurrentWeek(weekId: number): void {
   const data = loadProgress();
   data.currentWeek = weekId;
   saveProgress(data);
+}
+
+export function saveQuizResult(result: QuizResult, xpEarned: number): void {
+  const data = loadProgress();
+  data.quizResults.push(result);
+  data.xp += xpEarned;
+  saveProgress(data);
+}
+
+export function getBestQuizScore(quizId: string): number | null {
+  const data = loadProgress();
+  const attempts = data.quizResults.filter((r) => r.quizId === quizId);
+  if (attempts.length === 0) return null;
+  return Math.max(...attempts.map((a) => a.score));
 }

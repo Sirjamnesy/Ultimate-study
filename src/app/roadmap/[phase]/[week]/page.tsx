@@ -196,7 +196,14 @@ export default function WeekPage({
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         {/* Week nav */}
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-between gap-2">
+          <Link href={`/roadmap?phase=${phaseId}`}>
+            <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground">
+              <ChevronLeft className="h-3 w-3" />
+              Phase {phaseId}
+            </Button>
+          </Link>
+          <div className="flex items-center gap-2">
           {prevWeek && (
             <Link href={`/roadmap/${prevWeek.phase}/${prevWeek.id}`}>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -214,6 +221,7 @@ export default function WeekPage({
               </Button>
             </Link>
           )}
+          </div>
         </div>
 
         {/* Week Header */}

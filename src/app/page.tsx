@@ -96,17 +96,17 @@ export default function Home() {
             An interactive, gamified notebook to track your AI learning journey.
             Check off resources, earn XP, level up, and get certified.
           </p>
-          <div className="flex items-center justify-center gap-3 pt-2">
+          <div className="flex items-center justify-center gap-3 pt-2 flex-wrap">
             <Link href="/roadmap">
               <Button size="lg" className="gap-2 sketch-border-sm">
                 <Map className="h-4 w-4" />
                 View Roadmap
               </Button>
             </Link>
-            <Link href="/roadmap/1/1">
+            <Link href="/quiz">
               <Button size="lg" variant="outline" className="gap-2 sketch-border-sm">
-                Start Week 1
-                <ChevronRight className="h-4 w-4" />
+                <BookOpen className="h-4 w-4" />
+                Quiz Hub
               </Button>
             </Link>
           </div>
