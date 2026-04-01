@@ -12,6 +12,7 @@ export type ProgressData = {
   lastStudyDate: string | null; // ISO date string
   dailyLog: string[]; // ISO date strings of study days
   earnedBadges: string[];
+  badgeEarnedDates: Record<string, string>; // badgeId -> ISO date
   currentWeek: number;
   quizResults: QuizResult[]; // all quiz attempts
 };
@@ -25,6 +26,7 @@ const defaultProgress: ProgressData = {
   lastStudyDate: null,
   dailyLog: [],
   earnedBadges: [],
+  badgeEarnedDates: {},
   currentWeek: 1,
   quizResults: [],
 };
@@ -108,6 +110,8 @@ export function earnBadge(badgeId: string): boolean {
   const data = loadProgress();
   if (data.earnedBadges.includes(badgeId)) return false;
   data.earnedBadges.push(badgeId);
+  if (!data.badgeEarnedDates) data.badgeEarnedDates = {};
+  data.badgeEarnedDates[badgeId] = new Date().toISOString();
   saveProgress(data);
   return true;
 }

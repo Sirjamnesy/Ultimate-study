@@ -125,3 +125,67 @@ export function XPToast({
     </AnimatePresence>
   );
 }
+
+export function LevelUpCelebration({
+  level,
+  title,
+  onComplete,
+}: {
+  level: number;
+  title: string;
+  onComplete: () => void;
+}) {
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+    const newParticles: Particle[] = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+      x: Math.random() * 100,
+      delay: Math.random() * 0.6,
+      duration: 1.5 + Math.random() * 2,
+      rotation: Math.random() * 720 - 360,
+      size: 18 + Math.random() * 18,
+    }));
+    setParticles(newParticles);
+    const timer = setTimeout(onComplete, 4000);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 pointer-events-none z-[100]"
+    >
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          initial={{ left: `${p.x}%`, top: "-5%", rotate: 0, opacity: 1 }}
+          animate={{ top: "110%", rotate: p.rotation, opacity: [1, 1, 0] }}
+          transition={{ duration: p.duration, delay: p.delay, ease: "easeIn" }}
+          className="absolute"
+          style={{ fontSize: p.size }}
+        >
+          {p.emoji}
+        </motion.div>
+      ))}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ type: "spring", damping: 12, delay: 0.2 }}
+        className="absolute inset-0 flex items-center justify-center"
+      >
+        <div className="bg-card/95 backdrop-blur-md border-2 border-dashed border-amber-500/50 rounded-2xl px-10 py-6 shadow-2xl sketch-border text-center">
+          <p className="text-sm font-mono text-amber-400 uppercase tracking-widest mb-1">Level Up!</p>
+          <p className="text-3xl font-sketch font-bold">
+            Level {level} — {title}
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">Keep going! 🚀</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}

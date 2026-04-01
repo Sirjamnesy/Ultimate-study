@@ -21,6 +21,7 @@ import { Confetti, XPToast } from "@/components/shared/confetti";
 import { useProgress } from "@/components/shared/progress-provider";
 import { getQuiz, getQuestionsByQuiz } from "@/lib/data/quiz-questions";
 import { calculateResult, getXPForQuiz, formatTime, type QuizResult } from "@/lib/gamification/quiz-engine";
+import { generatePracticeExam, PRACTICE_EXAM_CONFIG, DOMAIN_WEIGHTS } from "@/lib/gamification/practice-exam";
 
 type Stage = "intro" | "active" | "review" | "results";
 
@@ -44,8 +45,28 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
   const { id } = use(params);
   const { saveQuizResult, earnBadge, mounted } = useProgress();
 
-  const quiz = getQuiz(id);
-  const questionList = quiz ? getQuestionsByQuiz(id) : [];
+  const isPracticeExam = id === "practice-exam";
+  const quiz = isPracticeExam
+    ? {
+        id: PRACTICE_EXAM_CONFIG.id,
+        title: PRACTICE_EXAM_CONFIG.title,
+        description: PRACTICE_EXAM_CONFIG.description,
+        timeMinutes: PRACTICE_EXAM_CONFIG.timeMinutes,
+        passingScore: PRACTICE_EXAM_CONFIG.passingScore,
+        questions: [] as string[],
+        domain: undefined as number | undefined,
+        week: undefined as number | undefined,
+      }
+    : getQuiz(id);
+
+  const [practiceQuestions, setPracticeQuestions] = useState<import("@/lib/data/quiz-questions").QuizQuestion[]>([]);
+  // Generate practice exam questions on client only to avoid hydration mismatch
+  useEffect(() => {
+    if (isPracticeExam && practiceQuestions.length === 0) {
+      setPracticeQuestions(generatePracticeExam());
+    }
+  }, [isPracticeExam]);
+  const questionList = isPracticeExam ? practiceQuestions : quiz ? getQuestionsByQuiz(id) : [];
 
   const [stage, setStage] = useState<Stage>("intro");
   const [currentQ, setCurrentQ] = useState(0);
@@ -85,11 +106,15 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
     setAnswers({});
     setCurrentQ(0);
     setSelectedOption(null);
+    // Regenerate random questions for practice exam on each attempt
+    if (isPracticeExam) {
+      setPracticeQuestions(generatePracticeExam());
+    }
     const t = (quiz?.timeMinutes ?? 5) * 60;
     timeLeftRef.current = t;
     setTimeLeft(t);
     setStage("active");
-  }, [quiz]);
+  }, [quiz, isPracticeExam]);
 
   const finishQuiz = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -204,8 +229,12 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
             <div className="sketch-card bg-card p-6 sm:p-8 text-center space-y-5 relative">
               <div className="tape" />
               <div className="pt-4">
-                <span className="sticker border-blue-400 bg-blue-500/10 text-blue-400 text-xs">
-                  {quiz.domain ? `DOMAIN ${quiz.domain}` : `WEEK ${quiz.week}`}
+                <span className={`sticker text-xs ${
+                  isPracticeExam
+                    ? "border-amber-400 bg-amber-500/10 text-amber-400"
+                    : "border-blue-400 bg-blue-500/10 text-blue-400"
+                }`}>
+                  {isPracticeExam ? "FULL MOCK EXAM" : quiz.domain ? `DOMAIN ${quiz.domain}` : `WEEK ${quiz.week}`}
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-sketch">
@@ -213,10 +242,10 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
               </h2>
               <p className="text-muted-foreground">{quiz.description}</p>
 
-              <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
                 <span className="flex items-center gap-1.5">
                   <Sparkles className="h-4 w-4 text-violet-400" />
-                  {quiz.questions.length} questions
+                  {isPracticeExam ? PRACTICE_EXAM_CONFIG.totalQuestions : quiz.questions.length} questions
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="h-4 w-4 text-amber-400" />
@@ -228,9 +257,25 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                 </span>
               </div>
 
-              {quiz.domain && (
+              {isPracticeExam && (
+                <div className="flex flex-wrap justify-center gap-2 pt-1">
+                  {Object.entries(DOMAIN_WEIGHTS).map(([d, info]) => (
+                    <span key={d} className={`sticker bg-transparent text-[10px] ${info.color} border-current`}>
+                      {info.name} ({info.weight})
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {!isPracticeExam && quiz.domain && (
                 <p className="text-xs text-muted-foreground">
                   Score 90%+ to earn the <span className="text-amber-400 font-semibold">Domain Master</span> badge
+                </p>
+              )}
+
+              {isPracticeExam && (
+                <p className="text-xs text-muted-foreground">
+                  Questions are randomly selected each attempt. Simulates the real exam format.
                 </p>
               )}
 
@@ -240,7 +285,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                 onClick={startQuiz}
               >
                 <Zap className="h-4 w-4" />
-                Start Quiz
+                {isPracticeExam ? "Begin Exam" : "Start Quiz"}
               </Button>
             </div>
           </motion.div>
@@ -457,6 +502,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                   {Object.entries(result.domainBreakdown).map(([d, stats]) => {
                     const dNum = Number(d);
                     const pct = Math.round((stats.correct / stats.total) * 100);
+                    const weight = isPracticeExam ? DOMAIN_WEIGHTS[dNum] : null;
                     return (
                       <div key={d} className="flex items-center gap-3">
                         <span className={`text-sm font-semibold w-36 truncate ${domainColors[dNum] || ""}`}>
@@ -473,10 +519,20 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                         <span className="text-sm font-mono w-16 text-right">
                           {stats.correct}/{stats.total}
                         </span>
+                        {weight && (
+                          <span className="text-[10px] text-muted-foreground/60 font-mono w-10 text-right">
+                            {weight.weight}
+                          </span>
+                        )}
                       </div>
                     );
                   })}
                 </div>
+                {isPracticeExam && (
+                  <p className="text-xs text-muted-foreground pt-2">
+                    Percentages on the right show the exam domain weights. Focus on low-scoring, high-weight domains.
+                  </p>
+                )}
               </div>
             )}
           </motion.div>

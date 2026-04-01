@@ -13,6 +13,8 @@ import {
   Sparkles,
   Star,
   CheckCircle2,
+  GraduationCap,
+  Clock,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/shared/header";
 import { useProgress } from "@/components/shared/progress-provider";
 import { getDomainQuizzes, getWeeklyQuizzes } from "@/lib/data/quiz-questions";
+import { PRACTICE_EXAM_CONFIG } from "@/lib/gamification/practice-exam";
 
 const domainIcons: Record<number, React.ReactNode> = {
   1: <Brain className="h-5 w-5" />,
@@ -87,6 +90,53 @@ export default function QuizHub() {
           <p className="text-muted-foreground max-w-lg mx-auto">
             Practice quizzes for each exam domain and weekly topics. Score 90%+ to earn Domain Master badges.
           </p>
+        </motion.section>
+
+        {/* Practice Exam */}
+        <motion.section variants={item}>
+          <Link href="/quiz/practice-exam">
+            <div className="sketch-card bg-gradient-to-r from-violet-500/10 to-amber-500/10 border-amber-500/40 border-l-4 p-5 relative hover:scale-[1.01] transition-transform">
+              <div className="tape" />
+              <div className="flex items-center gap-4 pt-1">
+                <div className="h-14 w-14 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0 sketch-border-sm border-amber-500/30">
+                  <GraduationCap className="h-7 w-7 text-amber-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xl font-sketch font-bold">{PRACTICE_EXAM_CONFIG.title}</h4>
+                    <span className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[9px]">
+                      <Star className="h-2.5 w-2.5" />
+                      FULL EXAM
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-0.5">{PRACTICE_EXAM_CONFIG.description}</p>
+                  <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                    <span>{PRACTICE_EXAM_CONFIG.totalQuestions} questions</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {PRACTICE_EXAM_CONFIG.timeMinutes} min</span>
+                    <span className="font-mono text-amber-400">Pass: {PRACTICE_EXAM_CONFIG.passingScore}%</span>
+                  </div>
+                </div>
+                <div className="text-right shrink-0 ml-2">
+                  {mounted && getBestQuizScore(PRACTICE_EXAM_CONFIG.id) !== null ? (
+                    <div className="space-y-1">
+                      <p className={`text-xl font-bold font-mono ${
+                        getBestQuizScore(PRACTICE_EXAM_CONFIG.id)! >= PRACTICE_EXAM_CONFIG.passingScore
+                          ? "text-emerald-400"
+                          : "text-muted-foreground"
+                      }`}>
+                        {getBestQuizScore(PRACTICE_EXAM_CONFIG.id)}%
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">Best</p>
+                    </div>
+                  ) : (
+                    <Button variant="outline" size="sm" className="gap-1 sketch-border-sm text-xs">
+                      Start <ChevronRight className="h-3 w-3" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Link>
         </motion.section>
 
         {/* Domain Quizzes */}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen } from "lucide-react";
+import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/shared/theme-provider";
 import { useProgress } from "@/components/shared/progress-provider";
@@ -17,9 +17,10 @@ export function Header() {
   const isWeekPage = pathname.startsWith("/roadmap/") && pathname !== "/roadmap";
   const isQuizHub = pathname === "/quiz";
   const isQuizPage = pathname.startsWith("/quiz/") && pathname !== "/quiz";
+  const isBadges = pathname === "/badges";
 
-  const backHref = isWeekPage ? "/roadmap" : isRoadmap ? "/" : isQuizPage ? "/quiz" : isQuizHub ? "/" : null;
-  const backLabel = isWeekPage ? "Roadmap" : isRoadmap ? "Home" : isQuizPage ? "Quizzes" : isQuizHub ? "Home" : null;
+  const backHref = isWeekPage ? "/roadmap" : isRoadmap ? "/" : isQuizPage ? "/quiz" : isQuizHub ? "/" : isBadges ? "/" : null;
+  const backLabel = isWeekPage ? "Roadmap" : isRoadmap ? "Home" : isQuizPage ? "Quizzes" : isQuizHub ? "Home" : isBadges ? "Home" : null;
 
   return (
     <header className="border-b-2 border-dashed border-border/60 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
@@ -72,6 +73,16 @@ export function Header() {
               >
                 <BookOpen className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Quizzes</span>
+              </Button>
+            </Link>
+            <Link href="/badges">
+              <Button
+                variant={isBadges ? "secondary" : "ghost"}
+                size="sm"
+                className="gap-1.5 text-xs"
+              >
+                <Trophy className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Badges</span>
               </Button>
             </Link>
           </nav>

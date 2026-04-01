@@ -38,21 +38,27 @@ Dark mode is the default. Theme toggle exists in header.
 | `src/lib/data/roadmap.ts` | All 26 weeks of roadmap data: phases, weeks, resources, XP values, badges, exam domains |
 | `src/lib/data/quiz-questions.ts` | Quiz definitions: 5 domain quizzes + weekly quizzes (some placeholder with empty `questions: []`) |
 | `src/components/shared/progress-provider.tsx` | Global progress context: XP, completed resources, streaks, badges, quiz scores (localStorage) |
-| `src/components/shared/confetti.tsx` | Confetti + XP toast animations |
-| `src/components/shared/header.tsx` | Shared header with nav, XP display, theme toggle |
-| `src/app/page.tsx` | Dashboard: level progress, streak, phase cards, recent activity |
+| `src/components/shared/confetti.tsx` | Confetti, XP toast, and LevelUpCelebration animations |
+| `src/components/shared/level-up-overlay.tsx` | Global level-up celebration overlay (mounted in layout) |
+| `src/components/shared/header.tsx` | Shared header with nav (Roadmap, Quizzes, Badges), XP display, theme toggle |
+| `src/app/page.tsx` | Dashboard: level progress, streak, badge count, phase cards |
+| `src/app/badges/page.tsx` | Badge gallery: 19 badges in 4 categories, earned/locked states, progress hints |
 | `src/app/roadmap/page.tsx` | Roadmap overview: phase accordion with week cards |
 | `src/app/roadmap/[phase]/[week]/page.tsx` | Week detail: resource checklist with progress tracking |
-| `src/app/quiz/page.tsx` | Quiz hub: domain quizzes + weekly quizzes grid |
-| `src/app/quiz/[id]/page.tsx` | Quiz engine: timer, question navigation, scoring, domain breakdown |
+| `src/app/quiz/page.tsx` | Quiz hub: practice exam card + domain quizzes + weekly quizzes |
+| `src/app/quiz/[id]/page.tsx` | Quiz engine: timer, navigation, scoring, domain breakdown; handles practice-exam |
+| `src/lib/gamification/practice-exam.ts` | Practice exam: weighted random question selection across 5 domains |
+| `src/lib/gamification/badge-checker.ts` | Auto-earn streak badges, badge progress hints |
 | `public/architects-playbook.pdf` | 27-page PDF on enterprise LLM architecture patterns (14MB) |
 
 ### Gamification System
-- **XP:** 10 XP per resource type (course, docs, video, practice, build, quiz, reading)
-- **Levels:** 10 levels from "Curious Explorer" (0 XP) to "AI Architect" (12000 XP)
-- **Badges:** 20+ badges earned by completing weeks
-- **Streaks:** Daily study streak with multiplier
+- **XP:** Variable per resource type (course: 50, docs: 25, video: 30, practice: 40, build: 200, quiz: 75, reading: 25)
+- **Levels:** 10 levels from "Curious Beginner" (0 XP) to "AI Master" (12000 XP), with level-up confetti celebration
+- **Badges:** 19 badges in 4 categories (streak, knowledge, build, milestone) with gallery at `/badges`
+- **Streak badges:** Auto-earned at 3/7/30 day streaks
+- **Streaks:** Daily study streak with multiplier (1x base, 1.5x at 7+ days, 2x at 30+ days)
 - **Quiz scores:** Best score tracked per quiz, 90%+ = "Mastered"
+- **Badge earned dates:** Tracked in `badgeEarnedDates` field in progress data
 
 ### Roadmap Structure
 - **Phase 1 (W1-6):** AI Foundations
@@ -63,6 +69,7 @@ Dark mode is the default. Theme toggle exists in header.
 
 ### Quiz System
 - **5 Domain Quizzes:** Map to Claude Certified Architect exam domains (D1-D5)
+- **Practice Exam:** Full mock at `/quiz/practice-exam` — 30 weighted questions (D1:8, D2:6, D3:6, D4:6, D5:4), 45 min, 72% pass, randomized each attempt
 - **Weekly Quizzes:** Tied to weekly topics, linked from roadmap resources
 - **Placeholder quizzes:** Have `questions: []` — show "Coming Soon" UI instead of "not found"
 - Quiz resources in roadmap use internal `/quiz/week-{N}` or `/quiz/domain-{N}` URLs
@@ -84,12 +91,13 @@ Dark mode is the default. Theme toggle exists in header.
 1. **Sprint 1:** MVP dashboard, roadmap, gamification (XP, levels, streaks, badges)
 2. **Sprint 2:** Sketch design system, persistent progress (localStorage), theme toggle
 3. **Sprint 3:** Quiz engine with timer, scoring, domain breakdown, confetti rewards
-4. **Sprint 3.5 (current):** Data quality fixes — deep-linked all resources, added quiz URLs to roadmap, placeholder quizzes with "Coming Soon" UI, restructured weeks 17-18/23-24, added Architect's Playbook PDF
+4. **Sprint 3.5:** Data quality fixes — deep-linked all resources, added quiz URLs to roadmap, placeholder quizzes with "Coming Soon" UI, restructured weeks 17-18/23-24, added Architect's Playbook PDF
+5. **Sprint 4:** Badges gallery (`/badges`), level-up confetti celebration, practice exam simulator (`/quiz/practice-exam`), streak badge auto-earn, badge earned date tracking
 
 ## Upcoming Work
-- **Sprint 4:** Badges gallery UI, confetti on level-up, practice exam simulator, AI study buddy chat
 - **Sprint 5:** Public profiles, weekly check-ins, mobile polish, final deploy
 - **Supabase migration:** Replace localStorage with real database
+- **Auth + payments:** User accounts, one-time purchase gate (product will be sold)
 - **Content:** Fill in placeholder quiz questions (weeks 4, 7, 9, 10, 12, 17, 19)
 
 ## Conventions

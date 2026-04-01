@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Caveat } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { ProgressProvider } from "@/components/shared/progress-provider";
+import { LevelUpOverlay } from "@/components/shared/level-up-overlay";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,7 +42,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider>
           <ProgressProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              {children}
+              <LevelUpOverlay />
+            </TooltipProvider>
           </ProgressProvider>
         </ThemeProvider>
       </body>

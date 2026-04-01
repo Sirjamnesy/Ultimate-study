@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/shared/header";
 import { useProgress } from "@/components/shared/progress-provider";
 import { phases, weeks, getTotalResources, getTotalXP } from "@/lib/data/roadmap";
-import { getXPProgress } from "@/lib/gamification/xp-engine";
+import { getXPProgress, badges as allBadges } from "@/lib/gamification/xp-engine";
 
 const phaseColors: Record<string, string> = {
   emerald: "border-emerald-500 text-emerald-500",
@@ -142,13 +142,10 @@ export default function Home() {
               label: levelInfo.current.title,
               color: "text-blue-400 bg-blue-500/10",
               rotate: "1deg",
+              href: undefined as string | undefined,
             },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="sketch-card bg-card p-4 relative"
-              style={{ transform: `rotate(${stat.rotate})` }}
-            >
+          ].map((stat, i) => {
+            const inner = (
               <div className="flex items-center gap-3">
                 <div
                   className={`h-10 w-10 rounded-xl flex items-center justify-center ${stat.color}`}
@@ -160,8 +157,17 @@ export default function Home() {
                   <p className="text-[11px] text-muted-foreground">{stat.label}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+            return (
+              <div
+                key={i}
+                className="sketch-card bg-card p-4 relative"
+                style={{ transform: `rotate(${stat.rotate})` }}
+              >
+                {inner}
+              </div>
+            );
+          })}
         </motion.section>
 
         {/* Level Progress */}
@@ -193,6 +199,30 @@ export default function Home() {
               </p>
             )}
           </div>
+        </motion.div>
+
+        {/* Badge Summary */}
+        <motion.div variants={item}>
+          <Link href="/badges">
+            <div className="sketch-card bg-amber-500/5 border-amber-500/30 p-4 relative hover:scale-[1.01] transition-transform cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-amber-500/10">
+                    <Trophy className="h-5 w-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <p className="font-sketch text-lg font-bold">
+                      {mounted ? progress.earnedBadges.length : 0} / {allBadges.length} Badges
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      View your collection
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
+          </Link>
         </motion.div>
 
         {/* Current Week */}

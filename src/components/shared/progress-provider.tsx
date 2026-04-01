@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   type ProgressData,
   loadProgress,
@@ -12,6 +12,10 @@ import {
   getBestQuizScore as getBestQuizScoreStore,
 } from "@/lib/store/progress";
 import type { QuizResult } from "@/lib/gamification/quiz-engine";
+import { getLevelForXP } from "@/lib/gamification/xp-engine";
+import { checkStreakBadges } from "@/lib/gamification/badge-checker";
+
+export type LevelUpInfo = { level: number; title: string } | null;
 
 type ProgressContextType = {
   progress: ProgressData;
@@ -21,6 +25,8 @@ type ProgressContextType = {
   isCompleted: (resourceId: string) => boolean;
   saveQuizResult: (result: QuizResult, xpEarned: number) => void;
   getBestQuizScore: (quizId: string) => number | null;
+  levelUpInfo: LevelUpInfo;
+  clearLevelUp: () => void;
   mounted: boolean;
 };
 
@@ -32,6 +38,7 @@ const ProgressContext = createContext<ProgressContextType>({
     lastStudyDate: null,
     dailyLog: [],
     earnedBadges: [],
+    badgeEarnedDates: {},
     currentWeek: 1,
     quizResults: [],
   },
@@ -41,6 +48,8 @@ const ProgressContext = createContext<ProgressContextType>({
   isCompleted: () => false,
   saveQuizResult: () => {},
   getBestQuizScore: () => null,
+  levelUpInfo: null,
+  clearLevelUp: () => {},
   mounted: false,
 });
 
@@ -51,26 +60,51 @@ export function useProgress() {
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [progress, setProgress] = useState<ProgressData>(loadProgress);
   const [mounted, setMounted] = useState(false);
+  const [levelUpInfo, setLevelUpInfo] = useState<LevelUpInfo>(null);
+  const prevXPRef = useRef<number>(progress.xp);
 
   useEffect(() => {
     setMounted(true);
-    setProgress(loadProgress());
+    const data = loadProgress();
+    setProgress(data);
+    prevXPRef.current = data.xp;
   }, []);
+
+  const checkLevelUp = useCallback((oldXP: number) => {
+    const newData = loadProgress();
+    setProgress(newData);
+    const oldLevel = getLevelForXP(oldXP);
+    const newLevel = getLevelForXP(newData.xp);
+    if (newLevel.level > oldLevel.level) {
+      setLevelUpInfo({ level: newLevel.level, title: newLevel.title });
+    }
+    prevXPRef.current = newData.xp;
+  }, []);
+
+  const clearLevelUp = useCallback(() => setLevelUpInfo(null), []);
 
   const toggleResource = useCallback(
     (id: string, type: string) => {
+      const oldXP = prevXPRef.current;
       const result = toggleResourceStore(id, type, progress.streak);
-      setProgress(loadProgress());
+      checkLevelUp(oldXP);
       return result;
     },
-    [progress.streak]
+    [progress.streak, checkLevelUp]
   );
 
   const logStudyDay = useCallback(() => {
+    const oldXP = prevXPRef.current;
     const result = recordStudyDay();
-    setProgress(loadProgress());
+    checkLevelUp(oldXP);
+    // Auto-earn streak badges
+    const newBadges = checkStreakBadges(result.newStreak);
+    for (const b of newBadges) {
+      earnBadgeStore(b.id);
+    }
+    if (newBadges.length > 0) setProgress(loadProgress());
     return result;
-  }, []);
+  }, [checkLevelUp]);
 
   const earnBadge = useCallback((id: string) => {
     const result = earnBadgeStore(id);
@@ -84,9 +118,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   );
 
   const saveQuizResult = useCallback((result: QuizResult, xpEarned: number) => {
+    const oldXP = prevXPRef.current;
     saveQuizResultStore(result, xpEarned);
-    setProgress(loadProgress());
-  }, []);
+    checkLevelUp(oldXP);
+  }, [checkLevelUp]);
 
   const getBestQuizScore = useCallback((quizId: string) => {
     return getBestQuizScoreStore(quizId);
@@ -94,7 +129,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ProgressContext.Provider
-      value={{ progress, toggleResource, logStudyDay, earnBadge, isCompleted, saveQuizResult, getBestQuizScore, mounted }}
+      value={{ progress, toggleResource, logStudyDay, earnBadge, isCompleted, saveQuizResult, getBestQuizScore, levelUpInfo, clearLevelUp, mounted }}
     >
       {children}
     </ProgressContext.Provider>
