@@ -186,8 +186,14 @@ export default function QuizHub() {
                         <h4 className="font-semibold text-sm">{quiz.title}</h4>
                         <p className="text-xs text-muted-foreground">{quiz.description}</p>
                         <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                          <span>{quiz.questions.length} Q</span>
-                          <span>{quiz.timeMinutes} min</span>
+                          {quiz.questions.length > 0 ? (
+                            <>
+                              <span>{quiz.questions.length} Q</span>
+                              <span>{quiz.timeMinutes} min</span>
+                            </>
+                          ) : (
+                            <span className="text-amber-400 font-medium">Coming Soon</span>
+                          )}
                         </div>
                       </div>
                       {bestScore !== null ? (

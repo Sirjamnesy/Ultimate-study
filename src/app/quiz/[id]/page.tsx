@@ -136,12 +136,35 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
     [stage, currentQ, questionList]
   );
 
-  if (!quiz || questionList.length === 0) {
+  if (!quiz) {
     return (
       <div className="min-h-screen notebook-bg">
         <Header />
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <p className="font-sketch text-2xl text-muted-foreground">Quiz not found</p>
+          <Link href="/quiz">
+            <Button variant="outline" className="mt-4 sketch-border-sm">
+              Back to Quiz Hub
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (questionList.length === 0) {
+    return (
+      <div className="min-h-screen notebook-bg">
+        <Header />
+        <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
+          <span className="sticker border-amber-400 bg-amber-500/10 text-amber-400 text-xs inline-flex items-center gap-1">
+            COMING SOON
+          </span>
+          <p className="font-sketch text-3xl">{quiz.title}</p>
+          <p className="text-muted-foreground">{quiz.description}</p>
+          <p className="text-sm text-muted-foreground">
+            Questions are being prepared. Check back soon!
+          </p>
           <Link href="/quiz">
             <Button variant="outline" className="mt-4 sketch-border-sm">
               Back to Quiz Hub

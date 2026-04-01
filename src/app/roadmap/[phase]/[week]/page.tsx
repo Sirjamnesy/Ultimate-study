@@ -104,15 +104,25 @@ function ResourceItem({
             </span>
           )}
           {resource.url && (
-            <a
-              href={resource.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors font-medium"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Open <ExternalLink className="h-2.5 w-2.5" />
-            </a>
+            resource.url.startsWith("/quiz/") ? (
+              <Link
+                href={resource.url}
+                className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Open <ExternalLink className="h-2.5 w-2.5" />
+              </Link>
+            ) : (
+              <a
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Open <ExternalLink className="h-2.5 w-2.5" />
+              </a>
+            )
           )}
         </div>
       </div>
