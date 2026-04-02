@@ -221,34 +221,32 @@ export default function ProfilePage() {
             Domain Strengths
           </h3>
           {Object.keys(domainScores).length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {Object.entries(DOMAIN_WEIGHTS).map(([d, info]) => {
                 const dNum = Number(d);
                 const score = domainScores[dNum];
                 return (
-                  <div key={d} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                    <span className={`text-sm font-semibold sm:w-40 ${info.color}`}>
+                  <div key={d} className="flex items-center gap-2">
+                    <span className={`text-xs font-semibold w-28 shrink-0 truncate ${info.color}`}>
                       D{d}: {info.name}
                     </span>
-                    <div className="flex items-center gap-2 flex-1">
-                      <div className="flex-1 sketch-progress h-2.5">
-                        <div
-                          className={`h-full rounded-[4px] transition-all duration-500 ${
-                            score !== undefined
-                              ? score >= 90
-                                ? "bg-emerald-500"
-                                : score >= 70
-                                ? "bg-amber-500"
-                                : "bg-rose-500"
-                              : "bg-muted"
-                          }`}
-                          style={{ width: `${score ?? 0}%` }}
-                        />
-                      </div>
-                      <span className="text-sm font-mono w-12 text-right shrink-0">
-                        {score !== undefined ? `${score}%` : "—"}
-                      </span>
+                    <div className="flex-1 sketch-progress h-1.5">
+                      <div
+                        className={`h-full rounded-[3px] transition-all duration-500 ${
+                          score !== undefined
+                            ? score >= 90
+                              ? "bg-emerald-500"
+                              : score >= 70
+                              ? "bg-amber-500"
+                              : "bg-rose-500"
+                            : "bg-muted"
+                        }`}
+                        style={{ width: `${score ?? 0}%` }}
+                      />
                     </div>
+                    <span className="text-xs font-mono w-9 text-right shrink-0 text-muted-foreground">
+                      {score !== undefined ? `${score}%` : "—"}
+                    </span>
                   </div>
                 );
               })}

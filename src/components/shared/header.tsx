@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Trophy, Menu, User, ClipboardCheck } from "lucide-react";
+import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useTheme } from "@/components/shared/theme-provider";
@@ -30,9 +30,8 @@ export function Header() {
   const navLinks = [
     { href: "/roadmap", label: "Roadmap", icon: <Map className="h-4 w-4" />, active: isRoadmap || isWeekPage },
     { href: "/quiz", label: "Quizzes", icon: <BookOpen className="h-4 w-4" />, active: isQuizHub || isQuizPage },
-    { href: "/badges", label: "Badges", icon: <Trophy className="h-4 w-4" />, active: isBadges },
-    { href: "/profile", label: "Profile", icon: <User className="h-4 w-4" />, active: isProfile },
     { href: "/check-ins", label: "Check-Ins", icon: <ClipboardCheck className="h-4 w-4" />, active: isCheckIns },
+    { href: "/profile", label: "Profile", icon: <User className="h-4 w-4" />, active: isProfile },
   ];
 
   return (
@@ -59,9 +58,23 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-1">
+          {/* Theme toggle — desktop */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden sm:inline-flex h-8 w-8"
+            onClick={toggle}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
+
           {/* XP pill — desktop */}
           {mounted && (
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono text-violet-400 mr-2">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono text-violet-400 mx-1">
               <Zap className="h-3 w-3" />
               {progress.xp} XP
             </div>
@@ -83,20 +96,6 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Theme toggle — desktop */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden sm:inline-flex h-8 w-8 ml-1"
-            onClick={toggle}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </Button>
-
           {/* Mobile hamburger */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
@@ -109,36 +108,12 @@ export function Header() {
             <SheetContent side="right" className="w-64 p-0">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
               <div className="flex flex-col h-full">
-                {/* XP pill — mobile */}
-                {mounted && (
-                  <div className="flex items-center gap-2 px-5 pt-5 pb-3">
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-sm font-mono text-violet-400">
-                      <Zap className="h-3.5 w-3.5" />
-                      {progress.xp} XP
-                    </div>
-                  </div>
-                )}
-
-                {/* Nav links */}
-                <nav className="flex flex-col gap-1 px-3 py-2">
-                  {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
-                      <Button
-                        variant={link.active ? "secondary" : "ghost"}
-                        className="w-full justify-start gap-3 text-sm h-10"
-                      >
-                        {link.icon}
-                        {link.label}
-                      </Button>
-                    </Link>
-                  ))}
-                </nav>
-
-                {/* Theme toggle — mobile */}
-                <div className="mt-auto border-t border-border/40 p-4">
+                {/* Theme toggle + XP pill — mobile top */}
+                <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-border/40">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start gap-3 text-sm h-10"
+                    size="sm"
+                    className="gap-2 text-sm"
                     onClick={toggle}
                   >
                     {theme === "dark" ? (
@@ -153,7 +128,28 @@ export function Header() {
                       </>
                     )}
                   </Button>
+                  {mounted && (
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-sm font-mono text-violet-400">
+                      <Zap className="h-3.5 w-3.5" />
+                      {progress.xp} XP
+                    </div>
+                  )}
                 </div>
+
+                {/* Nav links */}
+                <nav className="flex flex-col gap-1 px-3 py-3">
+                  {navLinks.map((link) => (
+                    <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
+                      <Button
+                        variant={link.active ? "secondary" : "ghost"}
+                        className="w-full justify-start gap-3 text-sm h-10"
+                      >
+                        {link.icon}
+                        {link.label}
+                      </Button>
+                    </Link>
+                  ))}
+                </nav>
               </div>
             </SheetContent>
           </Sheet>
