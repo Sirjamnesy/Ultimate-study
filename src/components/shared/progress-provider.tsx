@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   type ProgressData,
+  type WeeklyCheckIn,
   loadProgress,
   saveProgress,
   recordStudyDay,
@@ -10,6 +11,8 @@ import {
   earnBadge as earnBadgeStore,
   saveQuizResult as saveQuizResultStore,
   getBestQuizScore as getBestQuizScoreStore,
+  saveCheckIn as saveCheckInStore,
+  getLatestCheckIn as getLatestCheckInStore,
 } from "@/lib/store/progress";
 import type { QuizResult } from "@/lib/gamification/quiz-engine";
 import { getLevelForXP } from "@/lib/gamification/xp-engine";
@@ -25,6 +28,8 @@ type ProgressContextType = {
   isCompleted: (resourceId: string) => boolean;
   saveQuizResult: (result: QuizResult, xpEarned: number) => void;
   getBestQuizScore: (quizId: string) => number | null;
+  saveCheckIn: (checkIn: WeeklyCheckIn) => void;
+  getLatestCheckIn: () => WeeklyCheckIn | null;
   levelUpInfo: LevelUpInfo;
   clearLevelUp: () => void;
   mounted: boolean;
@@ -41,6 +46,7 @@ const ProgressContext = createContext<ProgressContextType>({
     badgeEarnedDates: {},
     currentWeek: 1,
     quizResults: [],
+    weeklyCheckIns: [],
   },
   toggleResource: () => ({ added: false, xpDelta: 0 }),
   logStudyDay: () => ({ newStreak: 0, isNewDay: false }),
@@ -48,6 +54,8 @@ const ProgressContext = createContext<ProgressContextType>({
   isCompleted: () => false,
   saveQuizResult: () => {},
   getBestQuizScore: () => null,
+  saveCheckIn: () => {},
+  getLatestCheckIn: () => null,
   levelUpInfo: null,
   clearLevelUp: () => {},
   mounted: false,
@@ -127,9 +135,19 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     return getBestQuizScoreStore(quizId);
   }, []);
 
+  const saveCheckIn = useCallback((checkIn: WeeklyCheckIn) => {
+    const oldXP = prevXPRef.current;
+    saveCheckInStore(checkIn);
+    checkLevelUp(oldXP);
+  }, [checkLevelUp]);
+
+  const getLatestCheckIn = useCallback(() => {
+    return getLatestCheckInStore();
+  }, []);
+
   return (
     <ProgressContext.Provider
-      value={{ progress, toggleResource, logStudyDay, earnBadge, isCompleted, saveQuizResult, getBestQuizScore, levelUpInfo, clearLevelUp, mounted }}
+      value={{ progress, toggleResource, logStudyDay, earnBadge, isCompleted, saveQuizResult, getBestQuizScore, saveCheckIn, getLatestCheckIn, levelUpInfo, clearLevelUp, mounted }}
     >
       {children}
     </ProgressContext.Provider>

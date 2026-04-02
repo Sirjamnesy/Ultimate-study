@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import {
   BookOpen,
   Trophy,
@@ -13,6 +14,7 @@ import {
   Sparkles,
   Star,
   Pencil,
+  ClipboardCheck,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +51,7 @@ const item = {
 };
 
 export default function Home() {
-  const { progress, mounted } = useProgress();
+  const { progress, getLatestCheckIn, mounted } = useProgress();
   const xp = mounted ? progress.xp : 0;
   const streak = mounted ? progress.streak : 0;
   const completedCount = mounted ? progress.completedResources.length : 0;
@@ -59,6 +61,16 @@ export default function Home() {
   const currentWeekData = weeks.find(
     (w) => w.id === (mounted ? progress.currentWeek : 1)
   );
+
+  const showCheckInPrompt = useMemo(() => {
+    if (!mounted) return false;
+    const latest = getLatestCheckIn();
+    if (!latest) return true;
+    const daysSince = Math.floor(
+      (Date.now() - new Date(latest.date).getTime()) / (1000 * 60 * 60 * 24)
+    );
+    return daysSince >= 7;
+  }, [mounted, getLatestCheckIn]);
 
   return (
     <div className="min-h-screen notebook-bg">
@@ -201,6 +213,32 @@ export default function Home() {
           </div>
         </motion.div>
 
+        {/* Check-In Prompt */}
+        {showCheckInPrompt && (
+          <motion.div variants={item}>
+            <Link href="/check-ins">
+              <div className="sketch-card bg-emerald-500/5 border-emerald-500/30 border-l-4 p-4 hover:scale-[1.01] transition-transform cursor-pointer">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-emerald-500/10">
+                      <ClipboardCheck className="h-5 w-5 text-emerald-400" />
+                    </div>
+                    <div>
+                      <p className="font-sketch text-lg font-bold">
+                        Time for a Check-In!
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Reflect on your week and earn +25 XP
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        )}
+
         {/* Badge Summary */}
         <motion.div variants={item}>
           <Link href="/badges">
@@ -229,7 +267,7 @@ export default function Home() {
         {currentWeekData && (
           <motion.div variants={item}>
             <div className="sketch-card bg-violet-500/5 border-violet-500/30 p-5 relative">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                   <span className="sticker border-violet-400/50 bg-violet-500/10 text-violet-400 text-[10px] mb-2">
                     <Target className="h-3 w-3" />
@@ -243,8 +281,8 @@ export default function Home() {
                     {currentWeekData.description}
                   </p>
                 </div>
-                <Link href={`/roadmap/${currentWeekData.phase}/${currentWeekData.id}`}>
-                  <Button variant="outline" size="sm" className="gap-1 sketch-border-sm shrink-0">
+                <Link href={`/roadmap/${currentWeekData.phase}/${currentWeekData.id}`} className="w-full sm:w-auto">
+                  <Button variant="outline" size="sm" className="gap-1 sketch-border-sm shrink-0 w-full sm:w-auto">
                     Open <ChevronRight className="h-3 w-3" />
                   </Button>
                 </Link>

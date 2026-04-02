@@ -40,9 +40,12 @@ Dark mode is the default. Theme toggle exists in header.
 | `src/components/shared/progress-provider.tsx` | Global progress context: XP, completed resources, streaks, badges, quiz scores (localStorage) |
 | `src/components/shared/confetti.tsx` | Confetti, XP toast, and LevelUpCelebration animations |
 | `src/components/shared/level-up-overlay.tsx` | Global level-up celebration overlay (mounted in layout) |
-| `src/components/shared/header.tsx` | Shared header with nav (Roadmap, Quizzes, Badges), XP display, theme toggle |
-| `src/app/page.tsx` | Dashboard: level progress, streak, badge count, phase cards |
+| `src/components/shared/header.tsx` | Shared header with nav (Roadmap, Quizzes, Badges, Profile, Check-Ins), mobile hamburger menu, XP display, theme toggle |
+| `src/app/page.tsx` | Dashboard: level progress, streak, badge count, check-in prompt, phase cards |
 | `src/app/badges/page.tsx` | Badge gallery: 19 badges in 4 categories, earned/locked states, progress hints |
+| `src/app/profile/page.tsx` | Profile page: stats grid, badge showcase, domain strengths, study heatmap, share card |
+| `src/app/check-ins/page.tsx` | Weekly check-ins: reflection form (+25 XP), star rating, history timeline |
+| `src/app/not-found.tsx` | Custom 404 page with sketch aesthetic |
 | `src/app/roadmap/page.tsx` | Roadmap overview: phase accordion with week cards |
 | `src/app/roadmap/[phase]/[week]/page.tsx` | Week detail: resource checklist with progress tracking |
 | `src/app/quiz/page.tsx` | Quiz hub: practice exam card + domain quizzes + weekly quizzes |
@@ -59,6 +62,7 @@ Dark mode is the default. Theme toggle exists in header.
 - **Streaks:** Daily study streak with multiplier (1x base, 1.5x at 7+ days, 2x at 30+ days)
 - **Quiz scores:** Best score tracked per quiz, 90%+ = "Mastered"
 - **Badge earned dates:** Tracked in `badgeEarnedDates` field in progress data
+- **Weekly check-ins:** +25 XP per check-in, stored in `weeklyCheckIns` array in progress data
 
 ### Roadmap Structure
 - **Phase 1 (W1-6):** AI Foundations
@@ -93,12 +97,13 @@ Dark mode is the default. Theme toggle exists in header.
 3. **Sprint 3:** Quiz engine with timer, scoring, domain breakdown, confetti rewards
 4. **Sprint 3.5:** Data quality fixes — deep-linked all resources, added quiz URLs to roadmap, placeholder quizzes with "Coming Soon" UI, restructured weeks 17-18/23-24, added Architect's Playbook PDF
 5. **Sprint 4:** Badges gallery (`/badges`), level-up confetti celebration, practice exam simulator (`/quiz/practice-exam`), streak badge auto-earn, badge earned date tracking
+6. **Sprint 5:** Profile page (`/profile`), weekly check-ins (`/check-ins`), mobile hamburger menu, responsive quiz fixes, dashboard check-in prompt, custom 404, enhanced SEO metadata
 
 ## Upcoming Work
-- **Sprint 5:** Public profiles, weekly check-ins, mobile polish, final deploy
 - **Supabase migration:** Replace localStorage with real database
 - **Auth + payments:** User accounts, one-time purchase gate (product will be sold)
 - **Content:** Fill in placeholder quiz questions (weeks 4, 7, 9, 10, 12, 17, 19)
+- **Public profiles:** Shareable public URLs (requires auth + database)
 
 ## Conventions
 - Commit messages: `feat:` prefix for features/enhancements, `fix:` for bug fixes

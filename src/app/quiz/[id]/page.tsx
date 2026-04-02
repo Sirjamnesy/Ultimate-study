@@ -352,7 +352,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                       >
                         <span className="flex items-start gap-3">
                           <span
-                            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold mt-0.5
+                            className={`flex h-7 w-7 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold mt-0.5
                               ${
                                 isSelected
                                   ? "border-violet-500 bg-violet-500 text-white"
@@ -498,32 +498,34 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
             {result.domainBreakdown && (
               <div className="sketch-card bg-card p-5 space-y-3">
                 <h3 className="font-sketch text-xl font-bold">Domain Breakdown</h3>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {Object.entries(result.domainBreakdown).map(([d, stats]) => {
                     const dNum = Number(d);
                     const pct = Math.round((stats.correct / stats.total) * 100);
                     const weight = isPracticeExam ? DOMAIN_WEIGHTS[dNum] : null;
                     return (
-                      <div key={d} className="flex items-center gap-3">
-                        <span className={`text-sm font-semibold w-36 truncate ${domainColors[dNum] || ""}`}>
+                      <div key={d} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                        <span className={`text-sm font-semibold sm:w-36 truncate ${domainColors[dNum] || ""}`}>
                           D{d}: {domainNames[dNum] || ""}
                         </span>
-                        <div className="flex-1 sketch-progress h-2.5">
-                          <div
-                            className={`h-full rounded-[4px] transition-all duration-500 ${
-                              pct >= 90 ? "bg-emerald-500" : pct >= 70 ? "bg-amber-500" : "bg-rose-500"
-                            }`}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                        <span className="text-sm font-mono w-16 text-right">
-                          {stats.correct}/{stats.total}
-                        </span>
-                        {weight && (
-                          <span className="text-[10px] text-muted-foreground/60 font-mono w-10 text-right">
-                            {weight.weight}
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex-1 sketch-progress h-2.5">
+                            <div
+                              className={`h-full rounded-[4px] transition-all duration-500 ${
+                                pct >= 90 ? "bg-emerald-500" : pct >= 70 ? "bg-amber-500" : "bg-rose-500"
+                              }`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          <span className="text-sm font-mono w-16 text-right shrink-0">
+                            {stats.correct}/{stats.total}
                           </span>
-                        )}
+                          {weight && (
+                            <span className="text-[10px] text-muted-foreground/60 font-mono w-10 text-right shrink-0">
+                              {weight.weight}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     );
                   })}

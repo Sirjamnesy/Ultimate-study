@@ -5,6 +5,16 @@
 
 import type { QuizResult } from "@/lib/gamification/quiz-engine";
 
+export type WeeklyCheckIn = {
+  id: string;
+  weekNumber: number;
+  date: string; // ISO date
+  reflection: string;
+  rating: number; // 1-5
+  challenges: string;
+  nextFocus: string;
+};
+
 export type ProgressData = {
   completedResources: string[];
   xp: number;
@@ -15,6 +25,7 @@ export type ProgressData = {
   badgeEarnedDates: Record<string, string>; // badgeId -> ISO date
   currentWeek: number;
   quizResults: QuizResult[]; // all quiz attempts
+  weeklyCheckIns: WeeklyCheckIn[];
 };
 
 const STORAGE_KEY = "us-progress";
@@ -29,6 +40,7 @@ const defaultProgress: ProgressData = {
   badgeEarnedDates: {},
   currentWeek: 1,
   quizResults: [],
+  weeklyCheckIns: [],
 };
 
 export function loadProgress(): ProgressData {
@@ -134,4 +146,18 @@ export function getBestQuizScore(quizId: string): number | null {
   const attempts = data.quizResults.filter((r) => r.quizId === quizId);
   if (attempts.length === 0) return null;
   return Math.max(...attempts.map((a) => a.score));
+}
+
+export function saveCheckIn(checkIn: WeeklyCheckIn): void {
+  const data = loadProgress();
+  if (!data.weeklyCheckIns) data.weeklyCheckIns = [];
+  data.weeklyCheckIns.push(checkIn);
+  data.xp += 25; // Check-in XP reward
+  saveProgress(data);
+}
+
+export function getLatestCheckIn(): WeeklyCheckIn | null {
+  const data = loadProgress();
+  if (!data.weeklyCheckIns || data.weeklyCheckIns.length === 0) return null;
+  return data.weeklyCheckIns[data.weeklyCheckIns.length - 1];
 }
