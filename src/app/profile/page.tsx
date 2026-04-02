@@ -227,10 +227,10 @@ export default function ProfilePage() {
                 const score = domainScores[dNum];
                 return (
                   <div key={d} className="flex items-center gap-2">
-                    <span className={`text-xs font-semibold w-28 shrink-0 truncate ${info.color}`}>
+                    <span className={`text-xs font-semibold shrink-0 whitespace-nowrap ${info.color}`}>
                       D{d}: {info.name}
                     </span>
-                    <div className="flex-1 sketch-progress h-1.5">
+                    <div className="flex-1 sketch-progress h-1.5 min-w-[40px]">
                       <div
                         className={`h-full rounded-[3px] transition-all duration-500 ${
                           score !== undefined
