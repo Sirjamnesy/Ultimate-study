@@ -14,7 +14,8 @@ A 26-week gamified study roadmap web app for becoming an AI Engineer, with a foc
 - **Styling:** Tailwind CSS v4, shadcn/ui (base-nova style)
 - **Animations:** Framer Motion
 - **Fonts:** Google Fonts — Geist (body), Geist Mono (code), Caveat (sketch headings via `font-sketch` class)
-- **Persistence:** localStorage (Supabase planned for later)
+- **Persistence:** Supabase (anonymous auth + JSONB table) + localStorage cache
+- **Database:** Supabase project `ultimate-study` (id: `jsxpvmrsfpqymwjxnxqn`, region: eu-west-1)
 - **Deployment:** Vercel
 
 ## Design System
@@ -98,10 +99,17 @@ Dark mode is the default. Theme toggle exists in header.
 4. **Sprint 3.5:** Data quality fixes — deep-linked all resources, added quiz URLs to roadmap, placeholder quizzes with "Coming Soon" UI, restructured weeks 17-18/23-24, added Architect's Playbook PDF
 5. **Sprint 4:** Badges gallery (`/badges`), level-up confetti celebration, practice exam simulator (`/quiz/practice-exam`), streak badge auto-earn, badge earned date tracking
 6. **Sprint 5:** Profile page (`/profile`), weekly check-ins (`/check-ins`), mobile hamburger menu, responsive quiz fixes, dashboard check-in prompt, custom 404, enhanced SEO metadata
+7. **Sprint 7:** Supabase migration — anonymous auth, `user_progress` JSONB table, RLS policies, hybrid localStorage+Supabase storage, data migration path for existing users
+
+## Supabase Architecture
+- **Anonymous auth:** `supabase.auth.signInAnonymously()` on first visit — stable UUID per browser, no sign-up required. Sprint 8 will promote to real accounts via Supabase identity linking.
+- **Table:** `public.user_progress` — single JSONB `data` column stores full `ProgressData`. RLS: users can only access their own row.
+- **Hybrid storage:** localStorage = instant synchronous reads (offline cache). Supabase = persistent backend. On mutations: write localStorage first (instant) + fire-and-forget Supabase upsert via `syncProgressToSupabase()`.
+- **Key files:** `src/lib/supabase/client.ts`, `src/lib/supabase/database.types.ts`, `src/lib/store/supabase-sync.ts`
+- **Anonymous auth must be enabled** in Supabase dashboard: Authentication → Providers → Anonymous → Enable
 
 ## Upcoming Work
-- **Supabase migration:** Replace localStorage with real database
-- **Auth + payments:** User accounts, one-time purchase gate (product will be sold)
+- **Auth + payments:** Real user accounts (email/password), one-time purchase gate (product will be sold). Supabase anonymous sessions link to real accounts — UUID preserved.
 - **Content:** Fill in placeholder quiz questions (weeks 4, 7, 9, 10, 12, 17, 19)
 - **Public profiles:** Shareable public URLs (requires auth + database)
 

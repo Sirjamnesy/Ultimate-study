@@ -17,6 +17,8 @@ import {
 import type { QuizResult } from "@/lib/gamification/quiz-engine";
 import { getLevelForXP } from "@/lib/gamification/xp-engine";
 import { checkStreakBadges } from "@/lib/gamification/badge-checker";
+import { supabase } from "@/lib/supabase/client";
+import { fetchProgressFromSupabase, syncProgressToSupabase } from "@/lib/store/supabase-sync";
 
 export type LevelUpInfo = { level: number; title: string } | null;
 
@@ -72,10 +74,49 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const prevXPRef = useRef<number>(progress.xp);
 
   useEffect(() => {
-    setMounted(true);
-    const data = loadProgress();
-    setProgress(data);
-    prevXPRef.current = data.xp;
+    let cancelled = false;
+
+    async function init() {
+      // Anon auth — idempotent, returns existing session if already signed in
+      const { error: authError } = await supabase.auth.signInAnonymously();
+
+      if (authError) {
+        // Offline or Supabase down — fall back to localStorage only
+        console.warn("[progress-provider] anon auth failed, using localStorage:", authError.message);
+        if (!cancelled) {
+          const local = loadProgress();
+          setProgress(local);
+          prevXPRef.current = local.xp;
+          setMounted(true);
+        }
+        return;
+      }
+
+      const remoteData = await fetchProgressFromSupabase();
+      if (cancelled) return;
+
+      if (remoteData) {
+        // Remote wins — write back to localStorage cache so sync reads are fresh
+        saveProgress(remoteData);
+        setProgress(remoteData);
+        prevXPRef.current = remoteData.xp;
+      } else {
+        // No remote row yet — check if localStorage has existing data to migrate
+        const localData = loadProgress();
+        const hasLocalData =
+          localData.completedResources.length > 0 ||
+          localData.xp > 0 ||
+          localData.earnedBadges.length > 0;
+        if (hasLocalData) await syncProgressToSupabase(localData);
+        setProgress(localData);
+        prevXPRef.current = localData.xp;
+      }
+
+      if (!cancelled) setMounted(true);
+    }
+
+    init();
+    return () => { cancelled = true; };
   }, []);
 
   const checkLevelUp = useCallback((oldXP: number) => {
@@ -87,6 +128,8 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setLevelUpInfo({ level: newLevel.level, title: newLevel.title });
     }
     prevXPRef.current = newData.xp;
+    // Background sync to Supabase — fire-and-forget
+    syncProgressToSupabase(newData);
   }, []);
 
   const clearLevelUp = useCallback(() => setLevelUpInfo(null), []);
@@ -116,7 +159,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const earnBadge = useCallback((id: string) => {
     const result = earnBadgeStore(id);
-    setProgress(loadProgress());
+    const newData = loadProgress();
+    setProgress(newData);
+    // earnBadge doesn't go through checkLevelUp, so sync explicitly
+    syncProgressToSupabase(newData);
     return result;
   }, []);
 
