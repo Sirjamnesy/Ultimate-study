@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/shared/header";
 import { useProgress } from "@/components/shared/progress-provider";
+import { LandingPage } from "@/components/shared/landing-page";
 import { phases, weeks, getTotalResources, getTotalXP } from "@/lib/data/roadmap";
 import { getXPProgress, badges as allBadges } from "@/lib/gamification/xp-engine";
 
@@ -51,7 +52,12 @@ const item = {
 };
 
 export default function Home() {
-  const { progress, getLatestCheckIn, mounted } = useProgress();
+  const { progress, getLatestCheckIn, mounted, hasPaid } = useProgress();
+
+  // Show landing/sales page for unauthenticated or unpaid visitors
+  if (mounted && !hasPaid) {
+    return <LandingPage />;
+  }
   const xp = mounted ? progress.xp : 0;
   const streak = mounted ? progress.streak : 0;
   const completedCount = mounted ? progress.completedResources.length : 0;

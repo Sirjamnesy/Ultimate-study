@@ -32,12 +32,70 @@ export type Database = {
         }
         Relationships: []
       }
+      purchases: {
+        Row: {
+          id: string
+          user_id: string
+          paystack_reference: string
+          amount_kobo: number
+          currency: string
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          paystack_reference: string
+          amount_kobo: number
+          currency?: string
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          paystack_reference?: string
+          amount_kobo?: number
+          currency?: string
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      invite_codes: {
+        Row: {
+          code: string
+          max_uses: number
+          used_count: number
+          created_at: string
+        }
+        Insert: {
+          code: string
+          max_uses?: number
+          used_count?: number
+          created_at?: string
+        }
+        Update: {
+          code?: string
+          max_uses?: number
+          used_count?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      mark_user_paid: {
+        Args: { target_user_id: string }
+        Returns: void
+      }
+      mark_user_admin: {
+        Args: { target_user_id: string }
+        Returns: void
+      }
     }
     Enums: {
       [_ in never]: never

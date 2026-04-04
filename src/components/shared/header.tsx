@@ -2,18 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useTheme } from "@/components/shared/theme-provider";
 import { useProgress } from "@/components/shared/progress-provider";
+import { signOut } from "@/lib/auth/helpers";
 
 export function Header() {
   const { theme, toggle } = useTheme();
-  const { progress, mounted } = useProgress();
+  const { progress, mounted, user, hasPaid } = useProgress();
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  async function handleSignOut() {
+    setOpen(false);
+    await signOut();
+    router.push("/");
+    router.refresh();
+  }
 
   const isHome = pathname === "/";
   const isRoadmap = pathname === "/roadmap";
@@ -94,6 +103,18 @@ export function Header() {
                 </Button>
               </Link>
             ))}
+            {/* Sign out — only shown when authenticated + paid */}
+            {mounted && hasPaid && user && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                onClick={handleSignOut}
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden lg:inline">Sign Out</span>
+              </Button>
+            )}
           </nav>
 
           {/* Mobile hamburger */}
@@ -150,6 +171,23 @@ export function Header() {
                     </Link>
                   ))}
                 </nav>
+
+                {/* Sign out — mobile */}
+                {mounted && hasPaid && user && (
+                  <div className="mt-auto px-3 pb-4 border-t border-border/40 pt-3">
+                    <div className="px-2 pb-2 text-xs text-muted-foreground truncate">
+                      {user.email}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-3 text-sm h-10 text-muted-foreground hover:text-foreground"
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </Button>
+                  </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>

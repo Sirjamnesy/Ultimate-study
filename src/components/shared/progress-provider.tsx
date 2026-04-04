@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import type { User } from "@supabase/supabase-js";
 import {
   type ProgressData,
   type WeeklyCheckIn,
@@ -35,6 +36,11 @@ type ProgressContextType = {
   levelUpInfo: LevelUpInfo;
   clearLevelUp: () => void;
   mounted: boolean;
+  // Auth state
+  user: User | null;
+  isAnonymous: boolean;
+  hasPaid: boolean;
+  refreshAuth: () => Promise<void>;
 };
 
 const ProgressContext = createContext<ProgressContextType>({
@@ -61,6 +67,10 @@ const ProgressContext = createContext<ProgressContextType>({
   levelUpInfo: null,
   clearLevelUp: () => {},
   mounted: false,
+  user: null,
+  isAnonymous: true,
+  hasPaid: false,
+  refreshAuth: async () => {},
 });
 
 export function useProgress() {
@@ -71,37 +81,58 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [progress, setProgress] = useState<ProgressData>(loadProgress);
   const [mounted, setMounted] = useState(false);
   const [levelUpInfo, setLevelUpInfo] = useState<LevelUpInfo>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const [hasPaid, setHasPaid] = useState(false);
   const prevXPRef = useRef<number>(progress.xp);
+
+  function applyUser(u: User | null) {
+    setUser(u);
+    const anon = !u || u.is_anonymous === true;
+    setIsAnonymous(anon);
+    setHasPaid(!anon && (u?.app_metadata?.has_paid === true || u?.app_metadata?.is_admin === true));
+  }
+
+  const refreshAuth = useCallback(async () => {
+    const { data: { session } } = await supabase.auth.refreshSession();
+    applyUser(session?.user ?? null);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
     async function init() {
-      // Anon auth — idempotent, returns existing session if already signed in
-      const { error: authError } = await supabase.auth.signInAnonymously();
+      // Check for existing session first (returning user)
+      const { data: { session } } = await supabase.auth.getSession();
 
-      if (authError) {
-        // Offline or Supabase down — fall back to localStorage only
-        console.warn("[progress-provider] anon auth failed, using localStorage:", authError.message);
-        if (!cancelled) {
-          const local = loadProgress();
-          setProgress(local);
-          prevXPRef.current = local.xp;
-          setMounted(true);
+      if (session?.user && !session.user.is_anonymous) {
+        // Real authenticated user — use their session
+        if (!cancelled) applyUser(session.user);
+      } else {
+        // No session or anonymous — sign in anonymously (idempotent)
+        const { error: authError } = await supabase.auth.signInAnonymously();
+        if (authError) {
+          console.warn("[progress-provider] anon auth failed:", authError.message);
+          if (!cancelled) {
+            const local = loadProgress();
+            setProgress(local);
+            prevXPRef.current = local.xp;
+            setMounted(true);
+          }
+          return;
         }
-        return;
+        const { data: { user: anonUser } } = await supabase.auth.getUser();
+        if (!cancelled) applyUser(anonUser);
       }
 
       const remoteData = await fetchProgressFromSupabase();
       if (cancelled) return;
 
       if (remoteData) {
-        // Remote wins — write back to localStorage cache so sync reads are fresh
         saveProgress(remoteData);
         setProgress(remoteData);
         prevXPRef.current = remoteData.xp;
       } else {
-        // No remote row yet — check if localStorage has existing data to migrate
         const localData = loadProgress();
         const hasLocalData =
           localData.completedResources.length > 0 ||
@@ -119,6 +150,14 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     return () => { cancelled = true; };
   }, []);
 
+  // Listen for auth state changes (sign-in, sign-out, session refresh)
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      applyUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   const checkLevelUp = useCallback((oldXP: number) => {
     const newData = loadProgress();
     setProgress(newData);
@@ -128,7 +167,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setLevelUpInfo({ level: newLevel.level, title: newLevel.title });
     }
     prevXPRef.current = newData.xp;
-    // Background sync to Supabase — fire-and-forget
     syncProgressToSupabase(newData);
   }, []);
 
@@ -148,7 +186,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     const oldXP = prevXPRef.current;
     const result = recordStudyDay();
     checkLevelUp(oldXP);
-    // Auto-earn streak badges
     const newBadges = checkStreakBadges(result.newStreak);
     for (const b of newBadges) {
       earnBadgeStore(b.id);
@@ -161,7 +198,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     const result = earnBadgeStore(id);
     const newData = loadProgress();
     setProgress(newData);
-    // earnBadge doesn't go through checkLevelUp, so sync explicitly
     syncProgressToSupabase(newData);
     return result;
   }, []);
@@ -193,7 +229,12 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ProgressContext.Provider
-      value={{ progress, toggleResource, logStudyDay, earnBadge, isCompleted, saveQuizResult, getBestQuizScore, saveCheckIn, getLatestCheckIn, levelUpInfo, clearLevelUp, mounted }}
+      value={{
+        progress, toggleResource, logStudyDay, earnBadge, isCompleted,
+        saveQuizResult, getBestQuizScore, saveCheckIn, getLatestCheckIn,
+        levelUpInfo, clearLevelUp, mounted,
+        user, isAnonymous, hasPaid, refreshAuth,
+      }}
     >
       {children}
     </ProgressContext.Provider>

@@ -59,6 +59,11 @@ export function saveProgress(data: ProgressData): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+export function clearProgress(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(STORAGE_KEY);
+}
+
 export function toggleResource(
   resourceId: string,
   resourceType: string,
