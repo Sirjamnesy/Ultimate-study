@@ -17,44 +17,37 @@ export default function AuthCallbackPage() {
         router.replace(paid ? "/" : "/checkout");
       }
 
-      // 1. Implicit flow — tokens are in the hash fragment (#access_token=...&refresh_token=...)
-      const hash = window.location.hash.slice(1);
-      if (hash) {
-        const p = new URLSearchParams(hash);
-        const accessToken = p.get("access_token");
-        const refreshToken = p.get("refresh_token");
-
-        if (accessToken && refreshToken) {
-          const { data, error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-          if (!error && data.session) {
-            go(hasPaid(data.session.user.app_metadata));
-            return;
-          }
-        }
-      }
-
-      // 2. PKCE flow — code is in the query string (?code=...)
-      const code = new URLSearchParams(window.location.search).get("code");
-      if (code) {
-        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-        if (!error && data.session) {
-          go(hasPaid(data.session.user.app_metadata));
-          return;
-        }
-      }
-
-      // 3. Session already exists (e.g. user came back to this page)
+      // createBrowserClient has detectSessionInUrl:true — calling getSession()
+      // automatically processes both PKCE (?code=...) and implicit (#access_token=...)
+      // tokens from the current URL and stores the resulting session in cookies.
       const { data: { session } } = await supabase.auth.getSession();
+
       if (session && !session.user.is_anonymous) {
         go(hasPaid(session.user.app_metadata));
         return;
       }
 
-      // Nothing worked
-      router.replace("/login?error=oauth_failed");
+      // Fallback: listen for the SIGNED_IN event in case getSession() resolved
+      // before the async URL processing completed.
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          if (event === "SIGNED_IN" && session) {
+            go(hasPaid(session.user.app_metadata));
+            subscription.unsubscribe();
+          }
+        }
+      );
+
+      // 10 s safety net — if nothing fires, send back to login
+      const timer = setTimeout(() => {
+        subscription.unsubscribe();
+        router.replace("/login?error=timeout");
+      }, 10_000);
+
+      return () => {
+        clearTimeout(timer);
+        subscription.unsubscribe();
+      };
     }
 
     handleCallback();
