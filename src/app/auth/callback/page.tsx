@@ -5,43 +5,59 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 
-/**
- * OAuth callback page — handles both PKCE (code param) and implicit flow (hash fragment).
- * The Supabase JS client automatically processes whichever flow Supabase sends back.
- * We listen for SIGNED_IN then route: paid/admin → /, unpaid → /checkout.
- */
 export default function AuthCallbackPage() {
   const router = useRouter();
 
   useEffect(() => {
-    function redirect(hasPaid: boolean) {
-      router.replace(hasPaid ? "/" : "/checkout");
-    }
-
-    function checkPaid(appMeta: Record<string, unknown>) {
-      return appMeta?.has_paid === true || appMeta?.is_admin === true;
-    }
-
-    // Listen for auth state change — fires for both PKCE code exchange and
-    // implicit-flow hash fragment processing
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        redirect(checkPaid(session.user.app_metadata));
-        subscription.unsubscribe();
+    async function handleCallback() {
+      function hasPaid(appMeta: Record<string, unknown>) {
+        return appMeta?.has_paid === true || appMeta?.is_admin === true;
       }
-    });
+      function go(paid: boolean) {
+        router.replace(paid ? "/" : "/checkout");
+      }
 
-    // Also check immediately in case the session is already available
-    supabase.auth.getSession().then(({ data: { session } }) => {
+      // 1. Implicit flow — tokens are in the hash fragment (#access_token=...&refresh_token=...)
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const p = new URLSearchParams(hash);
+        const accessToken = p.get("access_token");
+        const refreshToken = p.get("refresh_token");
+
+        if (accessToken && refreshToken) {
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (!error && data.session) {
+            go(hasPaid(data.session.user.app_metadata));
+            return;
+          }
+        }
+      }
+
+      // 2. PKCE flow — code is in the query string (?code=...)
+      const code = new URLSearchParams(window.location.search).get("code");
+      if (code) {
+        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+        if (!error && data.session) {
+          go(hasPaid(data.session.user.app_metadata));
+          return;
+        }
+      }
+
+      // 3. Session already exists (e.g. user came back to this page)
+      const { data: { session } } = await supabase.auth.getSession();
       if (session && !session.user.is_anonymous) {
-        redirect(checkPaid(session.user.app_metadata));
-        subscription.unsubscribe();
+        go(hasPaid(session.user.app_metadata));
+        return;
       }
-    });
 
-    return () => subscription.unsubscribe();
+      // Nothing worked
+      router.replace("/login?error=oauth_failed");
+    }
+
+    handleCallback();
   }, [router]);
 
   return (
