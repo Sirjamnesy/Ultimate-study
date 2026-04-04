@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   BookOpen,
   Trophy,
@@ -52,9 +53,17 @@ const item = {
 };
 
 export default function Home() {
-  const { progress, getLatestCheckIn, mounted, hasPaid } = useProgress();
+  const { progress, getLatestCheckIn, mounted, hasPaid, user, isAnonymous } = useProgress();
+  const router = useRouter();
 
-  // Show landing/sales page for unauthenticated or unpaid visitors
+  // Real (non-anonymous) authenticated user who hasn't paid yet → send to checkout
+  useEffect(() => {
+    if (mounted && !hasPaid && user && !isAnonymous) {
+      router.replace("/checkout");
+    }
+  }, [mounted, hasPaid, user, isAnonymous, router]);
+
+  // Show landing/sales page for unauthenticated or anonymous (unpaid) visitors
   if (mounted && !hasPaid) {
     return <LandingPage />;
   }
