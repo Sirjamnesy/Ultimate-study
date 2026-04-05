@@ -152,8 +152,16 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   // Listen for auth state changes (sign-in, sign-out, session refresh)
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      applyUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        // After sign-out, re-create an anonymous session so the app keeps
+        // functioning correctly (landing page, no crash, fresh local state).
+        supabase.auth.signInAnonymously().then(({ data }) => {
+          applyUser(data.user ?? null);
+        });
+      } else {
+        applyUser(session?.user ?? null);
+      }
     });
     return () => subscription.unsubscribe();
   }, []);

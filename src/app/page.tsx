@@ -63,20 +63,8 @@ export default function Home() {
     }
   }, [mounted, hasPaid, user, isAnonymous, router]);
 
-  // Show landing/sales page for unauthenticated or anonymous (unpaid) visitors
-  if (mounted && !hasPaid) {
-    return <LandingPage />;
-  }
-  const xp = mounted ? progress.xp : 0;
-  const streak = mounted ? progress.streak : 0;
-  const completedCount = mounted ? progress.completedResources.length : 0;
-  const levelInfo = getXPProgress(xp);
-  const totalResources = getTotalResources();
-  const totalXP = getTotalXP();
-  const currentWeekData = weeks.find(
-    (w) => w.id === (mounted ? progress.currentWeek : 1)
-  );
-
+  // NOTE: ALL hooks must be declared before any conditional return (Rules of Hooks).
+  // This useMemo is intentionally placed here, before the early return below.
   const showCheckInPrompt = useMemo(() => {
     if (!mounted) return false;
     const latest = getLatestCheckIn();
@@ -86,6 +74,21 @@ export default function Home() {
     );
     return daysSince >= 7;
   }, [mounted, getLatestCheckIn]);
+
+  // Show landing/sales page for unauthenticated or anonymous (unpaid) visitors
+  if (mounted && !hasPaid) {
+    return <LandingPage />;
+  }
+
+  const xp = mounted ? progress.xp : 0;
+  const streak = mounted ? progress.streak : 0;
+  const completedCount = mounted ? progress.completedResources.length : 0;
+  const levelInfo = getXPProgress(xp);
+  const totalResources = getTotalResources();
+  const totalXP = getTotalXP();
+  const currentWeekData = weeks.find(
+    (w) => w.id === (mounted ? progress.currentWeek : 1)
+  );
 
   return (
     <div className="min-h-screen notebook-bg">
