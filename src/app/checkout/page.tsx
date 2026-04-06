@@ -2,19 +2,48 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Zap, Globe } from "lucide-react";
+import { Loader2, Zap, Globe, Tag, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/shared/header";
+import { useProgress } from "@/components/shared/progress-provider";
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { refreshAuth } = useProgress();
   const [loading, setLoading] = useState<"NGN" | "USD" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showInvite, setShowInvite] = useState(false);
+  const [inviteCode, setInviteCode] = useState("");
+  const [inviteLoading, setInviteLoading] = useState(false);
+  const [inviteError, setInviteError] = useState<string | null>(null);
+
+  async function handleInviteCode() {
+    if (!inviteCode.trim()) return;
+    setInviteError(null);
+    setInviteLoading(true);
+    try {
+      const res = await fetch("/api/redeem-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: inviteCode.trim() }),
+      });
+      const json = await res.json();
+      if (!json.success) {
+        setInviteError(json.error ?? "Invalid code. Please check and try again.");
+        setInviteLoading(false);
+        return;
+      }
+      await refreshAuth();
+      router.push("/");
+    } catch {
+      setInviteError("Network error. Please try again.");
+      setInviteLoading(false);
+    }
+  }
 
   async function handleCheckout(currency: "NGN" | "USD") {
     setError(null);
     setLoading(currency);
-
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -108,7 +137,46 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            <p className="mt-6 text-xs text-muted-foreground">
+            {/* Invite code */}
+            <div className="mt-5 border-t border-border/40 pt-4">
+              <button
+                onClick={() => { setShowInvite(!showInvite); setInviteError(null); }}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mx-auto"
+              >
+                <Tag className="h-3 w-3" />
+                Have an invite code?
+                <ChevronDown className={`h-3 w-3 transition-transform ${showInvite ? "rotate-180" : ""}`} />
+              </button>
+
+              {showInvite && (
+                <div className="mt-3 flex gap-2">
+                  <input
+                    type="text"
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                    onKeyDown={(e) => e.key === "Enter" && handleInviteCode()}
+                    placeholder="INVITE-CODE"
+                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-violet-500/40 font-mono uppercase tracking-widest placeholder:normal-case placeholder:tracking-normal"
+                    disabled={inviteLoading}
+                  />
+                  <Button
+                    onClick={handleInviteCode}
+                    disabled={inviteLoading || !inviteCode.trim()}
+                    size="sm"
+                    variant="outline"
+                    className="shrink-0"
+                  >
+                    {inviteLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Apply"}
+                  </Button>
+                </div>
+              )}
+
+              {inviteError && (
+                <p className="mt-2 text-xs text-red-400">{inviteError}</p>
+              )}
+            </div>
+
+            <p className="mt-4 text-xs text-muted-foreground">
               Secure payment via Paystack. Your progress is already saved — you&apos;ll keep everything after payment.
             </p>
           </div>
