@@ -171,7 +171,7 @@ type ProgressData = {
 
 ## Upcoming Work (Post Sprint 8)
 - **Paystack go-live:** Add `PAYSTACK_SECRET_KEY`, `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`, `NEXT_PUBLIC_APP_URL` to Vercel env vars. Set webhook URL in Paystack dashboard: `https://ultimatestudy.xyz/api/webhooks/paystack`
-- **Email branding:** Once domain DNS is stable — set up Resend (free, 3k/mo), configure custom SMTP in Supabase (Auth → SMTP), design branded confirmation + reset email templates in Supabase (Auth → Email Templates)
+- **Email branding:** Deferred until first paying customer. Currently using Supabase default emails (`noreply@mail.supabase.io`). When ready: set up Resend (free, 3k/mo) → configure custom SMTP in Supabase (Auth → SMTP Settings: host `smtp.resend.com`, port 465, user `resend`, password = Resend API key) → design branded confirmation + reset email templates in Supabase (Auth → Email Templates). Note: email confirmation UX code (check-your-email screen, resend buttons) is already built and works with any SMTP.
 - **Public profiles:** Shareable `/profile/[userId]` read-only view — level, XP, badges, domain strengths
 - **AI tutor:** Claude-powered Q&A for exam prep (requires Anthropic API key)
 
