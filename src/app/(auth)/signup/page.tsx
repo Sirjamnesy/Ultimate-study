@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, UserPlus, Loader2, Tag } from "lucide-react";
+import { Eye, EyeOff, UserPlus, Loader2, Tag, Mail, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { promoteAnonymousUser, signInWithGoogle } from "@/lib/auth/helpers";
+import { promoteAnonymousUser, signInWithGoogle, resendConfirmationEmail } from "@/lib/auth/helpers";
 import { supabase } from "@/lib/supabase/client";
 
 function GoogleIcon() {
@@ -42,6 +42,10 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // After email signup: show "check your email" screen
+  const [confirmedEmail, setConfirmedEmail] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSent, setResendSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -98,7 +102,8 @@ export default function SignupPage() {
       return;
     }
 
-    router.push("/checkout");
+    // Show "check your email" screen — user must confirm before logging in next time
+    setConfirmedEmail(email);
   }
 
   async function handleGoogle() {
@@ -110,6 +115,71 @@ export default function SignupPage() {
       setGoogleLoading(false);
     }
     // On success, browser redirects to Google — no further action needed
+  }
+
+  async function handleResend() {
+    if (!confirmedEmail) return;
+    setResendLoading(true);
+    await resendConfirmationEmail(confirmedEmail);
+    setResendLoading(false);
+    setResendSent(true);
+    setTimeout(() => setResendSent(false), 5000);
+  }
+
+  // ── Check-your-email screen ──────────────────────────────────────────────
+  if (confirmedEmail) {
+    return (
+      <div className="w-full max-w-md">
+        <div className="sketch-card bg-card p-8 rounded-2xl text-center">
+          <div className="h-16 w-16 rounded-full bg-violet-500/10 flex items-center justify-center mx-auto mb-5 sketch-border-sm border-violet-500/30">
+            <Mail className="h-8 w-8 text-violet-400" />
+          </div>
+          <h1 className="text-2xl font-bold font-sketch mb-2">Check your email</h1>
+          <p className="text-sm text-muted-foreground mb-1">
+            We sent a confirmation link to
+          </p>
+          <p className="font-mono text-sm text-foreground font-medium mb-5">
+            {confirmedEmail}
+          </p>
+          <p className="text-xs text-muted-foreground mb-6">
+            Click the link in the email to verify your address. You can still access the app — your progress is saved.
+          </p>
+
+          <div className="space-y-3">
+            <Button
+              onClick={() => router.push("/checkout")}
+              className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+            >
+              Continue to Checkout
+            </Button>
+
+            <Button
+              variant="ghost"
+              onClick={handleResend}
+              disabled={resendLoading || resendSent}
+              className="w-full text-muted-foreground gap-2"
+            >
+              {resendLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : resendSent ? (
+                <CheckCircle className="h-4 w-4 text-emerald-400" />
+              ) : null}
+              {resendSent ? "Email sent!" : resendLoading ? "Sending…" : "Resend confirmation email"}
+            </Button>
+          </div>
+
+          <p className="mt-4 text-xs text-muted-foreground">
+            Wrong email?{" "}
+            <button
+              onClick={() => setConfirmedEmail(null)}
+              className="text-violet-400 hover:text-violet-300 underline"
+            >
+              Go back
+            </button>
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

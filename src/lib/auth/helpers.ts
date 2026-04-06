@@ -64,6 +64,17 @@ export async function signInWithGoogle(): Promise<{ error: string | null }> {
 }
 
 /**
+ * Resend the email confirmation link to the given address.
+ */
+export async function resendConfirmationEmail(
+  email: string
+): Promise<{ error: string | null }> {
+  const { error } = await supabase.auth.resend({ type: "signup", email });
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+/**
  * Sign out and clear local progress cache.
  */
 export async function signOut(): Promise<void> {

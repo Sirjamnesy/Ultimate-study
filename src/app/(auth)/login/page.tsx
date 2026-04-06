@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, LogIn, Loader2 } from "lucide-react";
+import { Eye, EyeOff, LogIn, Loader2, Mail, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { signIn, signInWithGoogle } from "@/lib/auth/helpers";
+import { signIn, signInWithGoogle, resendConfirmationEmail } from "@/lib/auth/helpers";
 
 function GoogleIcon() {
   return (
@@ -38,6 +38,9 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSent, setResendSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -47,6 +50,13 @@ export default function LoginPage() {
     const { error: authError } = await signIn(email, password);
 
     if (authError) {
+      // Detect unconfirmed email specifically — show resend UI instead of generic error
+      if (authError.toLowerCase().includes("email not confirmed") ||
+          authError.toLowerCase().includes("confirm your email")) {
+        setUnconfirmedEmail(email);
+        setLoading(false);
+        return;
+      }
       setError(authError);
       setLoading(false);
       return;
@@ -65,6 +75,15 @@ export default function LoginPage() {
       setGoogleLoading(false);
     }
     // On success, browser is redirected to Google — no further action needed
+  }
+
+  async function handleResend() {
+    if (!unconfirmedEmail) return;
+    setResendLoading(true);
+    await resendConfirmationEmail(unconfirmedEmail);
+    setResendLoading(false);
+    setResendSent(true);
+    setTimeout(() => setResendSent(false), 5000);
   }
 
   return (
@@ -142,6 +161,34 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
+
+          {unconfirmedEmail && (
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-3 space-y-2">
+              <div className="flex items-center gap-2 text-amber-400">
+                <Mail className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium">Email not confirmed</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Check your inbox for a confirmation link sent to{" "}
+                <span className="font-mono text-foreground">{unconfirmedEmail}</span>.
+              </p>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleResend}
+                disabled={resendLoading || resendSent}
+                className="w-full text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 gap-2 h-8 text-xs"
+              >
+                {resendLoading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : resendSent ? (
+                  <CheckCircle className="h-3.5 w-3.5" />
+                ) : null}
+                {resendSent ? "Confirmation email sent!" : resendLoading ? "Sending…" : "Resend confirmation email"}
+              </Button>
+            </div>
+          )}
 
           {error && (
             <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
