@@ -25,7 +25,9 @@ const PUBLIC_ROUTES = [
   "/",
   "/login",
   "/signup",
-  "/auth/callback",   // OAuth callback — must be public so tokens can be processed client-side
+  "/auth/callback",      // OAuth callback — tokens processed client-side
+  "/forgot-password",    // Anyone can request a reset
+  "/reset-password",     // Token in URL hash IS the auth — must be public
   "/api/webhooks",
 ];
 

@@ -64,6 +64,31 @@ export async function signInWithGoogle(): Promise<{ error: string | null }> {
 }
 
 /**
+ * Send a password reset email. The link redirects to /reset-password where
+ * Supabase's implicit-flow token is processed and the user sets a new password.
+ */
+export async function sendPasswordReset(
+  email: string
+): Promise<{ error: string | null }> {
+  const redirectTo = `${window.location.origin}/reset-password`;
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+/**
+ * Set a new password for the currently authenticated user (called after a
+ * PASSWORD_RECOVERY session is established from the reset link).
+ */
+export async function updatePassword(
+  password: string
+): Promise<{ error: string | null }> {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+/**
  * Resend the email confirmation link to the given address.
  */
 export async function resendConfirmationEmail(
