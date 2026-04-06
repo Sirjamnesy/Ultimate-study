@@ -5,7 +5,7 @@
 ## What This Is
 A 26-week gamified study roadmap web app for becoming an AI Engineer, with a focus on the **Claude Certified Architect** exam. Built with Next.js (App Router), React 19, TypeScript, Tailwind CSS v4, shadcn/ui, and Framer Motion.
 
-**Live:** https://ultimate-study-nu.vercel.app/
+**Live:** https://ultimatestudy.xyz (also: https://ultimate-study-nu.vercel.app/)
 **Repo:** https://github.com/Sirjamnesy/Ultimate-study.git
 
 ## Tech Stack
@@ -14,8 +14,10 @@ A 26-week gamified study roadmap web app for becoming an AI Engineer, with a foc
 - **Styling:** Tailwind CSS v4, shadcn/ui (base-nova style)
 - **Animations:** Framer Motion
 - **Fonts:** Google Fonts — Geist (body), Geist Mono (code), Caveat (sketch headings via `font-sketch` class)
-- **Persistence:** Supabase (anonymous auth + JSONB table) + localStorage cache
+- **Persistence:** Supabase (anonymous auth → real accounts + JSONB table) + localStorage cache
 - **Database:** Supabase project `ultimate-study` (id: `jsxpvmrsfpqymwjxnxqn`, region: eu-west-1)
+- **Payments:** Paystack (one-time purchase, NGN ₦20,000 / USD $15) — pending account activation
+- **Domain:** ultimatestudy.xyz (purchased on Vercel, DNS managed by Vercel)
 - **Deployment:** Vercel
 
 ## Design System
@@ -57,6 +59,23 @@ Dark mode is the default. Theme toggle exists in header.
 | `src/lib/supabase/database.types.ts` | Auto-generated Supabase TypeScript types |
 | `src/lib/store/progress.ts` | localStorage store: ProgressData type, all synchronous read/write functions |
 | `src/lib/store/supabase-sync.ts` | Async Supabase helpers: `fetchProgressFromSupabase()`, `syncProgressToSupabase()` |
+| `src/proxy.ts` | Route protection: PAID_ROUTES → paid users only, AUTH_ROUTES → real accounts only, PUBLIC_ROUTES → always open |
+| `src/lib/auth/helpers.ts` | Auth helpers: `promoteAnonymousUser`, `signIn`, `signInWithGoogle`, `signOut`, `sendPasswordReset`, `updatePassword`, `resendConfirmationEmail` |
+| `src/lib/supabase/server.ts` | Server-side Supabase client (`createServerSupabaseClient`) using cookies via `@supabase/ssr` |
+| `src/lib/supabase/purchases.ts` | Server-only: `hasUserPaid()`, `redeemInviteCode()` using service-role client |
+| `src/lib/paystack.ts` | Paystack API: `initializeTransaction`, `verifyTransaction`, `verifyWebhookSignature` |
+| `src/app/(auth)/login/page.tsx` | Login: email/password + Google OAuth + unconfirmed-email resend banner + forgot password link |
+| `src/app/(auth)/signup/page.tsx` | Signup: promotes anon → real account, invite code redemption, check-your-email screen |
+| `src/app/(auth)/forgot-password/page.tsx` | Forgot password: sends reset email via `resetPasswordForEmail` |
+| `src/app/(auth)/reset-password/page.tsx` | Reset password: processes PASSWORD_RECOVERY token, sets new password |
+| `src/app/checkout/page.tsx` | Checkout: NGN/USD price picker + invite code redemption |
+| `src/app/payment/callback/page.tsx` | Post-payment: verifies Paystack reference with retry logic, shows confetti on success |
+| `src/app/payment/cancelled/page.tsx` | Payment cancelled gracefully |
+| `src/app/api/checkout/route.ts` | POST: initializes Paystack transaction, returns authorization_url |
+| `src/app/api/webhooks/paystack/route.ts` | POST: handles `charge.success`, records purchase, marks user paid |
+| `src/app/api/verify-payment/route.ts` | GET: verifies payment by reference (post-redirect fallback) |
+| `src/app/api/redeem-invite/route.ts` | POST: validates + redeems invite code, marks user paid |
+| `src/components/shared/landing-page.tsx` | Sales/landing page for unauthenticated or anonymous visitors |
 | `public/architects-playbook.pdf` | 27-page PDF on enterprise LLM architecture patterns (14MB) |
 
 ### Gamification System
@@ -108,33 +127,33 @@ Dark mode is the default. Theme toggle exists in header.
 6. **Sprint 5:** Profile page (`/profile`), weekly check-ins (`/check-ins`), mobile hamburger menu, responsive quiz fixes, dashboard check-in prompt, custom 404, enhanced SEO metadata
 7. **Sprint 7:** Supabase migration — anonymous auth, `user_progress` JSONB table, RLS policies, hybrid localStorage+Supabase storage, data migration path for existing users
 8. **Sprint 6:** Quiz content — filled all 7 placeholder quizzes with 47 new questions (W4, W7, W9, W10, W12, W17, W19). No more "Coming Soon" quizzes.
+9. **Sprint 8:** Auth + Payments — real accounts (email/password + Google OAuth), anonymous→real account promotion preserving progress UUID, Paystack one-time payment (NGN/USD), route protection via `proxy.ts`, landing page for unauthenticated visitors, invite code system, email confirmation UX (check-your-email screen + resend), password reset flow (`/forgot-password` + `/reset-password`), sign-out→new-anon-session flow, React hooks violation fix on home page. Domain `ultimatestudy.xyz` purchased and live. Paystack pending account verification.
 
 ## Supabase Architecture
-- **Anonymous auth:** `supabase.auth.signInAnonymously()` on first visit — stable UUID per browser, no sign-up required. Sprint 8 will promote to real accounts via Supabase identity linking.
+- **Anonymous auth:** `supabase.auth.signInAnonymously()` on first visit — stable UUID per browser, no sign-up required. Promoted to real account via `updateUser({ email, password })` on signup (preserves UUID + all progress data).
 - **Table:** `public.user_progress` — single JSONB `data` column stores full `ProgressData`. RLS: users can only access their own row.
+- **Table:** `public.purchases` — records completed Paystack transactions. Columns: `user_id`, `paystack_reference` (UNIQUE), `amount_kobo`, `currency`, `status`.
+- **Table:** `public.invite_codes` — `code` (PK), `max_uses`, `used_count`. Managed manually in Supabase Table Editor.
+- **Functions:** `mark_user_paid(uuid)`, `mark_user_admin(uuid)` — write `has_paid`/`is_admin` to `raw_app_meta_data` so JWT reflects access.
 - **Hybrid storage:** localStorage = instant synchronous reads (offline cache). Supabase = persistent backend. On mutations: write localStorage first (instant) + fire-and-forget Supabase upsert via `syncProgressToSupabase()`.
-- **Key files:** `src/lib/supabase/client.ts`, `src/lib/supabase/database.types.ts`, `src/lib/store/supabase-sync.ts`
-- **Anonymous auth must be enabled** in Supabase dashboard: Authentication → Providers → Anonymous → Enable
-- **Vercel env vars required:** `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` (set in Vercel dashboard for production)
+- **Session cookies:** Browser client uses `createBrowserClient` from `@supabase/ssr` with `flowType: 'implicit'` — stores session in cookies (readable by server-side proxy). Do NOT use `createClient` from `@supabase/supabase-js` — it uses localStorage which is invisible to the proxy.
+- **Env vars required:**
+  - `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` — public, set in Vercel
+  - `SUPABASE_SERVICE_ROLE_KEY` — server-only, set in Vercel (used by webhook + invite redemption)
+  - `PAYSTACK_SECRET_KEY` + `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` — set when Paystack account verified
+  - `NEXT_PUBLIC_APP_URL` — set to `https://ultimatestudy.xyz`
 
-## Sprint 8 — Auth + Payments (NEXT)
-This is the monetisation sprint. The app will be sold as a one-time purchase.
+## Auth Flow (Sprint 8)
+1. New visitor → anonymous session created automatically (`signInAnonymously`)
+2. Visitor sees landing page (`<LandingPage />`) — dashboard hidden behind `hasPaid` check
+3. Signup → `updateUser({ email, password })` promotes anon → real account (same UUID, progress preserved) → check-your-email screen
+4. Google OAuth → `signInWithGoogle()` uses `linkIdentity()` for anon sessions (preserves UUID), `signInWithOAuth()` for new users → `/auth/callback` processes token → `/checkout` or dashboard
+5. Checkout → Paystack hosted page → webhook fires `charge.success` → `mark_user_paid` → JWT updated → dashboard unlocked
+6. Invite code → redeemable on signup page or checkout page → `mark_user_paid` → instant access
+7. Sign out → new anonymous session auto-created (progress-provider `onAuthStateChange` handler)
+8. Password reset → `resetPasswordForEmail` → link to `/reset-password` → `PASSWORD_RECOVERY` token → `updateUser({ password })`
 
-### Goals
-1. **Real user accounts** — email/password sign-up/login via Supabase Auth
-2. **Promote anonymous sessions** — link existing anon UUID to new real account (Supabase identity linking), preserving all progress data
-3. **One-time payment gate** — Stripe Checkout, single product SKU
-4. **Access control** — unpaid users see a preview/landing; paying users get full app access
-5. **Protected routes** — middleware redirects unauthenticated or unpaid users
-
-### Key decisions for Sprint 8
-- **Auth provider:** Supabase Auth (already in stack — no Clerk needed)
-- **Payment:** Stripe (one-time payment, not subscription)
-- **Session linking:** `supabase.auth.updateUser({ email, password })` on the anonymous session promotes it to a real account without changing the `user_id` UUID — all Supabase data is preserved
-- **Access gate:** Store `has_paid: boolean` on the Supabase user record or a separate `purchases` table; middleware checks this
-- **No free tier planned** — product is sold, not freemium
-
-### ProgressData type (current shape — Sprint 8 must not break this)
+## ProgressData type
 ```typescript
 type ProgressData = {
   completedResources: string[];
@@ -151,8 +170,10 @@ type ProgressData = {
 ```
 
 ## Upcoming Work (Post Sprint 8)
-- **Public profiles:** Shareable profile URLs (requires Sprint 8 auth)
-- **AI tutor:** Claude-powered Q&A for exam prep (requires API integration)
+- **Paystack go-live:** Add `PAYSTACK_SECRET_KEY`, `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`, `NEXT_PUBLIC_APP_URL` to Vercel env vars. Set webhook URL in Paystack dashboard: `https://ultimatestudy.xyz/api/webhooks/paystack`
+- **Email branding:** Once domain DNS is stable — set up Resend (free, 3k/mo), configure custom SMTP in Supabase (Auth → SMTP), design branded confirmation + reset email templates in Supabase (Auth → Email Templates)
+- **Public profiles:** Shareable `/profile/[userId]` read-only view — level, XP, badges, domain strengths
+- **AI tutor:** Claude-powered Q&A for exam prep (requires Anthropic API key)
 
 ## Conventions
 - Commit messages: `feat:` prefix for features/enhancements, `fix:` for bug fixes
