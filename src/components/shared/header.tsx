@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { useTheme } from "@/components/shared/theme-provider";
 import { useProgress } from "@/components/shared/progress-provider";
 import { signOut } from "@/lib/auth/helpers";
+import { UpdatesBadge } from "@/components/shared/updates-badge";
 
 export function Header() {
   const { theme, toggle } = useTheme();
@@ -71,6 +72,9 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-1">
+          {/* Updates badge — desktop */}
+          <UpdatesBadge className="hidden sm:inline-flex" />
+
           {/* Theme toggle — desktop */}
           <Button
             variant="ghost"
@@ -135,24 +139,27 @@ export function Header() {
               <div className="flex flex-col h-full">
                 {/* Theme toggle + XP pill — mobile top */}
                 <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-border/40">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="gap-2 text-sm"
-                    onClick={toggle}
-                  >
-                    {theme === "dark" ? (
-                      <>
-                        <Sun className="h-4 w-4" />
-                        Light Mode
-                      </>
-                    ) : (
-                      <>
-                        <Moon className="h-4 w-4" />
-                        Dark Mode
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="gap-2 text-sm"
+                      onClick={toggle}
+                    >
+                      {theme === "dark" ? (
+                        <>
+                          <Sun className="h-4 w-4" />
+                          Light Mode
+                        </>
+                      ) : (
+                        <>
+                          <Moon className="h-4 w-4" />
+                          Dark Mode
+                        </>
+                      )}
+                    </Button>
+                    <UpdatesBadge />
+                  </div>
                   {mounted && (
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-sm font-mono text-violet-400">
                       <Zap className="h-3.5 w-3.5" />
