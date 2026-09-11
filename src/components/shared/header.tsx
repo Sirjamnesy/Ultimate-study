@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck, LogOut } from "lucide-react";
+import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck, LogOut, ShoppingBag, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useTheme } from "@/components/shared/theme-provider";
@@ -32,6 +32,8 @@ export function Header() {
   const isBadges = pathname === "/badges";
   const isProfile = pathname === "/profile";
   const isCheckIns = pathname === "/check-ins";
+  const isShop = pathname.startsWith("/products");
+  const isLibrary = pathname.startsWith("/library");
 
   const backHref = isWeekPage ? "/roadmap" : isRoadmap ? "/" : isQuizPage ? "/quiz" : isQuizHub ? "/" : isBadges ? "/" : isProfile ? "/" : isCheckIns ? "/" : null;
   const backLabel = isWeekPage ? "Roadmap" : isRoadmap ? "Home" : isQuizPage ? "Quizzes" : isQuizHub ? "Home" : isBadges ? "Home" : isProfile ? "Home" : isCheckIns ? "Home" : null;
@@ -40,6 +42,8 @@ export function Header() {
     { href: "/roadmap", label: "Roadmap", icon: <Map className="h-4 w-4" />, active: isRoadmap || isWeekPage },
     { href: "/quiz", label: "Quizzes", icon: <BookOpen className="h-4 w-4" />, active: isQuizHub || isQuizPage },
     { href: "/check-ins", label: "Check-Ins", icon: <ClipboardCheck className="h-4 w-4" />, active: isCheckIns },
+    { href: "/products", label: "Shop", icon: <ShoppingBag className="h-4 w-4" />, active: isShop },
+    { href: "/library", label: "Library", icon: <Library className="h-4 w-4" />, active: isLibrary },
     { href: "/profile", label: "Profile", icon: <User className="h-4 w-4" />, active: isProfile },
   ];
 
