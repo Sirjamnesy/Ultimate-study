@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+// Routes that require a real, signed-in admin account. Deliberately excludes
+// /api/admin/* — those route handlers check admin status themselves and
+// return a 403 JSON response, which a redirect here would break (a fetch()
+// caller expects JSON, not an HTML redirect target).
+const ADMIN_ROUTES = [
+  "/admin",
+];
+
 // Routes that require a paid account
 const PAID_ROUTES = [
   "/roadmap",
@@ -36,6 +44,10 @@ function isPublic(pathname: string): boolean {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon") ||
     pathname.includes(".");
+}
+
+function requiresAdmin(pathname: string): boolean {
+  return ADMIN_ROUTES.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
 
 function requiresPaid(pathname: string): boolean {
@@ -81,6 +93,18 @@ export async function proxy(request: NextRequest) {
     user?.app_metadata?.has_paid === true ||
     user?.app_metadata?.is_admin === true
   );
+  const isAdmin = !isAnonymous && user?.app_metadata?.is_admin === true;
+
+  // Admin-route protection
+  if (requiresAdmin(pathname)) {
+    if (!isAuthenticated || isAnonymous) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    if (!isAdmin) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    return response;
+  }
 
   // Paid-route protection
   if (requiresPaid(pathname)) {
