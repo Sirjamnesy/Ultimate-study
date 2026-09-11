@@ -16,7 +16,7 @@ A 26-week gamified study roadmap web app for becoming an AI Engineer, with a foc
 - **Fonts:** Google Fonts — Geist (body), Geist Mono (code), Caveat (sketch headings via `font-sketch` class)
 - **Persistence:** Supabase (anonymous auth → real accounts + JSONB table) + localStorage cache
 - **Database:** Supabase project `ultimate-study` (id: `jsxpvmrsfpqymwjxnxqn`, region: eu-west-1)
-- **Payments:** Paystack (one-time purchase, NGN ₦20,000 / USD $15) — pending account activation
+- **Payments:** Paystack — one-time whole-app purchase (NGN ₦20,000 / USD $15) plus per-product digital-product purchases (Sprint 9), both pending Paystack account activation
 - **Domain:** ultimatestudy.xyz (purchased on Vercel, DNS managed by Vercel)
 - **Deployment:** Vercel
 
@@ -77,6 +77,17 @@ Dark mode is the default. Theme toggle exists in header.
 | `src/app/api/redeem-invite/route.ts` | POST: validates + redeems invite code, marks user paid |
 | `src/components/shared/landing-page.tsx` | Sales/landing page for unauthenticated or anonymous visitors |
 | `public/architects-playbook.pdf` | 27-page PDF on enterprise LLM architecture patterns (14MB) |
+| `src/lib/data/products.ts` | Product/course/PDF types, Zod schemas, price formatting — mirrors the `Resource`/`Week` shape in `roadmap.ts` |
+| `src/lib/data/updates.ts` | Changelog/updates feed types + Zod schema |
+| `src/lib/auth/admin.ts` | `getAdminUser()` — centralized `is_admin` check for admin pages/routes |
+| `src/lib/supabase/product-purchases.ts` | Server-only: `hasUserPurchasedProduct()`, `getUserProductPurchases()` — per-product entitlement, separate from `hasUserPaid()` |
+| `src/lib/geo/currency.ts` + `currency-server.ts` | Geo-currency: header → currency resolution, cookie read helper |
+| `src/lib/store/product-progress.ts` | Hybrid local+Supabase hook for purchased-course completion (`product_progress` table) |
+| `src/components/mascot/mascot.tsx` | `<Mascot pose />` — falls back to the violet Zap mark until real artwork lands in `public/mascot/*.svg` |
+| `src/app/admin/**` | Admin UI (`is_admin`-gated): product + updates CRUD, PDF/cover upload |
+| `src/app/products/**`, `src/app/library/**` | Public storefront and owned-content library (PDF viewer, course reader) |
+| `src/app/updates/**` | Public changelog/announcements feed |
+| `supabase/migrations/*.sql` | Version-controlled schema migrations (convention started post-Sprint 8 — apply via Supabase MCP `apply_migration`, never ad hoc) |
 
 ### Gamification System
 - **XP:** Variable per resource type (course: 50, docs: 25, video: 30, practice: 40, build: 200, quiz: 75, reading: 25)
@@ -128,6 +139,7 @@ Dark mode is the default. Theme toggle exists in header.
 7. **Sprint 7:** Supabase migration — anonymous auth, `user_progress` JSONB table, RLS policies, hybrid localStorage+Supabase storage, data migration path for existing users
 8. **Sprint 6:** Quiz content — filled all 7 placeholder quizzes with 47 new questions (W4, W7, W9, W10, W12, W17, W19). No more "Coming Soon" quizzes.
 9. **Sprint 8:** Auth + Payments — real accounts (email/password + Google OAuth), anonymous→real account promotion preserving progress UUID, Paystack one-time payment (NGN/USD), route protection via `proxy.ts`, landing page for unauthenticated visitors, invite code system, email confirmation UX (check-your-email screen + resend), password reset flow (`/forgot-password` + `/reset-password`), sign-out→new-anon-session flow, React hooks violation fix on home page. Domain `ultimatestudy.xyz` purchased and live. Paystack pending account verification.
+10. **Sprint 9:** Digital products marketplace — `products`/`product_purchases`/`product_progress`/`updates` tables (versioned migrations start here, see `supabase/migrations/`), admin UI (`/admin`, `is_admin`-gated) for creating courses/PDFs and posting changelog updates, Paystack generalized for per-product pricing without touching the whole-app `purchases`/`mark_user_paid` path, public storefront (`/products`) + library (`/library`) with signed-URL PDF delivery and a course reader, geo-based currency detection (Vercel edge header) with manual override, public `/updates` changelog feed with an unread badge, and a `<Mascot />` component scaffold (falls back to the existing Zap mark until real artwork is designed).
 
 ## Supabase Architecture
 - **Anonymous auth:** `supabase.auth.signInAnonymously()` on first visit — stable UUID per browser, no sign-up required. Promoted to real account via `updateUser({ email, password })` on signup (preserves UUID + all progress data).
@@ -142,6 +154,14 @@ Dark mode is the default. Theme toggle exists in header.
   - `SUPABASE_SERVICE_ROLE_KEY` — server-only, set in Vercel (used by webhook + invite redemption)
   - `PAYSTACK_SECRET_KEY` + `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` — set when Paystack account verified
   - `NEXT_PUBLIC_APP_URL` — set to `https://ultimatestudy.xyz`
+
+## Digital Products Marketplace (Sprint 9)
+- **Tables:** `products` (course/PDF, `content` JSONB shaped by `type`, prices in `price_ngn_kobo`/`price_usd_cents`, `status` draft/published/archived), `product_purchases` (per-product ownership — deliberately a *separate* table from `purchases`/`mark_user_paid` so the whole-app entitlement path is never touched), `product_progress` (course completion, separate from `user_progress`), `updates` (changelog feed). All four use RLS: public/owner SELECT only, writes go through service-role admin API routes.
+- **Storage buckets:** `product-files` (private — PDFs, access only via short-lived signed URLs after an ownership check) and `product-covers` (public).
+- **Admin:** `/admin` (gated by `is_admin`, same flag as the whole-app admin bypass) — CRUD for products and updates. Course content is authored as JSON (validated against a Zod schema in `src/lib/data/products.ts`) with a live preview, not a drag-and-drop builder — a deliberate v1 scope call.
+- **Checkout:** `initializeTransaction()` in `paystack.ts` now takes an explicit `amount` (caller resolves the price) instead of the old fixed `PRICES` lookup. `/api/products/[slug]/checkout` mirrors `/api/checkout` but for one product; the webhook and `/api/verify-payment` branch on `metadata.product_id` into `product_purchases` and skip `mark_user_paid` entirely — product ownership is checked with a direct indexed query (`hasUserPurchasedProduct`) at the point content is served, not carried in the JWT (unlike `has_paid`/`is_admin`, it's an unbounded per-product set).
+- **Geo-currency:** `src/proxy.ts` sets a `currency` cookie from Vercel's `x-vercel-ip-country` edge header on first visit (`NG` → NGN, else USD; falls back to USD in local dev where the header is absent) and never overwrites an existing cookie — that's what makes the `CurrencyToggle` manual override stick.
+- **Migrations:** schema changes are now tracked in `supabase/migrations/*.sql` and applied via the Supabase MCP `apply_migration` tool — this convention started with Sprint 9; everything before it (`user_progress`, `purchases`, `invite_codes`, `mark_user_paid`/`mark_user_admin`) was applied ad hoc and is only documented in a non-destructive baseline-comment migration, not fully retrofitted.
 
 ## Auth Flow (Sprint 8)
 1. New visitor → anonymous session created automatically (`signInAnonymously`)
@@ -169,11 +189,14 @@ type ProgressData = {
 };
 ```
 
-## Upcoming Work (Post Sprint 8)
+## Upcoming Work (Post Sprint 9)
 - **Paystack go-live:** Add `PAYSTACK_SECRET_KEY`, `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`, `NEXT_PUBLIC_APP_URL` to Vercel env vars. Set webhook URL in Paystack dashboard: `https://ultimatestudy.xyz/api/webhooks/paystack`
 - **Email branding:** Deferred until first paying customer. Currently using Supabase default emails (`noreply@mail.supabase.io`). When ready: set up Resend (free, 3k/mo) → configure custom SMTP in Supabase (Auth → SMTP Settings: host `smtp.resend.com`, port 465, user `resend`, password = Resend API key) → design branded confirmation + reset email templates in Supabase (Auth → Email Templates). Note: email confirmation UX code (check-your-email screen, resend buttons) is already built and works with any SMTP.
 - **Public profiles:** Shareable `/profile/[userId]` read-only view — level, XP, badges, domain strengths
 - **AI tutor:** Claude-powered Q&A for exam prep (requires Anthropic API key)
+- **Mascot artwork:** `<Mascot />` component and pose union exist (`src/components/mascot/mascot.tsx`), wired into the landing hero, 404, level-up celebration, and empty library state — but every call site still renders the placeholder Zap-square fallback because no real illustration exists yet. Needs a concept/design pass (name, personality, style consistent with the sketch aesthetic), then SVGs dropped into `public/mascot/*.svg` and `ARTWORK_READY` flipped to `true`.
+- **Admin course builder v2:** course `content` is currently authored as raw JSON (Zod-validated) in `/admin/products/[id]/edit` — fine for the owner today, but a structured module/resource form builder would be friendlier if course authoring becomes frequent.
+- **Pre-existing lint debt (not introduced by Sprint 9):** `npx eslint src` reports 5 errors (all `react-hooks/set-state-in-effect`, in `src/app/page.tsx`, `src/app/quiz/[id]/page.tsx`, `src/components/shared/confetti.tsx`, `src/components/shared/theme-provider.tsx`) plus ~21 unused-var/exhaustive-deps warnings, none in Sprint 9 code. Since Next.js runs ESLint during `next build` by default, this is worth a cleanup pass — confirm whether it's currently blocking Vercel deploys.
 
 ## Conventions
 - Commit messages: `feat:` prefix for features/enhancements, `fix:` for bug fixes
