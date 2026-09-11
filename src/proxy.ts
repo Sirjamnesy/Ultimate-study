@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { CURRENCY_COOKIE, resolveCurrencyFromHeader } from "@/lib/geo/currency";
 
 // Routes that require a real, signed-in admin account. Deliberately excludes
 // /api/admin/* — those route handlers check admin status themselves and
@@ -23,6 +24,7 @@ const PAID_ROUTES = [
 const AUTH_ROUTES = [
   "/checkout",
   "/payment",
+  "/library",             // owned digital products — real account, not the whole-app paywall
   "/api/checkout",
   "/api/verify-payment",
   "/api/redeem-invite",
@@ -36,7 +38,10 @@ const PUBLIC_ROUTES = [
   "/auth/callback",      // OAuth callback — tokens processed client-side
   "/forgot-password",    // Anyone can request a reset
   "/reset-password",     // Token in URL hash IS the auth — must be public
+  "/products",            // public storefront — drives conversion for anonymous visitors
+  "/updates",             // public changelog/announcements feed
   "/api/webhooks",
+  "/api/currency",
 ];
 
 function isPublic(pathname: string): boolean {
@@ -60,14 +65,26 @@ function requiresAuth(pathname: string): boolean {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const response = NextResponse.next();
+
+  // Geo-currency: default a currency cookie for first-time visitors based on
+  // Vercel's edge geo header (absent in local dev, where this falls back to
+  // USD). Never overwrites an existing cookie — that's what lets the manual
+  // currency toggle stick after a visitor overrides the detected default.
+  if (!request.cookies.get(CURRENCY_COOKIE)) {
+    const country = request.headers.get("x-vercel-ip-country");
+    response.cookies.set(CURRENCY_COOKIE, resolveCurrencyFromHeader(country), {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+  }
 
   // Always allow public routes through
   if (isPublic(pathname)) {
-    return NextResponse.next();
+    return response;
   }
 
   // Create a Supabase client that reads cookies from the request
-  const response = NextResponse.next();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
