@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { initializeTransaction, type PaystackCurrency } from "@/lib/paystack";
+import { initializeTransaction, PRICES, type PaystackCurrency } from "@/lib/paystack";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://ultimate-study-nu.vercel.app";
 
@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     const transaction = await initializeTransaction({
       email,
       currency,
+      amount: PRICES[currency],
       metadata: { user_id: user.id },
       callbackUrl: `${APP_URL}/payment/callback`,
     });

@@ -3,6 +3,8 @@ import { verifyWebhookSignature, verifyTransaction } from "@/lib/paystack";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 
+type PaystackEvent = { event: string; data: { reference: string; metadata?: Record<string, string> } };
+
 // Service-role client — no cookies needed, webhook has no user session
 function getAdminClient() {
   return createClient<Database>(
@@ -23,7 +25,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
   }
 
-  let event: { event: string; data: { reference: string } };
+  let event: PaystackEvent;
   try {
     event = JSON.parse(rawBody);
   } catch {
@@ -53,6 +55,28 @@ export async function POST(request: NextRequest) {
     }
 
     const admin = getAdminClient();
+    const productId = txn.metadata?.product_id;
+
+    if (productId) {
+      // Per-product purchase — separate table from the whole-app `purchases`
+      // path below, and deliberately does NOT call mark_user_paid: product
+      // ownership isn't a JWT boolean, it's checked per-product at read time.
+      const { error: insertError } = await admin.from("product_purchases").insert({
+        user_id: userId,
+        product_id: productId,
+        paystack_reference: reference,
+        amount: txn.amount,
+        currency: txn.currency,
+        status: "completed",
+      });
+
+      if (insertError && !insertError.message.includes("duplicate")) {
+        console.error("[webhook/paystack] product_purchases insert failed:", insertError.message);
+        return NextResponse.json({ error: "DB insert failed." }, { status: 500 });
+      }
+
+      return NextResponse.json({ received: true });
+    }
 
     // Insert purchase record (idempotent via UNIQUE on paystack_reference)
     const { error: insertError } = await admin.from("purchases").insert({

@@ -28,6 +28,10 @@ export type InitTransactionResult = {
 export async function initializeTransaction(params: {
   email: string;
   currency: PaystackCurrency;
+  /** Amount in kobo (NGN) or cents (USD). Caller resolves the price — this
+   * function no longer assumes the single whole-app PRICES table, so it
+   * works for both the whole-app purchase and per-product checkout. */
+  amount: number;
   metadata: Record<string, string>;
   callbackUrl: string;
 }): Promise<InitTransactionResult> {
@@ -36,7 +40,7 @@ export async function initializeTransaction(params: {
     headers: paystackHeaders(),
     body: JSON.stringify({
       email: params.email,
-      amount: PRICES[params.currency],
+      amount: params.amount,
       currency: params.currency,
       metadata: params.metadata,
       callback_url: params.callbackUrl,
