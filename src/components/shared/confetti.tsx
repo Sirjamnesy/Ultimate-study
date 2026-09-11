@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Mascot } from "@/components/mascot/mascot";
 
 const EMOJIS = ["🎉", "⭐", "🚀", "💜", "✨", "🔥", "💎", "🏆"];
 
@@ -179,6 +180,7 @@ export function LevelUpCelebration({
         className="absolute inset-0 flex items-center justify-center"
       >
         <div className="bg-card/95 backdrop-blur-md border-2 border-dashed border-amber-500/50 rounded-2xl px-10 py-6 shadow-2xl sketch-border text-center">
+          <Mascot pose="celebrate" size={56} className="mx-auto mb-2" />
           <p className="text-sm font-mono text-amber-400 uppercase tracking-widest mb-1">Level Up!</p>
           <p className="text-3xl font-sketch font-bold">
             Level {level} — {title}

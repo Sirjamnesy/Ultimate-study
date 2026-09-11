@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { BookOpen, FileText, Library as LibraryIcon } from "lucide-react";
+import { BookOpen, FileText } from "lucide-react";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getUserProductPurchases } from "@/lib/supabase/product-purchases";
 import { Header } from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
+import { Mascot } from "@/components/mascot/mascot";
 
 export default async function LibraryPage() {
   const supabase = await createServerSupabaseClient();
@@ -20,7 +21,7 @@ export default async function LibraryPage() {
 
         {products.length === 0 ? (
           <div className="sketch-card bg-card p-10 rounded-2xl text-center">
-            <LibraryIcon className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+            <Mascot pose="reading" size={72} className="mx-auto mb-3" />
             <p className="text-sm text-muted-foreground mb-4">Nothing here yet.</p>
             <Link href="/products">
               <Button size="sm">Browse the shop</Button>

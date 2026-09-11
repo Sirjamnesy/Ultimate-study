@@ -7,6 +7,7 @@ import {
   CheckCircle, ArrowRight, Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Mascot } from "@/components/mascot/mascot";
 
 const container = {
   hidden: {},
@@ -104,6 +105,7 @@ export function LandingPage() {
             className="space-y-6"
           >
             <motion.div variants={item}>
+              <Mascot pose="wave" size={72} className="mx-auto mb-3" />
               <span className="sticker inline-flex items-center gap-1.5 text-xs mb-4">
                 <Zap className="h-3 w-3" /> Claude Certified Architect Prep
               </span>

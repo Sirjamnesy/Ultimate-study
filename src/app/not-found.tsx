@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Home, Search } from "lucide-react";
+import { Mascot } from "@/components/mascot/mascot";
 
 export default function NotFound() {
   return (
@@ -8,6 +9,7 @@ export default function NotFound() {
       <div className="sketch-card bg-card p-8 sm:p-12 max-w-md w-full text-center relative">
         <div className="tape" />
         <div className="pt-4 space-y-4">
+          <Mascot pose="sleeping" size={72} className="mx-auto" />
           <span className="text-6xl">📝</span>
           <h1 className="font-sketch text-4xl sm:text-5xl font-bold">
             404
