@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck, LogOut, ShoppingBag, Library } from "lucide-react";
+import { ArrowLeft, Moon, Sun, Zap, Map, BookOpen, Menu, User, ClipboardCheck, LogOut, ShoppingBag, Library, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useTheme } from "@/components/shared/theme-provider";
@@ -13,7 +13,7 @@ import { UpdatesBadge } from "@/components/shared/updates-badge";
 
 export function Header() {
   const { theme, toggle } = useTheme();
-  const { progress, mounted, user, hasPaid } = useProgress();
+  const { progress, mounted, user, hasPaid, isAdmin } = useProgress();
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -35,6 +35,7 @@ export function Header() {
   const isCheckIns = pathname === "/check-ins";
   const isShop = pathname.startsWith("/products");
   const isLibrary = pathname.startsWith("/library");
+  const isAdminPage = pathname.startsWith("/admin");
 
   const backHref = isWeekPage ? "/roadmap" : isRoadmap ? "/" : isQuizPage ? "/quiz" : isQuizHub ? "/" : isBadges ? "/" : isProfile ? "/" : isCheckIns ? "/" : null;
   const backLabel = isWeekPage ? "Roadmap" : isRoadmap ? "Home" : isQuizPage ? "Quizzes" : isQuizHub ? "Home" : isBadges ? "Home" : isProfile ? "Home" : isCheckIns ? "Home" : null;
@@ -46,6 +47,9 @@ export function Header() {
     { href: "/products", label: "Shop", icon: <ShoppingBag className="h-4 w-4" />, active: isShop },
     { href: "/library", label: "Library", icon: <Library className="h-4 w-4" />, active: isLibrary },
     { href: "/profile", label: "Profile", icon: <User className="h-4 w-4" />, active: isProfile },
+    ...(isAdmin
+      ? [{ href: "/admin", label: "Admin", icon: <ShieldCheck className="h-4 w-4" />, active: isAdminPage }]
+      : []),
   ];
 
   return (

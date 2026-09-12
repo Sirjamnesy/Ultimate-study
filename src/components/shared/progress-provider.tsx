@@ -40,6 +40,7 @@ type ProgressContextType = {
   user: User | null;
   isAnonymous: boolean;
   hasPaid: boolean;
+  isAdmin: boolean;
   refreshAuth: () => Promise<void>;
 };
 
@@ -70,6 +71,7 @@ const ProgressContext = createContext<ProgressContextType>({
   user: null,
   isAnonymous: true,
   hasPaid: false,
+  isAdmin: false,
   refreshAuth: async () => {},
 });
 
@@ -84,6 +86,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [hasPaid, setHasPaid] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const prevXPRef = useRef<number>(progress.xp);
 
   function applyUser(u: User | null) {
@@ -91,6 +94,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     const anon = !u || u.is_anonymous === true;
     setIsAnonymous(anon);
     setHasPaid(!anon && (u?.app_metadata?.has_paid === true || u?.app_metadata?.is_admin === true));
+    setIsAdmin(!anon && u?.app_metadata?.is_admin === true);
   }
 
   const refreshAuth = useCallback(async () => {
@@ -241,7 +245,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         progress, toggleResource, logStudyDay, earnBadge, isCompleted,
         saveQuizResult, getBestQuizScore, saveCheckIn, getLatestCheckIn,
         levelUpInfo, clearLevelUp, mounted,
-        user, isAnonymous, hasPaid, refreshAuth,
+        user, isAnonymous, hasPaid, isAdmin, refreshAuth,
       }}
     >
       {children}
