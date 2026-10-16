@@ -198,6 +198,18 @@ type ProgressData = {
 - **Admin course builder v2:** course `content` is currently authored as raw JSON (Zod-validated) in `/admin/products/[id]/edit` — fine for the owner today, but a structured module/resource form builder would be friendlier if course authoring becomes frequent.
 - **Pre-existing lint debt (not introduced by Sprint 9):** `npx eslint src` reports 5 errors (all `react-hooks/set-state-in-effect`, in `src/app/page.tsx`, `src/app/quiz/[id]/page.tsx`, `src/components/shared/confetti.tsx`, `src/components/shared/theme-provider.tsx`) plus ~21 unused-var/exhaustive-deps warnings, none in Sprint 9 code. Since Next.js runs ESLint during `next build` by default, this is worth a cleanup pass — confirm whether it's currently blocking Vercel deploys.
 
+## Design skill: `design-taste-frontend` (taste-skill)
+Installed at `.claude/skills/design-taste-frontend/` — MIT, from github.com/Leonxlnx/taste-skill (commit `f624f37`); its Node scripts were audited before install (they only contact public image archives, serve a localhost-only server, and clean up their own temp browser profile). Working files go to `.taste-skill/` (gitignored); it also keeps a small history file in `~/.taste-skill/`.
+- **Scope:** public, marketing-style pages only — the landing page, shop/product pages, the updates feed. The skill itself excludes dashboards and app screens, so do not run it on the header/nav, roadmap, quizzes, admin, the library reader or checkout.
+- **It conflicts with the brand by design.** Run against `/products` its inspector marks as failures the things the sketch/notebook identity does on purpose: violet accent, dashed borders, three typefaces (Geist + Caveat + Geist Mono), emoji, stickers. Before using it on a page, ask the owner whether that page keeps the sketch identity (pass `--keep palette,type` to `draw.mjs` and map the brand onto the roles) or deliberately departs from it. Never silently restyle.
+- **Cost:** a full build is a multi-round loop (roughly 30–45 min, a few hundred thousand tokens). Use it for a real page redesign, not a small tweak.
+- **Running it in the cloud sandbox:** needs Node 22+ and Chrome/Chromium. Chrome refuses to run as root without `--no-sandbox` and the skill doesn't pass it, so point `CHROME_PATH` at a wrapper (don't edit the skill's scripts):
+  ```bash
+  printf '#!/bin/sh\nexec /opt/pw-browsers/chromium-1194/chrome-linux/chrome --no-sandbox "$@"\n' > /tmp/chrome-nosandbox.sh && chmod +x /tmp/chrome-nosandbox.sh
+  CHROME_PATH=/tmp/chrome-nosandbox.sh node .claude/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:3000/products
+  ```
+  (Adjust the `chromium-NNNN` folder to whatever is under `/opt/pw-browsers`.) Verified working this way against the local dev server.
+
 ## Conventions
 - Commit messages: `feat:` prefix for features/enhancements, `fix:` for bug fixes
 - No test suite yet (planned)
