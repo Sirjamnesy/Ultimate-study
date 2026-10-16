@@ -62,6 +62,21 @@ export function ProductForm({ product }: { product?: Product }) {
     if (!slugTouched) setSlug(slugify(value));
   }
 
+  // A PDF has no lesson JSON — its only "content" is the uploaded file — so
+  // switching type on a new product swaps in the matching starting content.
+  function handleTypeChange(next: ProductType) {
+    setType(next);
+    setContentJson(next === "pdf" ? "{}" : DEFAULT_COURSE_CONTENT);
+  }
+
+  const uploadedPdfPath = (() => {
+    try {
+      return (JSON.parse(contentJson) as { storage_path?: string }).storage_path ?? null;
+    } catch {
+      return null;
+    }
+  })();
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -171,10 +186,16 @@ export function ProductForm({ product }: { product?: Product }) {
       <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <Label htmlFor="type">Type</Label>
-          <Select id="type" value={type} onChange={(e) => setType(e.target.value as ProductType)}>
-            <option value="course">Course</option>
-            <option value="pdf">PDF</option>
+          <Select
+            id="type"
+            value={type}
+            disabled={isEdit}
+            onChange={(e) => handleTypeChange(e.target.value as ProductType)}
+          >
+            <option value="course">Course (read in the app)</option>
+            <option value="pdf">PDF (a file to read or download)</option>
           </Select>
+          {isEdit && <p className="text-xs text-muted-foreground">Type can&apos;t change after creation.</p>}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="status">Status</Label>
@@ -233,37 +254,66 @@ export function ProductForm({ product }: { product?: Product }) {
         {!isEdit && <p className="text-xs text-muted-foreground">Save the product first to enable file uploads.</p>}
       </div>
 
-      {type === "pdf" && isEdit && (
+      {type === "pdf" && (
         <div className="space-y-1.5">
           <Label>PDF file</Label>
-          <div className="flex items-center gap-3">
-            <input
-              ref={pdfInputRef}
-              type="file"
-              accept="application/pdf"
-              className="hidden"
-              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload("pdf", f); }}
-            />
-            <Button type="button" variant="outline" size="sm" disabled={uploadingPdf} onClick={() => pdfInputRef.current?.click()} className="gap-1.5">
-              {uploadingPdf ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-              {uploadingPdf ? "Uploading…" : "Upload PDF"}
-            </Button>
-          </div>
+          {isEdit ? (
+            <div className="flex items-center gap-3 flex-wrap">
+              <input
+                ref={pdfInputRef}
+                type="file"
+                accept="application/pdf"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload("pdf", f); }}
+              />
+              <Button type="button" variant="outline" size="sm" disabled={uploadingPdf} onClick={() => pdfInputRef.current?.click()} className="gap-1.5">
+                {uploadingPdf ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+                {uploadingPdf ? "Uploading…" : uploadedPdfPath ? "Replace PDF" : "Upload PDF"}
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                {uploadedPdfPath ? "File uploaded and stored privately." : "No file yet — upload one before publishing."}
+              </span>
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Save as a draft first — you&apos;ll be able to upload the PDF on the next screen.
+            </p>
+          )}
         </div>
       )}
 
-      <div className="space-y-1.5">
-        <Label htmlFor="content">
-          Content JSON {type === "pdf" ? "(storage_path is set automatically by the upload above)" : "(modules/resources)"}
-        </Label>
-        <Textarea
-          id="content"
-          rows={12}
-          value={contentJson}
-          onChange={(e) => setContentJson(e.target.value)}
-          className="font-mono text-xs"
-        />
-      </div>
+      {type === "course" && (
+        <div className="space-y-1.5">
+          <Label htmlFor="content">Course content (JSON)</Label>
+          <details className="text-xs text-muted-foreground rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+            <summary className="cursor-pointer font-medium text-foreground/80">How this works</summary>
+            <div className="mt-2 space-y-1.5 leading-relaxed">
+              <p>
+                A course is a list of <b>modules</b> (sections), and each module is a list of <b>resources</b> (lessons
+                students tick off). Copy a resource block to add another lesson; copy a module block to add a section.
+              </p>
+              <p>
+                Every <code>id</code> must be unique within the course and never change once students have started
+                (their progress is saved against it). <code>type</code> is one of: reading, video, course, docs,
+                practice, build, quiz.
+              </p>
+              <p>
+                For a lesson you write here, put the text in <code>body</code> (markdown works). For a lesson hosted
+                elsewhere (a YouTube video, a doc), use <code>url</code> instead. <code>duration</code> is optional,
+                e.g. &quot;15 min&quot;.
+              </p>
+            </div>
+          </details>
+          <Textarea
+            id="content"
+            rows={14}
+            value={contentJson}
+            onChange={(e) => setContentJson(e.target.value)}
+            className="font-mono text-xs"
+            spellCheck={false}
+          />
+        </div>
+      )}
 
       {error && (
         <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">

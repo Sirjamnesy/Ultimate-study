@@ -23,8 +23,11 @@ export const courseContentSchema = z.object({
   modules: z.array(courseModuleSchema).min(1),
 });
 
+// storage_path is optional so a PDF product can be saved as a draft before its
+// file is uploaded (uploads need the product's id, which only exists after
+// the first save). Publishing without a file is blocked in productFormSchema.
 export const pdfContentSchema = z.object({
-  storage_path: z.string().min(1),
+  storage_path: z.string().min(1).optional(),
   page_count: z.number().int().positive().optional(),
 });
 
@@ -82,6 +85,17 @@ export const productFormSchema = z
         path: ["content"],
         message: `Invalid ${data.type} content: ${result.error.issues.map((i) => i.message).join("; ")}`,
       });
+      return;
+    }
+    if (data.type === "pdf" && data.status === "published") {
+      const storagePath = (data.content as { storage_path?: string } | null)?.storage_path;
+      if (!storagePath) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["content"],
+          message: "Upload the PDF file before publishing this product.",
+        });
+      }
     }
   });
 
