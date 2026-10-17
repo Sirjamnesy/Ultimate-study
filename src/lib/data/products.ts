@@ -8,7 +8,12 @@ export const courseResourceSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   type: z.enum(["course", "docs", "video", "practice", "build", "quiz", "reading"]),
-  url: z.string().url().optional(),
+  // http(s) only: students click these links, so reject javascript:/data: URLs.
+  url: z
+    .string()
+    .url()
+    .refine((u) => /^https?:\/\//i.test(u), "Links must start with http:// or https://")
+    .optional(),
   body: z.string().optional(), // markdown, rendered inline when there's no external url
   duration: z.string().optional(),
 });
