@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultimate Study: get to 720 in 26 weeks</title>
+<meta name="description" content="A gamified 26-week study roadmap for the Claude Certified Architect exam. One payment: ₦20,000 in Nigeria or $15 elsewhere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;900&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root {
+  --bg: #e6e0d2;
+  --surface: #dcd5c5;
+  --paper: #f3f2ef;
+  --ink: #1a1a1a;
+  --muted: #5f5b52;
+  --accent: #18bc42;
+  --coral: #ed4b44;
+  --yellow: #f2c21a;
+  --green: #18bc42;
+
+  --m: clamp(20px, 1.6vw + 12px, 28px);
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
+  --step-poster: clamp(3.6rem, 9.4vw, 9.5rem);
+  --step-display: clamp(3.25rem, 13.2vw, 13rem);
+
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: 'Epilogue', system-ui, sans-serif; font-weight: 400;
+  font-size: var(--step-body); line-height: 1.5;
+  overflow-x: hidden;
+}
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+::selection { background: var(--ink); color: var(--yellow); }
+
+.wrap { padding-inline: var(--m); }
+.heavy { font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; text-wrap: balance; }
+.t-head { font-size: var(--step-head); }
+.t-lead { font-size: var(--step-lead); line-height: 1.35; }
+.t-small { font-size: var(--step-small); }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* buttons: square, flat, one fill */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 56px; padding: 0 28px; border: 0; border-radius: 0;
+  background: var(--ink); color: var(--bg); font-weight: 900; font-size: var(--step-body);
+  letter-spacing: -0.01em; text-decoration: none; cursor: pointer;
+  transition: transform 120ms var(--ease-out), background-color 160ms ease, color 160ms ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn--green { background: var(--green); color: var(--ink); }
+.link { font-weight: 500; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.22em; transition: text-decoration-color 160ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: var(--coral); color: var(--ink); }
+  .btn--green:hover { background: var(--yellow); }
+  .link:hover { text-decoration-color: transparent; }
+}
+
+/* ---------- nav ---------- */
+.nav {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 20px var(--m) 0;
+}
+.wordmark { font-weight: 900; font-size: 1.375rem; letter-spacing: -0.04em; text-decoration: none; }
+.nav ul { display: flex; gap: 28px; }
+.nav ul a { font-weight: 500; text-decoration: none; }
+.nav .side { display: flex; align-items: center; gap: 24px; }
+.nav .btn { min-height: 48px; padding: 0 22px; }
+@media (hover: hover) and (pointer: fine) { .nav ul a:hover { text-decoration: underline; text-underline-offset: .22em; } }
+
+/* ---------- hero ---------- */
+.hero {
+  background: var(--green); min-height: 100svh; position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.hero h1 {
+  font-size: var(--step-display); line-height: 0.85; letter-spacing: -0.045em; font-weight: 900;
+  padding: clamp(28px, 4vh, 56px) var(--m) 0; margin-left: -0.04em;
+}
+.lines .line { display: block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; white-space: nowrap; }
+.lines [data-line] { display: block; }
+.hero-foot {
+  flex: 1; display: grid; grid-template-columns: repeat(12, 1fr); gap: 0 24px;
+  padding: clamp(32px, 5vh, 56px) var(--m) 0; position: relative;
+}
+.hero-copy { grid-column: 1 / span 5; align-self: start; display: grid; gap: 28px; padding-bottom: 48px; }
+.hero-copy p { max-width: 34ch; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+.hero-stuck {
+  grid-column: 7 / span 6; justify-self: end; align-self: start; position: relative;
+  width: min(480px, 100%); margin-right: clamp(0px, 4vw, 80px); margin-top: -28px;
+  transform: rotate(-4deg) translateY(var(--drift, 0px)); transform-origin: 50% 0;
+}
+.hero-facts { grid-column: 1 / -1; display: none; }
+
+/* ---------- product UI fragments (data-ui) ---------- */
+[data-ui] { background: var(--paper); color: var(--ink); border: 2px solid var(--ink); font-size: 15px; line-height: 1.35; }
+[data-ui] .ui-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 18px 20px 14px; border-bottom: 2px solid var(--ink); }
+[data-ui] .ui-title { font-weight: 900; font-size: 19px; letter-spacing: -0.02em; line-height: 1.1; }
+[data-ui] .ui-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+[data-ui] .ui-tag { font-weight: 900; font-size: 13px; padding: 5px 9px; background: var(--green); border: 2px solid var(--ink); white-space: nowrap; }
+[data-ui] .ui-body { padding: 16px 20px 20px; }
+[data-ui] .ui-score { display: flex; align-items: flex-end; gap: 16px; }
+[data-ui] .ui-big { font-weight: 900; font-size: 72px; letter-spacing: -0.05em; line-height: 0.85; }
+[data-ui] .ui-score p { padding-bottom: 6px; }
+[data-ui] .ui-score b { font-weight: 900; }
+[data-ui] .ui-rows { margin-top: 18px; display: grid; gap: 9px; }
+[data-ui] .ui-row { display: grid; grid-template-columns: 30px 1fr 42px; align-items: center; gap: 10px; font-size: 13px; }
+[data-ui] .ui-row b { font-weight: 900; }
+[data-ui] .ui-bar { height: 12px; background: var(--surface); border: 2px solid var(--ink); position: relative; }
+[data-ui] .ui-bar i { position: absolute; inset: 0 auto 0 0; background: var(--ink); }
+[data-ui] .ui-row .n { text-align: right; font-variant-numeric: tabular-nums; }
+[data-ui] .ui-mark { position: relative; height: 0; }
+[data-ui] .ui-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 20px; border-top: 2px solid var(--ink); font-size: 13px; }
+[data-ui] .ui-btn { font-weight: 900; font-size: 13px; padding: 8px 12px; background: var(--ink); color: var(--paper); border: 0; }
+
+/* week card */
+[data-ui].week { width: 100%; max-width: 330px; }
+[data-ui].week .ui-top { padding: 14px 16px 12px; }
+[data-ui].week .ui-title { font-size: 15px; }
+[data-ui].week .prog { display: flex; align-items: center; gap: 10px; padding: 12px 16px 6px; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+[data-ui].week .prog .ui-bar { flex: 1; }
+[data-ui].week ul { padding: 4px 16px 12px; display: grid; gap: 7px; }
+[data-ui].week li { display: grid; grid-template-columns: 16px 1fr auto; gap: 9px; align-items: start; font-size: 13px; line-height: 1.3; }
+[data-ui].week li .box { width: 16px; height: 16px; border: 2px solid var(--ink); margin-top: 1px; background: var(--paper); position: relative; }
+[data-ui].week li.done .box { background: var(--ink); }
+[data-ui].week li.done .box::after { content: ""; position: absolute; left: 3px; top: 0px; width: 4px; height: 8px; border: solid var(--paper); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+[data-ui].week li.done span:nth-child(2) { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+[data-ui].week li .xp { font-weight: 900; font-variant-numeric: tabular-nums; }
+[data-ui].week li.now { background: var(--yellow); margin: 0 -8px; padding: 4px 8px; }
+[data-ui].week .ui-foot { padding: 10px 16px; }
+[data-ui].week .stamp { font-weight: 900; font-size: 13px; padding: 5px 9px; background: var(--yellow); border: 2px solid var(--ink); }
+
+/* level card */
+[data-ui].level .ui-big { font-size: 72px; }
+[data-ui].level .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+[data-ui].level .chips span { font-size: 13px; font-weight: 500; padding: 4px 8px; border: 2px solid var(--ink); background: var(--bg); }
+[data-ui].level .chips span.on { background: var(--yellow); }
+[data-ui].level .split { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--ink); }
+[data-ui].level .split > div { padding: 14px 20px; }
+[data-ui].level .split > div + div { border-left: 2px solid var(--ink); }
+[data-ui].level .split b { display: block; font-weight: 900; font-size: 26px; letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+
+/* ---------- how a week works: four fields ---------- */
+.fields { display: grid; grid-template-columns: repeat(4, 1fr); }
+.field { min-height: 84svh; position: relative; padding: 40px 28px 32px; display: grid; grid-template-rows: minmax(64px, auto) 1fr auto; gap: 32px; }
+.field:nth-child(1) { background: var(--coral); }
+.field:nth-child(2) { background: var(--ink); color: var(--bg); }
+.field:nth-child(3) { background: var(--bg); }
+.field:nth-child(4) { background: var(--yellow); }
+.field h2 { font-size: var(--step-lead); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
+.field h2 { grid-row: 1; }
+.field .card-slot { grid-row: 2; align-self: center; display: flex; justify-content: center; }
+.field .card-slot [data-ui] { transition: transform 150ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .field:hover .card-slot [data-ui] { transform: translateY(-6px); } }
+.field .clause { grid-row: 3; font-size: var(--step-lead); font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; max-width: 15ch; }
+
+/* ---------- the 26 weeks: a large plain list ---------- */
+.path { background: var(--bg); padding: clamp(96px, 12vw, 180px) 0 clamp(96px, 12vw, 160px); }
+.path-head { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: end; margin-bottom: clamp(48px, 6vw, 88px); }
+.path-head h2 { grid-column: 1 / span 7; }
+.path-head p { grid-column: 9 / span 4; max-width: 36ch; }
+.phases > li { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px 24px; padding: clamp(28px, 3vw, 44px) var(--m); align-items: start; }
+.phases > li:nth-child(odd) { background: var(--surface); }
+.phases .wk { grid-column: 1 / span 2; font-weight: 900; font-size: var(--step-lead); letter-spacing: -0.02em; line-height: 1.1; padding-top: 0.5em; font-variant-numeric: tabular-nums; }
+.phases h3 { grid-column: 3 / span 6; font-size: clamp(2rem, 1rem + 3.6vw, 4.5rem); font-weight: 900; letter-spacing: -0.04em; line-height: 0.95; }
+.phases .what { grid-column: 9 / span 4; padding-top: 0.4em; }
+.phases .strip { grid-column: 3 / span 10; display: grid; grid-template-columns: repeat(26, 1fr); gap: 4px; margin-top: 8px; }
+.phases .strip i { height: 14px; background: var(--paper); }
+.phases > li:nth-child(odd) .strip i { background: var(--bg); }
+.phases .strip i.f { background: var(--ink); }
+.phases > li.sprint .strip i.f { background: var(--coral); }
+
+/* ---------- the exam: stepped domain tiles ---------- */
+.exam { background: var(--ink); color: var(--bg); padding: clamp(96px, 10vw, 160px) var(--m) clamp(8px, 1vw, 8px); }
+.tiles {
+  display: grid; grid-template-columns: 27fr 19fr 19fr 20fr 15fr; grid-template-rows: auto auto; gap: 8px;
+  --u: clamp(14px, 1.9vw, 26px);
+}
+.tiles .notch { grid-column: 2 / 6; grid-row: 1; padding: 0 0 40px 20px; display: grid; gap: 20px; align-content: end; }
+.tiles .notch p { max-width: 46ch; }
+.tile { grid-row: 2; align-self: end; height: calc(var(--w) * var(--u)); min-height: 220px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; color: var(--ink); }
+.tile.d1 { grid-column: 1; grid-row: 1 / 3; background: var(--green); }
+.tile.d2 { background: var(--yellow); }
+.tile.d3 { background: var(--coral); }
+.tile.d4 { background: var(--bg); }
+.tile.d5 { background: var(--yellow); }
+.tile .fig { font-weight: 900; font-size: var(--step-head); letter-spacing: -0.05em; line-height: 0.85; font-variant-numeric: tabular-nums; }
+.tile .cap { font-weight: 500; line-height: 1.2; }
+.tile .cap b { display: block; font-weight: 900; }
+.exam-facts { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: clamp(56px, 6vw, 96px) 0 clamp(88px, 9vw, 140px); }
+.exam-facts > div { grid-column: span 3; }
+.exam-facts > div span { display: block; max-width: 24ch; }
+.exam-facts b { display: block; font-weight: 900; font-size: var(--step-head); letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+.exam-facts > div:first-child b { color: var(--green); }
+
+/* ---------- live question ---------- */
+.try { background: var(--yellow); padding: clamp(80px, 9vw, 140px) var(--m); display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px 24px; }
+.try-head { grid-column: 1 / span 4; display: grid; gap: 24px; align-content: start; }
+.try-head p { max-width: 30ch; }
+.domain-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+.domain-pick button { min-height: 48px; min-width: 56px; padding: 0 14px; border: 0; background: var(--bg); font-weight: 900; cursor: pointer; transition: transform 120ms var(--ease-out), background-color 160ms ease; }
+.domain-pick button[aria-pressed="true"] { background: var(--ink); color: var(--yellow); }
+.domain-pick button:active { transform: scale(0.96); }
+.try-q { grid-column: 6 / span 7; display: grid; gap: 20px; align-content: start; }
+.try-q .qd { font-weight: 500; }
+.try-q .qtext { font-size: var(--step-lead); font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; max-width: 34ch; }
+.answers { display: grid; gap: 6px; }
+.answers button {
+  display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; text-align: left;
+  width: 100%; min-height: 60px; padding: 16px 18px; border: 0; background: var(--bg); cursor: pointer;
+  font-size: var(--step-body); line-height: 1.35;
+  transition: transform 120ms var(--ease-out), background-color 160ms ease;
+}
+.answers button .k { font-weight: 900; }
+.answers button:active { transform: scale(0.99); }
+@media (hover: hover) and (pointer: fine) { .answers button:not([disabled]):hover { background: var(--paper); } .domain-pick button[aria-pressed="false"]:hover { background: var(--paper); } }
+.answers button.right { background: var(--green); }
+.answers button.wrong { background: var(--coral); }
+.answers button[disabled] { cursor: default; color: var(--ink); }
+.verdict { background: var(--ink); color: var(--bg); padding: 22px 24px; display: grid; gap: 8px; }
+.verdict strong { font-weight: 900; font-size: var(--step-lead); letter-spacing: -0.02em; }
+.js .verdict[hidden] { display: none; }
+.nojs-answer { background: var(--bg); padding: 16px 18px; }
+.nojs-answer summary { font-weight: 900; cursor: pointer; }
+.js .nojs-answer { display: none; }
+
+/* ---------- game layer: object in front of type ---------- */
+.game { background: var(--bg); position: relative; overflow: hidden; padding: clamp(96px, 11vw, 170px) 0 clamp(96px, 10vw, 150px); }
+.stack { padding-inline: var(--m); }
+.stack > * { font-size: var(--step-poster); font-weight: 900; letter-spacing: -0.045em; line-height: 0.88; white-space: nowrap; color: var(--muted); }
+.stack h2 { color: var(--ink); }
+.game-obj { position: absolute; top: clamp(80px, 9vw, 140px); right: clamp(20px, 5vw, 96px); width: min(42vw, 520px); transform: rotate(5deg); }
+.game-facts { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: clamp(56px, 6vw, 96px) var(--m) 0; }
+.game-facts > div { grid-column: 7 / span 6; display: grid; gap: 18px; align-content: start; }
+.game-facts > div.lv { grid-column: 1 / span 5; }
+.game-facts ol { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; counter-reset: lv; }
+.game-facts ol li { counter-increment: lv; font-weight: 500; }
+.game-facts ol li::before { content: counter(lv) "  "; font-weight: 900; display: inline-block; width: 2ch; }
+
+/* ---------- pricing: the ticket ---------- */
+.price { background: var(--coral); padding: clamp(96px, 10vw, 160px) var(--m); display: grid; justify-items: center; gap: 36px; }
+.ticket { width: min(64vw, 1000px); min-width: 0; display: grid; grid-template-columns: 7fr 3fr; position: relative; aspect-ratio: 2.3 / 1; }
+.ticket .main { background: var(--bg); padding: 40px; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
+.ticket .main h2 { font-size: clamp(2.5rem, 4vw, 4rem); }
+.ticket .main ul { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; }
+.ticket .main li { font-size: var(--step-body); line-height: 1.3; padding-left: 18px; position: relative; }
+.ticket .main li::before { content: ""; position: absolute; left: 0; top: 0.42em; width: 9px; height: 9px; background: var(--ink); }
+.ticket .stub { position: relative; background: var(--ink); color: var(--bg); padding: 28px 24px 24px; display: flex; flex-direction: column; align-items: stretch; justify-content: space-between; gap: 16px; text-align: center; }
+.cur { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.cur button { min-height: 44px; border: 0; background: #2c2c2c; color: var(--bg); font-weight: 900; cursor: pointer; transition: background-color 160ms ease, transform 120ms var(--ease-out); }
+.cur button:active { transform: scale(0.97); }
+.cur button[aria-pressed="true"] { background: var(--bg); color: var(--ink); }
+.amount { font-weight: 900; font-size: clamp(2.75rem, 5vw, 5.25rem); letter-spacing: -0.05em; line-height: 0.9; font-variant-numeric: tabular-nums; }
+.js [data-cur]:not(.on) { display: none; }
+.amount-note { font-size: var(--step-small); color: var(--bg); }
+.ticket .stub .btn { width: 100%; }
+.ticket .notch { position: absolute; width: 28px; height: 28px; border-radius: 50%; background: var(--coral); left: 0; transform: translateX(-50%); }
+.ticket .notch.t { top: -14px; } .ticket .notch.b { bottom: -14px; }
+.ticket .perf { position: absolute; left: 0; top: 26px; bottom: 26px; width: 6px; transform: translateX(-50%); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+.ticket .perf i { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); flex: none; }
+.price-after { max-width: 60ch; text-align: center; }
+
+/* ---------- FAQ: a band per question ---------- */
+.faq-head { background: var(--green); min-height: 40svh; display: flex; align-items: flex-end; padding: 48px var(--m); }
+.faq-head h2 { font-size: var(--step-poster); font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; }
+.faq dl > div { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: 56px var(--m); }
+.faq dl > div:nth-child(odd) { background: var(--bg); }
+.faq dl > div:nth-child(even) { background: var(--surface); }
+.faq dt { grid-column: 1 / span 5; font-weight: 900; font-size: var(--step-lead); letter-spacing: -0.025em; line-height: 1.12; }
+.faq dd { grid-column: 7 / span 6; max-width: 58ch; }
+
+/* ---------- CTA: inverted ---------- */
+.cta { background: var(--ink); color: var(--bg); min-height: 90svh; padding: clamp(96px, 10vw, 140px) var(--m) 40px; display: flex; flex-direction: column; justify-content: space-between; gap: 64px; }
+.cta h2 { font-size: var(--step-poster); font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; }
+.cta-foot { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: end; }
+.cta-foot p { grid-column: 1 / span 5; }
+.cta-foot .btn { grid-column: 10 / span 3; }
+
+/* ---------- footer: the mark, built large ---------- */
+.foot { background: var(--bg); padding: clamp(96px, 8vw, 120px) var(--m) 28px; }
+.blocks { display: flex; align-items: flex-end; gap: 4px; height: 34svh; min-height: 220px; }
+.blocks .word { display: flex; align-items: flex-end; gap: 4px; flex: 8; height: 100%; }
+.blocks .word + .word { flex: 5; margin-left: 20px; }
+.blocks span { flex: 1; height: var(--h); display: flex; align-items: flex-end; justify-content: center; font-weight: 900; font-size: min(var(--step-head), 6.2vw); line-height: 0.78; letter-spacing: -0.04em; padding-bottom: 0.08em; overflow: hidden; }
+.blocks .c { background: var(--coral); color: var(--ink); }
+.blocks .k { background: var(--ink); color: var(--bg); }
+.blocks .g { background: var(--green); color: var(--ink); }
+.blocks .y { background: var(--yellow); color: var(--ink); }
+.foot-links { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px 24px; margin-top: 56px; font-size: 15px; }
+.foot-links > div { grid-column: span 2; display: grid; gap: 8px; align-content: start; }
+.foot-links > div.contact { grid-column: 9 / span 4; }
+.foot-links .h { font-weight: 900; }
+.foot-links a { text-decoration: none; font-weight: 400; }
+@media (hover: hover) and (pointer: fine) { .foot-links a:hover { text-decoration: underline; text-underline-offset: .22em; } }
+.foot-last { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 56px; font-size: 15px; }
+.foot-last .btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js .lines [data-line] { transform: translateY(105%); animation: line-up 900ms var(--ease-out) forwards; animation-delay: calc(var(--i) * 110ms + 150ms); }
+  .js .hero-copy, .js .hero-stuck-in { opacity: 0; animation: fade-up 700ms var(--ease-out) 1000ms forwards; }
+  .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: calc(var(--d, 0) * 80ms); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+}
+@keyframes line-up { to { transform: none; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 0; transition: opacity 400ms ease; }
+  .js [data-reveal].is-in { opacity: 1; }
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 1100px) {
+  .nav ul { display: none; }
+  .hero-copy { grid-column: 1 / span 6; }
+  .hero-stuck { grid-column: 7 / span 6; margin-right: 0; width: min(420px, 100%); }
+  .fields { grid-template-columns: 1fr 1fr; }
+  .field { min-height: 0; padding: 32px 24px 32px; gap: 24px; grid-template-rows: none; align-content: start; }
+  .field h2, .field .clause, .field .card-slot { grid-row: auto; }
+  .field .card-slot { justify-content: flex-start; }
+  .field .clause { order: -1; }
+  .field h2 { order: -2; }
+  .path-head h2 { grid-column: 1 / -1; }
+  .path-head p { grid-column: 1 / span 8; }
+  .phases .wk { grid-column: 1 / span 3; }
+  .phases h3 { grid-column: 4 / -1; }
+  .phases .what { grid-column: 4 / -1; padding-top: 0; }
+  .phases .strip { grid-column: 4 / -1; }
+  .exam-facts { row-gap: 40px; }
+  .exam-facts > div { grid-column: span 6; display: flex; align-items: center; gap: 20px; }
+  .exam-facts b { margin: 0; min-width: 2.6em; }
+  .try-head, .try-q { grid-column: 1 / -1; }
+  .game-obj { position: relative; top: auto; right: auto; width: min(88vw, 480px); margin: 48px var(--m) 0 auto; }
+  .game-facts > div, .game-facts > div.lv { grid-column: 1 / -1; }
+  .ticket { width: 100%; }
+  .faq dt { grid-column: 1 / -1; }
+  .faq dd { grid-column: 1 / -1; }
+  .cta-foot p { grid-column: 1 / span 8; }
+  .cta-foot .btn { grid-column: 1 / span 6; }
+  .foot-links > div { grid-column: span 4; }
+  .foot-links > div.contact { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) {
+  .tiles { display: grid; grid-template-columns: 1fr; grid-template-rows: none; gap: 6px; }
+  .tiles .notch { grid-column: 1; grid-row: auto; padding: 0 0 32px; }
+  .tile, .tile.d1 { grid-column: 1; grid-row: auto; height: auto; min-height: 0; width: calc(44% + var(--w) / 27 * 56%); flex-direction: row; align-items: center; gap: 16px; padding: 18px 18px; justify-content: flex-start; }
+  .tile .fig { font-size: 2.5rem; min-width: 2.3em; }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 640px) {
+  .nav { padding-top: 16px; }
+  .nav .side .link { display: none; }
+  .nav .btn { min-height: 44px; padding: 0 16px; font-size: 15px; }
+  .hero { min-height: 0; }
+  .hero h1 { font-size: 15.4vw; padding-top: 36px; }
+  .hero-foot { display: block; padding-top: 28px; }
+  .hero-copy { padding-bottom: 40px; gap: 22px; }
+  .hero-stuck { width: 92%; margin: 0 auto -60px 4%; transform: rotate(-4deg) translateY(var(--drift, 0px)); }
+  .fields { grid-template-columns: 1fr; }
+  .field { padding: 32px 20px 40px; }
+  .path-head p { grid-column: 1 / -1; }
+  .phases > li { grid-template-columns: 1fr; gap: 10px; padding: 28px var(--m); }
+  .phases .wk, .phases h3, .phases .what, .phases .strip { grid-column: 1; padding-top: 0; }
+  .phases .strip { gap: 3px; }
+  .phases .strip i { height: 10px; }
+  .exam-facts { gap: 28px 16px; }
+  .exam-facts > div { grid-column: span 12; gap: 16px; }
+  .exam-facts b { font-size: 3rem; }
+  .try { gap: 32px 0; }
+  .answers button { grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 14px; }
+  .stack > * { font-size: 15vw; }
+  .game-obj { width: auto; margin: 40px var(--m) 0; transform: rotate(3deg); }
+  .game-facts ol { grid-template-columns: 1fr; }
+  .ticket { grid-template-columns: 1fr; aspect-ratio: auto; }
+  .ticket .main { padding: 28px 22px; }
+  .ticket .main h2 { font-size: 9.4vw; }
+  .ticket .main ul { grid-template-columns: 1fr; }
+  .ticket .stub { padding: 28px 22px 22px; }
+  .amount { font-size: 16vw; }
+  .ticket .notch.t { left: -14px; top: -14px; bottom: auto; transform: none; }
+  .ticket .notch.b { left: auto; right: -14px; top: -14px; bottom: auto; transform: none; }
+  .ticket .perf { left: 26px; right: 26px; top: -3px; bottom: auto; width: auto; height: 6px; transform: none; flex-direction: row; }
+  .faq-head { min-height: 30svh; padding: 32px var(--m); }
+  .faq-head h2 { font-size: 13vw; }
+  .faq dl > div { padding: 32px 20px; gap: 14px; }
+  .faq dd { font-size: 17px; }
+  .cta { min-height: 80svh; }
+  .cta h2 { font-size: 16vw; }
+  .cta-foot { display: grid; grid-template-columns: 1fr; gap: 28px; }
+  .cta-foot p, .cta-foot .btn { grid-column: 1; }
+  .blocks { flex-direction: column; align-items: stretch; height: auto; min-height: 0; gap: 4px; }
+  .blocks .word { height: 13svh; min-height: 96px; }
+  .blocks .word + .word { margin-left: 0; width: 66%; }
+  .blocks span { font-size: 11vw; }
+  .foot-links > div { grid-column: span 6; }
+  .foot-last { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero" id="top">
+  <nav class="nav" aria-label="Main">
+    <a class="wordmark" href="#top">Ultimate Study</a>
+    <ul>
+      <li><a href="#weeks">Weeks</a></li>
+      <li><a href="#exam">Exam</a></li>
+      <li><a href="#price">Price</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="side">
+      <a class="link" href="/login">Sign in</a>
+      <a class="btn" href="/signup">Get started</a>
+    </div>
+  </nav>
+
+  <h1 class="lines" aria-label="Get to 720 in 26 weeks">
+    <span class="line" aria-hidden="true"><span data-line style="--i:0">Get to 720</span></span>
+    <span class="line" aria-hidden="true"><span data-line style="--i:1">in 26 weeks</span></span>
+  </h1>
+
+  <div class="hero-foot">
+    <div class="hero-copy">
+      <p class="t-lead">The Claude Certified Architect exam passes at 720 out of 1000. This is a 26-week roadmap that gets you there, scored like a game. One payment: ₦20,000 or $15.</p>
+      <div class="hero-actions">
+        <a class="btn" href="/signup">Get started</a>
+        <a class="link" href="/login">Sign in</a>
+      </div>
+    </div>
+
+    <div class="hero-stuck">
+      <div class="hero-stuck-in">
+        <div data-ui role="img" aria-label="Sample practice exam result: 77 percent, 23 of 30 correct, pass mark 72 percent, with a score for each of the five domains">
+          <div class="ui-top">
+            <div>
+              <div class="ui-title">Practice exam</div>
+              <div class="ui-sub">30 questions, 45 minutes, weighted like the real exam</div>
+            </div>
+            <span class="ui-tag">Passed</span>
+          </div>
+          <div class="ui-body">
+            <div class="ui-score">
+              <span class="ui-big">77%</span>
+              <p><b>23 of 30</b> correct<br>Pass mark 72%</p>
+            </div>
+            <div class="ui-rows">
+              <div class="ui-row"><b>D1</b><span class="ui-bar"><i style="width:87.5%"></i></span><span class="n">7/8</span></div>
+              <div class="ui-row"><b>D2</b><span class="ui-bar"><i style="width:83%"></i></span><span class="n">5/6</span></div>
+              <div class="ui-row"><b>D3</b><span class="ui-bar"><i style="width:67%"></i></span><span class="n">4/6</span></div>
+              <div class="ui-row"><b>D4</b><span class="ui-bar"><i style="width:67%"></i></span><span class="n">4/6</span></div>
+              <div class="ui-row"><b>D5</b><span class="ui-bar"><i style="width:75%"></i></span><span class="n">3/4</span></div>
+            </div>
+          </div>
+          <div class="ui-foot">
+            <span>New questions every attempt</span>
+            <span class="ui-btn">Try again</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- How a week works: the same week card, four times, further along each time -->
+<section class="fields" aria-labelledby="how-h">
+  <div class="field">
+    <h2 id="how-h" data-reveal>How a week works</h2>
+    <div class="card-slot" data-reveal style="--d:1">
+      <div data-ui class="week" role="img" aria-label="Week 13 card, nothing ticked yet, 0 of 590 XP">
+        <div class="ui-top"><div><div class="ui-title">Week 13: Agentic Architecture</div><div class="ui-sub">Domain 1, 27% of the exam</div></div></div>
+        <div class="prog"><span class="ui-bar"><i style="width:0%"></i></span><span>0/7</span></div>
+        <ul>
+          <li><span class="box"></span><span>Agent SDK docs, task statements 1.1–1.7</span><span class="xp">25</span></li>
+          <li><span class="box"></span><span>Architect’s Playbook: multi-agent systems</span><span class="xp">25</span></li>
+          <li><span class="box"></span><span>Exercise: multi-tool agent with escalation</span><span class="xp">200</span></li>
+          <li><span class="box"></span><span>Exercise: multi-agent research system</span><span class="xp">200</span></li>
+          <li><span class="box"></span><span>Domain 1 practice questions</span><span class="xp">40</span></li>
+          <li><span class="box"></span><span>Exam guide: format and scenarios</span><span class="xp">25</span></li>
+          <li><span class="box"></span><span>Domain 1 quiz, 20 questions</span><span class="xp">75</span></li>
+        </ul>
+        <div class="ui-foot"><span>0 of 590 XP</span><span class="ui-btn">Start</span></div>
+      </div>
+    </div>
+    <p class="clause" data-reveal style="--d:2">First the week opens: seven things, 590&nbsp;XP.</p>
+  </div>
+
+  <div class="field">
+    <div class="card-slot" data-reveal style="--d:1">
+      <div data-ui class="week" role="img" aria-label="Week 13 card, three of seven ticked, 250 XP">
+        <div class="ui-top"><div><div class="ui-title">Week 13: Agentic Architecture</div><div class="ui-sub">Domain 1, 27% of the exam</div></div></div>
+        <div class="prog"><span class="ui-bar"><i style="width:43%"></i></span><span>3/7</span></div>
+        <ul>
+          <li class="done"><span class="box"></span><span>Agent SDK docs, task statements 1.1–1.7</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Architect’s Playbook: multi-agent systems</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Exercise: multi-tool agent with escalation</span><span class="xp">200</span></li>
+          <li class="now"><span class="box"></span><span>Exercise: multi-agent research system</span><span class="xp">200</span></li>
+          <li><span class="box"></span><span>Domain 1 practice questions</span><span class="xp">40</span></li>
+          <li><span class="box"></span><span>Exam guide: format and scenarios</span><span class="xp">25</span></li>
+          <li><span class="box"></span><span>Domain 1 quiz, 20 questions</span><span class="xp">75</span></li>
+        </ul>
+        <div class="ui-foot"><span>250 of 590 XP</span><span>Streak 8 days, 1.5x</span></div>
+      </div>
+    </div>
+    <p class="clause" data-reveal style="--d:2">Then you work the list. Builds pay 200&nbsp;XP.</p>
+  </div>
+
+  <div class="field">
+    <div class="card-slot" data-reveal style="--d:1">
+      <div data-ui class="week" role="img" aria-label="Week 13 card, six of seven ticked, the quiz is next">
+        <div class="ui-top"><div><div class="ui-title">Week 13: Agentic Architecture</div><div class="ui-sub">Domain 1, 27% of the exam</div></div></div>
+        <div class="prog"><span class="ui-bar"><i style="width:86%"></i></span><span>6/7</span></div>
+        <ul>
+          <li class="done"><span class="box"></span><span>Agent SDK docs, task statements 1.1–1.7</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Architect’s Playbook: multi-agent systems</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Exercise: multi-tool agent with escalation</span><span class="xp">200</span></li>
+          <li class="done"><span class="box"></span><span>Exercise: multi-agent research system</span><span class="xp">200</span></li>
+          <li class="done"><span class="box"></span><span>Domain 1 practice questions</span><span class="xp">40</span></li>
+          <li class="done"><span class="box"></span><span>Exam guide: format and scenarios</span><span class="xp">25</span></li>
+          <li class="now"><span class="box"></span><span>Domain 1 quiz, 20 questions</span><span class="xp">75</span></li>
+        </ul>
+        <div class="ui-foot"><span>515 of 590 XP</span><span class="ui-btn">Take quiz</span></div>
+      </div>
+    </div>
+    <p class="clause" data-reveal style="--d:2">Then the quiz. 90% or more counts as mastered.</p>
+  </div>
+
+  <div class="field">
+    <div class="card-slot" data-reveal style="--d:1">
+      <div data-ui class="week" role="img" aria-label="Week 13 card, complete, 590 XP and the Domain Master D1 badge">
+        <div class="ui-top"><div><div class="ui-title">Week 13: Agentic Architecture</div><div class="ui-sub">Domain 1, 27% of the exam</div></div><span class="ui-tag">Done</span></div>
+        <div class="prog"><span class="ui-bar"><i style="width:100%"></i></span><span>7/7</span></div>
+        <ul>
+          <li class="done"><span class="box"></span><span>Agent SDK docs, task statements 1.1–1.7</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Architect’s Playbook: multi-agent systems</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Exercise: multi-tool agent with escalation</span><span class="xp">200</span></li>
+          <li class="done"><span class="box"></span><span>Exercise: multi-agent research system</span><span class="xp">200</span></li>
+          <li class="done"><span class="box"></span><span>Domain 1 practice questions</span><span class="xp">40</span></li>
+          <li class="done"><span class="box"></span><span>Exam guide: format and scenarios</span><span class="xp">25</span></li>
+          <li class="done"><span class="box"></span><span>Domain 1 quiz: 92%, mastered</span><span class="xp">75</span></li>
+        </ul>
+        <div class="ui-foot"><span>590 of 590 XP</span><span class="stamp">Domain Master: D1</span></div>
+      </div>
+    </div>
+    <p class="clause" data-reveal style="--d:2">Then the week closes and the badge lands.</p>
+  </div>
+</section>
+
+<!-- The 26 weeks -->
+<section class="path" id="weeks" aria-labelledby="weeks-h">
+  <div class="path-head wrap">
+    <h2 id="weeks-h" class="heavy t-head" data-reveal>26 weeks, 5 phases</h2>
+    <p data-reveal style="--d:1">More than 200 resources, picked and put in order: courses, docs, videos, practice sets and things you build yourself. Every week ends in a quiz.</p>
+  </div>
+  <ol class="phases">
+    <li data-reveal>
+      <span class="wk">Weeks 1–6</span>
+      <h3>AI Foundations</h3>
+      <p class="what">The big picture, generative AI and your first API call, prompt engineering, agents.</p>
+      <span class="strip" aria-hidden="true"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    </li>
+    <li data-reveal>
+      <span class="wk">Weeks 7–12</span>
+      <h3>Developer Skills</h3>
+      <p class="what">MCP and agent skills, Claude Code, Hugging Face, LangChain, RAG and multi-agent systems, structured output.</p>
+      <span class="strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    </li>
+    <li data-reveal class="sprint">
+      <span class="wk">Weeks 13–18</span>
+      <h3>Architect Exam Sprint</h3>
+      <p class="what">A week on each domain (2 and 3 share one), then cross-domain scenarios, then mock exams and final review.</p>
+      <span class="strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    </li>
+    <li data-reveal>
+      <span class="wk">Weeks 19–22</span>
+      <h3>Production AI &amp; LLMOps</h3>
+      <p class="what">LLMOps, cloud AI platforms, advanced agent patterns, fine-tuning and open-source models.</p>
+      <span class="strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i></span>
+    </li>
+    <li data-reveal>
+      <span class="wk">Weeks 23–26</span>
+      <h3>Portfolio &amp; Career</h3>
+      <p class="what">Two portfolio builds, a RAG assistant and a SQL data analyst agent, then teaching, LinkedIn and your showcase.</p>
+      <span class="strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>
+    </li>
+  </ol>
+</section>
+
+<!-- The exam: five weighted domains -->
+<section class="exam" id="exam" aria-labelledby="exam-h">
+  <div class="tiles">
+    <div class="notch">
+      <h2 id="exam-h" class="heavy t-head" data-reveal>5 domains, weighted</h2>
+      <p data-reveal style="--d:1">The exam doesn’t weigh its domains equally, so the roadmap doesn’t either. Agentic architecture gets the most time because it carries the most marks.</p>
+    </div>
+    <div class="tile d1" style="--w:27" data-reveal><span class="fig">27%</span><span class="cap"><b>D1</b>Agentic Architecture</span></div>
+    <div class="tile d2" style="--w:19" data-reveal><span class="fig">19%</span><span class="cap"><b>D2</b>Tool Integration</span></div>
+    <div class="tile d3" style="--w:19" data-reveal><span class="fig">19%</span><span class="cap"><b>D3</b>Claude Code</span></div>
+    <div class="tile d4" style="--w:20" data-reveal><span class="fig">20%</span><span class="cap"><b>D4</b>Prompt Engineering</span></div>
+    <div class="tile d5" style="--w:15" data-reveal><span class="fig">15%</span><span class="cap"><b>D5</b>Context Management</span></div>
+  </div>
+  <div class="exam-facts">
+    <div data-reveal><b>720</b><span>out of 1000 to pass the real exam.</span></div>
+    <div data-reveal style="--d:1"><b>30</b><span>task statements across the five domains.</span></div>
+    <div data-reveal style="--d:2"><b>6</b><span>scenario-based questions to reason through.</span></div>
+    <div data-reveal style="--d:3"><b>72%</b><span>to pass our 30-question, 45-minute practice exam.</span></div>
+  </div>
+</section>
+
+<!-- The live thing: a real question from the quiz bank -->
+<section class="try" id="try" aria-labelledby="try-h">
+  <div class="try-head">
+    <h2 id="try-h" class="heavy t-head" data-reveal>Try one</h2>
+    <p data-reveal style="--d:1">A real question from the domain quizzes. Pick a domain, pick an answer.</p>
+    <div class="domain-pick" role="group" aria-label="Choose a domain" data-reveal style="--d:2">
+      <button type="button" data-q="0" aria-pressed="true">D1</button>
+      <button type="button" data-q="1" aria-pressed="false">D2</button>
+      <button type="button" data-q="2" aria-pressed="false">D3</button>
+      <button type="button" data-q="3" aria-pressed="false">D4</button>
+      <button type="button" data-q="4" aria-pressed="false">D5</button>
+    </div>
+  </div>
+  <div class="try-q" aria-live="polite">
+    <p class="qd" id="qd">D1, Agentic Architecture</p>
+    <p class="qtext" id="qtext">In a coordinator-subagent architecture, what is the coordinator’s primary responsibility?</p>
+    <div class="answers" id="answers">
+      <button type="button" data-a="0"><span class="k">A</span><span>Executing all tools directly</span></button>
+      <button type="button" data-a="1"><span class="k">B</span><span>Managing the database connections</span></button>
+      <button type="button" data-a="2"><span class="k">C</span><span>Decomposing tasks and delegating to specialized subagents</span></button>
+      <button type="button" data-a="3"><span class="k">D</span><span>Handling user authentication</span></button>
+    </div>
+    <div class="verdict" id="verdict" hidden>
+      <strong id="vhead">Right.</strong>
+      <p id="vexp"></p>
+    </div>
+    <details class="nojs-answer">
+      <summary>Show the answer</summary>
+      <p>C. The coordinator breaks complex tasks into subtasks and delegates them to specialized subagents, each with focused capabilities and tools.</p>
+    </details>
+  </div>
+</section>
+
+<!-- The game layer: object in front of type -->
+<section class="game" aria-labelledby="game-h">
+  <div class="stack" aria-label="19 badges, 10 levels, 2x streaks, 12,000 XP">
+    <p data-reveal aria-hidden="true">19 badges</p>
+    <h2 id="game-h" data-reveal style="--d:1">10 levels</h2>
+    <p data-reveal style="--d:2" aria-hidden="true">2x streaks</p>
+    <p data-reveal style="--d:3" aria-hidden="true">12,000 XP</p>
+  </div>
+  <div class="game-obj" data-reveal style="--d:2">
+    <div data-ui class="level" role="img" aria-label="Sample profile card: level 8, Exam Warrior, 7,240 XP, 12-day streak at 1.5x, 9 of 19 badges">
+      <div class="ui-top">
+        <div><div class="ui-title">Level 8: Exam Warrior</div><div class="ui-sub">Next: Claude Architect at 9,000 XP</div></div>
+        <span class="ui-tag">Check-in done</span>
+      </div>
+      <div class="ui-body">
+        <div class="ui-score"><span class="ui-big">7,240</span><p><b>XP</b></p></div>
+        <div class="ui-rows"><div class="ui-row"><b>L8</b><span class="ui-bar"><i style="width:30%"></i></span><span class="n">L9</span></div></div>
+        <div class="chips"><span class="on">Week Warrior</span><span class="on">Domain Master: D1</span><span class="on">MCP Pioneer</span><span>Exam Ready</span></div>
+      </div>
+      <div class="split">
+        <div><b>12 days</b>streak, earning 1.5x</div>
+        <div><b>9 of 19</b>badges earned</div>
+      </div>
+    </div>
+  </div>
+  <div class="game-facts">
+    <div>
+      <p data-reveal>Every resource you finish pays XP: a doc 25, a course 50, a build 200. Study seven days running and it pays 1.5x; thirty days, 2x. A weekly check-in adds 25.</p>
+    </div>
+    <div class="lv">
+      <p class="t-lead" data-reveal style="--d:1">Ten levels, from 0 to 12,000&nbsp;XP:</p>
+      <ol data-reveal style="--d:2">
+        <li>Curious Beginner</li><li>Prompt Apprentice</li><li>API Explorer</li><li>Tool Wielder</li><li>MCP Builder</li>
+        <li>Agent Crafter</li><li>System Designer</li><li>Exam Warrior</li><li>Claude Architect</li><li>AI Master</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing: the ticket -->
+<section class="price" id="price" aria-labelledby="price-h">
+  <div class="ticket" data-reveal>
+    <div class="main">
+      <h2 id="price-h" class="heavy">One payment. All of it.</h2>
+      <ul>
+        <li>26 weeks, 200+ resources</li>
+        <li>5 domain quizzes, 12 weekly quizzes</li>
+        <li>The 30-question practice exam</li>
+        <li>Architect’s Playbook, a 27-page PDF</li>
+        <li>Progress synced across devices</li>
+        <li>Lifetime access, no subscription</li>
+      </ul>
+    </div>
+    <div class="stub">
+      <div class="cur" role="group" aria-label="Currency">
+        <button type="button" data-set="NGN" aria-pressed="true">Naira</button>
+        <button type="button" data-set="USD" aria-pressed="false">Dollar</button>
+      </div>
+      <div>
+        <p class="amount" data-cur="NGN">₦20,000</p>
+        <p class="amount" data-cur="USD">$15</p>
+        <p class="amount-note" data-cur="NGN">in Nigeria, paid once</p>
+        <p class="amount-note" data-cur="USD">outside Nigeria, paid once</p>
+      </div>
+      <a class="btn btn--green" href="/signup">Get started</a>
+      <span class="notch t" aria-hidden="true"></span><span class="notch b" aria-hidden="true"></span><span class="perf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    </div>
+  </div>
+  <p class="price-after" data-reveal>Extra courses and PDFs are sold one by one in the <a class="link" href="/products">shop</a>. You never need them to finish the roadmap.</p>
+</section>
+
+<!-- FAQ: a band per question -->
+<section class="faq" id="faq" aria-labelledby="faq-h">
+  <div class="faq-head"><h2 id="faq-h" data-reveal>Fair questions</h2></div>
+  <dl>
+    <div><dt data-reveal>Is it a subscription?</dt><dd data-reveal style="--d:1">No. You pay once, ₦20,000 in Nigeria or $15 anywhere else, and keep access for life.</dd></div>
+    <div><dt data-reveal>Does it book the exam for me?</dt><dd data-reveal style="--d:1">No. You register for the Claude Certified Architect exam separately, through Anthropic. This is the study plan that gets you ready for it.</dd></div>
+    <div><dt data-reveal>Why two prices?</dt><dd data-reveal style="--d:1">So the price is fair where you live. The page picks your currency from your location, and you can switch it yourself.</dd></div>
+    <div><dt data-reveal>How close is the practice exam to the real one?</dt><dd data-reveal style="--d:1">It draws 30 questions in the real exam’s domain weights, gives you 45 minutes and asks for 72% to pass. The questions change every attempt.</dd></div>
+    <div><dt data-reveal>Can I study on my phone and my laptop?</dt><dd data-reveal style="--d:1">Yes. Your progress, XP, streak and badges sync across devices once you have an account.</dd></div>
+    <div><dt data-reveal>What else costs money?</dt><dd data-reveal style="--d:1">Only the extra courses and PDFs in the shop, if you want them. The roadmap, quizzes, practice exam and Playbook are all in the one payment.</dd></div>
+  </dl>
+</section>
+
+<!-- CTA: the idea again, inverted -->
+<section class="cta" aria-labelledby="cta-h">
+  <h2 id="cta-h" data-reveal>From zero<br>to 720</h2>
+  <div class="cta-foot">
+    <p data-reveal style="--d:1">Week 1 starts at 0&nbsp;XP. Week 26 ends with a portfolio and an exam you’re ready for. ₦20,000 or $15, once.</p>
+    <a class="btn btn--green" href="/signup" data-reveal style="--d:2">Get started</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="blocks" role="img" aria-label="Ultimate Study">
+    <div class="word" aria-hidden="true">
+      <span class="c" style="--h:86%">U</span><span class="k" style="--h:100%">L</span><span class="y" style="--h:72%">T</span><span class="g" style="--h:92%">I</span><span class="c" style="--h:64%">M</span><span class="k" style="--h:80%">A</span><span class="y" style="--h:96%">T</span><span class="g" style="--h:70%">E</span>
+    </div>
+    <div class="word" aria-hidden="true">
+      <span class="k" style="--h:90%">S</span><span class="g" style="--h:62%">T</span><span class="c" style="--h:100%">U</span><span class="y" style="--h:76%">D</span><span class="k" style="--h:88%">Y</span>
+    </div>
+  </div>
+  <div class="foot-links">
+    <div><span class="h">Study</span><a href="#weeks">The 26 weeks</a><a href="#exam">The exam</a><a href="#try">Try a question</a><a href="#price">Price</a></div>
+    <div><span class="h">Account</span><a href="/signup">Get started</a><a href="/login">Sign in</a><a href="/forgot-password">Reset password</a></div>
+    <div><span class="h">More</span><a href="/products">Shop</a><a href="/updates">Updates</a><a href="#faq">FAQ</a></div>
+    <div class="contact"><span class="h">Exam registration</span><a href="https://anthropic.skilljar.com/claude-certified-architect-foundations-access-request">Request access to the Claude Certified Architect exam on Anthropic’s Skilljar</a><span>Payments by Paystack.</span></div>
+  </div>
+  <div class="foot-last">
+    <span>© 2026 Ultimate Study, ultimatestudy.xyz</span>
+    <a class="btn" href="/signup">Get started</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ---- live question: five real questions, one per domain (ids d1-2, d2-1, d3-1, d4-1, d5-1) ----
+  var Q = [
+    { d: 'D1, Agentic Architecture', q: 'In a coordinator-subagent architecture, what is the coordinator’s primary responsibility?',
+      o: ['Executing all tools directly', 'Managing the database connections', 'Decomposing tasks and delegating to specialized subagents', 'Handling user authentication'], c: 2,
+      e: 'The coordinator breaks complex tasks into subtasks and delegates them to specialized subagents, each with focused capabilities and tools.' },
+    { d: 'D2, Tool Integration', q: 'What is the correct format for defining a tool’s input schema in the Anthropic API?',
+      o: ['A plain text description of expected parameters', 'A TypeScript interface definition', 'An XML schema document', 'A JSON Schema object with type, properties, and required fields'], c: 3,
+      e: 'Tool input schemas use JSON Schema format with ‘type: object’, ‘properties’ defining each parameter, and ‘required’ listing mandatory fields.' },
+    { d: 'D3, Claude Code', q: 'What is the purpose of a CLAUDE.md file in a project?',
+      o: ['It provides project-specific instructions, conventions, and context that Claude Code uses when working in that codebase', 'It replaces the README.md file', 'It stores Claude API keys', 'It configures the build process'], c: 0,
+      e: 'CLAUDE.md provides project-level instructions that Claude Code reads to understand conventions, architecture decisions, and how to work within a specific codebase.' },
+    { d: 'D4, Prompt Engineering', q: 'What is the recommended approach for getting structured JSON output from Claude?',
+      o: ['Just ask for JSON in the prompt and hope for the best', 'Use the system prompt to define the schema, provide examples, and use XML tags to structure the request', 'Use a separate JSON parsing library', 'Claude cannot produce structured output'], c: 1,
+      e: 'For reliable structured output, define the expected schema clearly, use XML tags for structure, provide examples, and optionally prefill the assistant response with ‘{’.' },
+    { d: 'D5, Context Management', q: 'What is the purpose of context window management in long-running agent sessions?',
+      o: ['To increase the API rate limit', 'To translate between languages', 'To save money on API calls', 'To keep conversations within token limits while preserving important information through summarization and pruning'], c: 3,
+      e: 'Long sessions accumulate tokens. Context management uses techniques like summarization, pruning tool results, and prioritizing recent context to stay within limits.' }
+  ];
+  var cur = 0, letters = ['A', 'B', 'C', 'D'];
+  var qd = document.getElementById('qd'), qt = document.getElementById('qtext'), box = document.getElementById('answers');
+  var verdict = document.getElementById('verdict'), vh = document.getElementById('vhead'), ve = document.getElementById('vexp');
+  function render(i) {
+    cur = i; var item = Q[i];
+    qd.textContent = item.d; qt.textContent = item.q; verdict.hidden = true;
+    box.innerHTML = '';
+    item.o.forEach(function (text, n) {
+      var b = document.createElement('button'); b.type = 'button'; b.dataset.a = n;
+      b.innerHTML = '<span class="k">' + letters[n] + '</span><span></span>';
+      b.lastChild.textContent = text; box.appendChild(b);
+    });
+  }
+  box.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b || b.disabled) return;
+    var item = Q[cur], pick = +b.dataset.a;
+    [].forEach.call(box.children, function (el, n) { el.disabled = true; if (n === item.c) el.classList.add('right'); });
+    if (pick !== item.c) b.classList.add('wrong');
+    vh.textContent = pick === item.c ? 'Right. That’s a mark toward 720.' : 'Not this time. The answer is ' + letters[item.c] + '.';
+    ve.textContent = item.e; verdict.hidden = false;
+  });
+  document.querySelectorAll('.domain-pick button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.domain-pick button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      render(+b.dataset.q);
+    });
+  });
+
+  // ---- currency toggle ----
+  function setCur(c) {
+    document.querySelectorAll('[data-cur]').forEach(function (el) { el.classList.toggle('on', el.dataset.cur === c); });
+    document.querySelectorAll('.cur button').forEach(function (x) { x.setAttribute('aria-pressed', x.dataset.set === c ? 'true' : 'false'); });
+  }
+  document.querySelectorAll('.cur button').forEach(function (b) { b.addEventListener('click', function () { setCur(b.dataset.set); }); });
+  setCur('NGN');
+
+  // ---- reveals, once ----
+  var els = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    els.forEach(function (el) { io.observe(el); });
+  } else { els.forEach(function (el) { el.classList.add('is-in'); }); }
+
+  // ---- the stuck-on card drifts up a little as the hero scrolls away ----
+  var stuck = document.querySelector('.hero-stuck');
+  if (stuck && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () { var y = Math.min(window.scrollY, 900); stuck.style.setProperty('--drift', (-y * 0.12).toFixed(1) + 'px'); ticking = false; });
+    }, { passive: true });
+  }
+})();
+</script>
+</body>
+</html>

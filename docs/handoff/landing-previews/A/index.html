@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultimate Study</title>
+<meta name="description" content="A gamified 26-week study roadmap to becoming an AI engineer, built around the Claude Certified Architect exam. One payment: ₦20,000 or $15.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --grey: #c5c5c5;
+  --mint: #a7ff9c;
+  --orange: #ff6831;
+  --green: #0d5c3a;
+  --surface: #f2f2f2;
+  --surface-2: #e6e6e6;
+  --muted: #595959;
+  --soft-on-black: #9a9a9a;
+
+  --d1: var(--orange); --d1-ink: #000;
+  --d2: var(--grey);   --d2-ink: #000;
+  --d3: var(--black);  --d3-ink: #fff;
+  --d4: var(--mint);   --d4-ink: #000;
+  --d5: var(--green);  --d5-ink: #fff;
+
+  --font: "Rubik", ui-sans-serif, system-ui, sans-serif;
+  /* five steps, no more */
+  --xl: clamp(3.25rem, 0.4rem + 11vw, 10.5rem);
+  --l: clamp(2rem, 1.3rem + 2.9vw, 4rem);
+  --m: clamp(1.25rem, 1.05rem + 0.75vw, 1.75rem);
+  --body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --small: 0.875rem;
+
+  --pad: 28px;
+  --gap: 20px;
+  --ease: cubic-bezier(.2,.7,.1,1);
+}
+@media (max-width: 700px) { :root { --pad: 16px; --gap: 12px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--white); color: var(--black); font-family: var(--font); font-size: var(--body); line-height: 1.5; font-weight: 400; overflow-x: hidden; }
+h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+a { color: inherit; }
+button, input { font: inherit; color: inherit; }
+img, svg { display: block; max-width: 100%; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+::selection { background: var(--mint); color: #000; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+h1, h2, h3, .fig { font-weight: 500; letter-spacing: -0.025em; line-height: 1.02; text-wrap: balance; }
+p { text-wrap: pretty; }
+.xl { font-size: var(--xl); line-height: 0.92; letter-spacing: -0.035em; }
+.l { font-size: var(--l); }
+.m { font-size: var(--m); line-height: 1.3; }
+.small { font-size: var(--small); }
+.tab { font-variant-numeric: tabular-nums; }
+
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); padding-inline: var(--pad); }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 28px; border: 0; border-radius: 0; background: var(--mint); color: #000; font-weight: 500; font-size: var(--body); text-decoration: none; cursor: pointer; transition: transform 160ms var(--ease), background-color 160ms; }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(1px) scale(.98); }
+.btn--ink { background: #000; color: #fff; }
+.btn--sm { min-height: 44px; padding: 0 20px; }
+.link { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; transition: opacity 160ms; }
+.link:hover { opacity: .7; }
+
+/* ---------- hero: waterline ---------- */
+.hero { --H: max(100svh, 620px); --seam: 50%; --fs: var(--xl); position: relative; height: var(--H); overflow: hidden; }
+.hero__top, .hero__bottom { position: absolute; left: 0; right: 0; }
+.hero__top { top: 0; height: var(--seam); background: var(--black); }
+.hero__bottom { bottom: 0; top: var(--seam); background: var(--orange); }
+.hero__nav { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: var(--pad); color: #fff; }
+.wordmark { font-weight: 600; font-size: var(--body); letter-spacing: -0.02em; text-decoration: none; color: #fff; }
+.hero__nav .right { display: flex; align-items: center; gap: 24px; }
+.hero__h { position: absolute; z-index: 2; left: 0; right: 0; top: calc(var(--seam) - var(--fs) * 1.42); pointer-events: none; white-space: nowrap; margin: 0 auto; width: max-content; max-width: calc(100% - 2 * var(--pad)); text-align: center; font-size: var(--fs); line-height: 0.9; letter-spacing: -0.04em; font-weight: 600; }
+.hero__h .line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.hero__h [data-line] { display: block; }
+.hero__h--top { color: var(--mint); clip-path: inset(0 0 calc(var(--fs) * 0.38) 0); }
+.hero__h--bottom { color: #000; clip-path: inset(calc(var(--fs) * 1.42) 0 0 0); }
+.hero__top, .hero__bottom { pointer-events: none; }
+.hero__sub { position: absolute; z-index: 2; left: 50%; bottom: 40px; transform: translateX(-50%); width: min(40rem, calc(100% - 2 * var(--pad))); text-align: center; font-size: var(--m); line-height: 1.3; color: #000; }
+@media (max-width: 700px) {
+  .hero { --seam: 46%; --fs: 13.4vw; }
+  .hero__nav .right { gap: 16px; }
+  .hero__nav .btn { min-height: 40px; padding: 0 14px; }
+  .hero__sub { left: var(--pad); transform: none; text-align: left; width: calc(100% - 2 * var(--pad)); bottom: 28px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero__h [data-line] { transform: translateY(105%); animation: line-up 900ms var(--ease) forwards; animation-delay: calc(var(--i) * 110ms + 150ms); }
+  .js .hero__sub, .js .hero__nav { opacity: 0; animation: fade-up 700ms var(--ease) 900ms forwards; }
+}
+@keyframes line-up { to { transform: none; } }
+@keyframes fade-up { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- chapters ---------- */
+.chapter { position: relative; min-height: 90svh; }
+.pt { padding-top: clamp(72px, 9vw, 128px); padding-bottom: clamp(56px, 7vw, 104px); }
+
+/* intro: the exam to scale */
+.intro { background: var(--white); color: #000; display: flex; flex-direction: column; justify-content: space-between; gap: 64px; }
+.intro h2 { grid-column: 1 / span 10; }
+.intro .lede { grid-column: 1 / span 5; margin-top: 40px; font-size: var(--m); line-height: 1.3; max-width: 32ch; }
+.intro .facts { grid-column: 7 / span 6; margin-top: 40px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 28px var(--gap); align-content: start; }
+.intro .facts dt { font-size: var(--l); font-weight: 500; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.intro .facts dd { margin-top: 6px; }
+.ratio { display: flex; gap: 4px; padding-inline: var(--pad); }
+.ratio a { display: flex; flex-direction: column; justify-content: flex-end; min-height: 120px; padding: 14px; text-decoration: none; transition: transform 200ms var(--ease); }
+.ratio a:hover { transform: translateY(-6px); }
+.ratio b { font-weight: 500; font-size: var(--m); font-variant-numeric: tabular-nums; }
+.ratio span { font-size: var(--small); line-height: 1.3; }
+@media (max-width: 900px) {
+  .intro h2 { grid-column: 1 / -1; }
+  .intro .lede { grid-column: 1 / -1; }
+  .intro .facts { grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .ratio { gap: 3px; }
+  .ratio a { min-height: 96px; padding: 8px 6px; }
+  .ratio span { display: none; }
+  .ratio b { font-size: 1rem; }
+}
+
+/* domain bands: heights set by the exam weights */
+.band { --u: 3.7svh; height: calc(var(--w) * var(--u)); min-height: calc(var(--w) * 26px); background: var(--bg); color: var(--ink); padding-top: clamp(40px, 4vw, 64px); padding-bottom: clamp(28px, 3vw, 48px); grid-template-rows: 1fr; }
+.band .fig { grid-column: 1 / span 6; grid-row: 1; align-self: end; font-size: var(--xl); line-height: 0.8; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.band .txt { grid-column: 7 / span 5; grid-row: 1; align-self: start; display: flex; flex-direction: column; gap: 18px; }
+.band h3 { font-size: var(--l); }
+.band .covers { font-size: var(--m); line-height: 1.32; max-width: 30ch; }
+.band .meta { max-width: 40ch; }
+.d1 { --bg: var(--d1); --ink: var(--d1-ink); }
+.d2 { --bg: var(--d2); --ink: var(--d2-ink); }
+.d3 { --bg: var(--d3); --ink: var(--d3-ink); }
+.d4 { --bg: var(--d4); --ink: var(--d4-ink); }
+.d5 { --bg: var(--d5); --ink: var(--d5-ink); }
+@media (max-width: 900px) {
+  .band { --u: 3.6svh; height: auto; min-height: max(calc(var(--w) * var(--u)), 360px); }
+  .band { grid-template-rows: auto 1fr; }
+  .band .fig { grid-column: 1 / -1; grid-row: 2; margin-top: 32px; font-size: 27vw; }
+  .band .txt { grid-column: 1 / -1; grid-row: 1; gap: 12px; }
+}
+
+/* live question */
+.try { background: var(--white); color: #000; }
+.try h2 { grid-column: 1 / span 9; }
+.try .note { grid-column: 1 / span 5; margin-top: 28px; max-width: 42ch; }
+.tabs { grid-column: 1 / -1; margin-top: 48px; display: none; flex-wrap: wrap; gap: 8px; }
+.js .tabs { display: flex; }
+.tabs button { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 18px 0 14px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; font-weight: 500; transition: background-color 160ms, color 160ms, transform 160ms var(--ease); }
+.tabs button:hover { background: var(--surface-2); color: #000; }
+.tabs button:active { transform: scale(.97); }
+.tabs button[aria-pressed="true"] { background: #000; color: #fff; }
+.chip { width: 14px; height: 14px; flex: none; background: var(--c); }
+.qs { grid-column: 1 / span 9; margin-top: 28px; display: grid; gap: 64px; }
+.js .qs .q:not(.on) { display: none; }
+.q .qtext { font-size: var(--m); line-height: 1.3; font-weight: 500; max-width: 34ch; }
+.q .qfrom { margin-top: 8px; color: var(--muted); }
+.q ol { margin-top: 24px; display: grid; gap: 8px; }
+.q ol li { display: block; }
+.opt { display: flex; gap: 16px; align-items: flex-start; width: 100%; min-height: 64px; padding: 18px 20px; border: 0; background: var(--surface); text-align: left; cursor: default; line-height: 1.4; transition: background-color 200ms, transform 160ms var(--ease); }
+.js .opt { cursor: pointer; }
+.js .opt:hover { background: var(--surface-2); }
+.js .opt:active { transform: scale(.99); }
+.opt .k { font-weight: 600; flex: none; width: 1.2em; }
+.opt.right { background: var(--mint); }
+.opt.wrong { background: var(--orange); }
+.q.answered .opt { cursor: default; }
+.verdict { margin-top: 20px; max-width: 60ch; }
+.verdict b { font-weight: 600; }
+.js .verdict { display: none; }
+.js .q.answered .verdict { display: block; }
+.js .q .fallback { display: none; }
+.fallback { margin-top: 16px; }
+.fallback summary { cursor: pointer; font-weight: 500; }
+.again { margin-top: 16px; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; font-weight: 500; }
+@media (max-width: 900px) { .try h2, .try .note, .qs { grid-column: 1 / -1; } }
+@media (max-width: 700px) { .tabs button { min-height: 44px; padding: 0 12px 0 10px; } .tabs .full { display: none; } }
+
+/* the path: drag through the phases */
+.path { display: grid; grid-template-columns: 1fr 1fr; min-height: 92svh; }
+.path__left { background: var(--black); color: #fff; padding: clamp(72px, 9vw, 128px) var(--pad) 40px; display: flex; flex-direction: column; justify-content: space-between; gap: 48px; }
+.path__right { background: var(--mint); color: #000; display: flex; align-items: center; justify-content: center; padding: 64px var(--pad); overflow: hidden; }
+.phase h2 { font-size: var(--l); max-width: 15ch; }
+.phase .when { margin-top: 20px; font-size: var(--m); line-height: 1.3; color: var(--mint); }
+.phase ol { margin-top: 28px; display: grid; gap: 6px; max-width: 38ch; }
+.phase ol li { display: flex; gap: 14px; }
+.phase ol li span:first-child { flex: none; width: 5.2em; color: var(--soft-on-black); font-variant-numeric: tabular-nums; }
+.js .phase:not(.on) { display: none; }
+.no-js-list { display: grid; gap: 64px; }
+.slider { display: none; }
+.js .slider { display: block; }
+.slider input { width: 100%; height: 44px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+.trk { position: relative; }
+.trk .rail, .trk .fill { position: absolute; left: 0; top: 18px; height: 8px; pointer-events: none; }
+.trk .rail { right: 0; background: #4a4a4a; }
+.trk .fill { width: var(--p, 0%); background: #fff; transition: width 200ms var(--ease); }
+.slider input { position: relative; z-index: 1; }
+.slider input::-webkit-slider-runnable-track { height: 8px; background: transparent; }
+.slider input::-moz-range-track { height: 8px; background: transparent; }
+.slider input::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; margin-top: -12px; background: var(--mint); border: 0; border-radius: 0; transition: transform 160ms var(--ease); }
+.slider input::-moz-range-thumb { width: 32px; height: 32px; background: var(--mint); border: 0; border-radius: 0; }
+.slider input:active::-webkit-slider-thumb { transform: scale(1.15); }
+.stops { margin-top: 10px; display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; }
+.stops button { background: none; border: 0; padding: 4px 0; text-align: left; font-size: var(--small); line-height: 1.3; color: var(--soft-on-black); cursor: pointer; transition: color 160ms; }
+.stops button:hover, .stops button[aria-pressed="true"] { color: #fff; }
+.js .wk:not(.on) { display: none; }
+.wks { display: grid; gap: 32px; justify-items: center; }
+.fade { animation: xfade 220ms ease-out; }
+@keyframes xfade { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 900px) {
+  .path { grid-template-columns: minmax(0, 1fr); }
+  .path__right { order: -1; min-height: 46svh; align-items: flex-start; padding: 32px var(--pad); }
+  .path__left { padding-top: 40px; }
+  .stops { grid-template-columns: 1fr 1fr; }
+}
+
+/* week card fragment */
+[data-ui] .week { width: min(440px, 100%); background: #fff; color: #111; border-radius: 12px; padding: 22px; font-size: 15px; line-height: 1.4; }
+[data-ui] .week .top { display: flex; justify-content: space-between; gap: 12px; color: #555; font-size: 13px; }
+[data-ui] .week .t { margin-top: 6px; font-size: 21px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+[data-ui] .week .d { margin-top: 4px; color: #555; font-size: 14px; }
+[data-ui] .week .bar { margin-top: 14px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+[data-ui] .week .bar i { display: block; height: 100%; background: #111; border-radius: 4px; }
+[data-ui] .week .prog { margin-top: 6px; display: flex; justify-content: space-between; font-size: 13px; color: #555; }
+[data-ui] .week ul { margin-top: 14px; display: grid; gap: 6px; }
+[data-ui] .week li { display: grid; grid-template-columns: 20px 1fr auto; gap: 10px; align-items: start; padding: 10px; border: 1px solid #e3e3e3; border-radius: 8px; }
+[data-ui] .week li.done { background: #f4fff2; border-color: #c6f2bf; }
+[data-ui] .week li.done .n { text-decoration: line-through; color: #666; }
+[data-ui] .week .box { width: 18px; height: 18px; border: 2px solid #bbb; border-radius: 4px; margin-top: 1px; }
+[data-ui] .week li.done .box { background: #1f8a3b; border-color: #1f8a3b; position: relative; }
+[data-ui] .week li.done .box::after { content: ""; position: absolute; left: 4px; top: 0px; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+[data-ui] .week .n { font-size: 14px; }
+[data-ui] .week .ty { display: block; font-size: 12px; color: #5f5f5f; margin-top: 2px; }
+[data-ui] .week .xp { font-size: 13px; font-weight: 600; color: #333; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* showcase: output index, live sheet */
+.show { background: var(--orange); color: #000; display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); column-gap: var(--gap); padding-left: var(--pad); min-height: 100svh; align-items: stretch; }
+.show__index { grid-column: 1 / span 5; padding-block: clamp(72px, 9vw, 128px) 56px; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; }
+.show__index ul { display: grid; gap: 2px; }
+.show__index button { background: none; border: 0; padding: 0; text-align: left; font-size: var(--l); font-weight: 500; letter-spacing: -0.025em; line-height: 1.1; color: rgba(0,0,0,.42); cursor: pointer; transition: color 160ms, transform 200ms var(--ease); }
+.show__index button:hover { color: #000; transform: translateX(6px); }
+.show__index button[aria-selected="true"] { color: #000; }
+.show__cap { max-width: 34ch; }
+.js .show__cap p:not(.on) { display: none; }
+.stage { grid-column: 7 / -1; margin-block: 6svh; background: var(--black); position: relative; overflow: hidden; min-height: 88svh; padding: 72px 0 0 64px; }
+.js .sheet:not(.on) { display: none; }
+.nojs-sheets { display: grid; gap: 40px; }
+@media (max-width: 900px) {
+  .show { grid-template-columns: minmax(0, 1fr); padding-left: 0; min-height: auto; }
+  .show__index { grid-column: 1; padding: 56px var(--pad) 24px; gap: 24px; }
+  .show__index ul { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
+  .show__index ul::-webkit-scrollbar { display: none; }
+  .show__index li { scroll-snap-align: start; flex: none; }
+  .show__index button { font-size: var(--m); white-space: nowrap; }
+  .show__index button:hover { transform: none; }
+  .stage { grid-column: 1; margin: 0; min-height: 70svh; height: 70svh; padding: 16px 0 0 16px; }
+}
+
+/* sheets (product fragments) */
+[data-ui].sheet { width: 560px; max-width: none; background: #fff; color: #111; border-radius: 14px 14px 0 0; padding: 26px 28px 40px; font-size: 15px; line-height: 1.4; }
+[data-ui].sheet h4 { margin: 0; font-size: 13px; font-weight: 500; color: #666; }
+[data-ui].sheet .big { font-size: 34px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; margin-top: 4px; }
+[data-ui].sheet .sub { color: #555; font-size: 14px; margin-top: 4px; }
+[data-ui].sheet .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+[data-ui].sheet .pbar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 14px; }
+[data-ui].sheet .pbar i { display: block; height: 100%; background: #111; border-radius: 5px; }
+[data-ui].sheet .sec { margin-top: 22px; padding-top: 18px; border-top: 1px solid #eee; }
+[data-ui].sheet .ladder { display: grid; gap: 4px; margin-top: 10px; }
+[data-ui].sheet .ladder li { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; padding: 7px 10px; border-radius: 8px; font-size: 14px; font-variant-numeric: tabular-nums; }
+[data-ui].sheet .ladder li.past { color: #777; }
+[data-ui].sheet .ladder li.now { background: #111; color: #fff; }
+[data-ui].sheet .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+[data-ui].sheet .chips span { font-size: 12.5px; padding: 4px 9px; border: 1px solid #ddd; border-radius: 999px; }
+[data-ui].sheet .heat { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 12px; }
+[data-ui].sheet .heat i { aspect-ratio: 1; border-radius: 4px; background: #eee; }
+[data-ui].sheet .heat i.s { background: #49c23a; }
+[data-ui].sheet .heat i.t { background: #111; }
+[data-ui].sheet .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 12px; color: #777; margin-top: 6px; text-align: center; }
+[data-ui].sheet .badges { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+[data-ui].sheet .badges li { padding: 9px 10px; border: 1px solid #e3e3e3; border-radius: 8px; font-size: 13.5px; line-height: 1.3; }
+[data-ui].sheet .badges li small { display: block; font-size: 12px; color: #777; }
+[data-ui].sheet .badges li.got { background: #111; color: #fff; border-color: #111; }
+[data-ui].sheet .badges li.got small { color: #bbb; }
+[data-ui].sheet .dom { display: grid; gap: 10px; margin-top: 12px; }
+[data-ui].sheet .dom li { display: grid; grid-template-columns: 1fr 52px; gap: 4px 10px; font-size: 13.5px; }
+[data-ui].sheet .dom .tr { grid-column: 1 / -1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+[data-ui].sheet .dom .tr i { display: block; height: 100%; background: var(--c); border-radius: 5px; }
+[data-ui].sheet .dom b { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+[data-ui].sheet .pass { display: inline-block; margin-top: 8px; padding: 4px 10px; border-radius: 999px; background: #e8ffe4; color: #135e1c; font-size: 13px; font-weight: 600; }
+[data-ui].sheet label { display: block; font-size: 13.5px; font-weight: 500; margin: 14px 0 6px; }
+[data-ui].sheet .ta { border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; font-size: 14px; color: #222; min-height: 54px; }
+[data-ui].sheet .stars { display: flex; gap: 6px; }
+[data-ui].sheet .stars i { width: 22px; height: 22px; border-radius: 4px; background: #eee; }
+[data-ui].sheet .stars i.f { background: #ff6831; }
+[data-ui].sheet .save { margin-top: 18px; display: inline-flex; padding: 10px 16px; border-radius: 8px; background: #111; color: #fff; font-size: 14px; font-weight: 500; }
+
+/* stats: the practice exam and its receipt */
+.exam { background: var(--green); color: #fff; padding-bottom: 0; }
+.exam__left { grid-column: 1 / span 6; display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding-bottom: clamp(56px, 7vw, 104px); }
+.exam__left h2 { font-size: var(--l); }
+.exam__left .note { margin-top: 16px; max-width: 36ch; }
+.exam__total .fig { font-size: var(--xl); line-height: 0.8; }
+.exam__total p { margin-top: 18px; max-width: 32ch; }
+.exam__slip { grid-column: 8 / span 4; align-self: start; }
+[data-ui].slip { width: 100%; max-width: 440px; background: #fff; color: #111; padding: 28px 26px 52px; font-size: 15.5px; line-height: 1.35; font-variant-numeric: tabular-nums; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), 96% 100%, 92% calc(100% - 14px), 88% 100%, 84% calc(100% - 14px), 80% 100%, 76% calc(100% - 14px), 72% 100%, 68% calc(100% - 14px), 64% 100%, 60% calc(100% - 14px), 56% 100%, 52% calc(100% - 14px), 48% 100%, 44% calc(100% - 14px), 40% 100%, 36% calc(100% - 14px), 32% 100%, 28% calc(100% - 14px), 24% 100%, 20% calc(100% - 14px), 16% 100%, 12% calc(100% - 14px), 8% 100%, 4% calc(100% - 14px), 0 100%); }
+[data-ui].slip .hd { font-weight: 600; font-size: 17px; }
+[data-ui].slip .hd2 { color: #666; font-size: 14px; margin-top: 2px; }
+[data-ui].slip .grp { font-weight: 600; margin: 22px 0 8px; }
+[data-ui].slip li { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; }
+[data-ui].slip li .dots { flex: 1; border-bottom: 3px dotted #999; transform: translateY(-4px); }
+[data-ui].slip li .sw { width: 10px; height: 10px; flex: none; background: var(--c); align-self: center; }
+[data-ui].slip .tot { margin-top: 18px; background: #111; color: #fff; padding: 12px 12px; display: flex; justify-content: space-between; font-weight: 600; font-size: 17px; }
+@media (max-width: 900px) {
+  .exam__left, .exam__slip { grid-column: 1 / -1; }
+  .exam__slip { margin-top: 8px; padding-bottom: 56px; }
+  [data-ui].slip { max-width: none; }
+}
+
+/* pricing: two fields */
+.price { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); min-height: 90svh; }
+.plan { padding: 40px var(--pad) 40px; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; }
+.plan--ng { background: var(--mint); color: #000; }
+.plan--intl { background: var(--black); color: #fff; }
+.plan h2 { font-size: var(--l); margin-top: clamp(32px, 5vw, 88px); }
+.plan .for { margin-top: 16px; font-size: var(--m); line-height: 1.3; max-width: 26ch; }
+.plan .inc { margin-top: 28px; max-width: 46ch; }
+.plan .foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+.plan .amt { font-size: var(--xl); font-weight: 500; letter-spacing: -0.045em; line-height: 0.85; font-variant-numeric: tabular-nums; }
+.plan .amt small { font-size: var(--body); letter-spacing: 0; font-weight: 400; margin-left: 10px; }
+@media (max-width: 900px) {
+  .price { grid-template-columns: minmax(0, 1fr); }
+  .plan { min-height: 70svh; }
+  .plan .foot { flex-direction: column; align-items: stretch; }
+  .plan .btn { width: 100%; }
+}
+
+/* faq */
+.faq { background: var(--white); color: #000; align-items: start; }
+.faq h2 { grid-column: 1 / span 4; font-size: var(--l); position: sticky; top: 96px; }
+.faq .list { grid-column: 5 / -1; display: grid; gap: 8px; }
+.faq details { background: var(--surface); transition: background-color 200ms; }
+.faq details[open] { background: var(--mint); }
+.faq summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; min-height: 72px; padding: 18px 24px; font-size: var(--body); font-weight: 500; line-height: 1.3; cursor: pointer; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { background: var(--surface-2); }
+.faq details[open] summary:hover { background: transparent; }
+.plus { position: relative; width: 16px; height: 16px; flex: none; }
+.plus::before, .plus::after { content: ""; position: absolute; left: 0; top: 6.5px; width: 16px; height: 3px; background: #000; transition: transform 200ms var(--ease); }
+.plus::after { transform: rotate(90deg); }
+.faq details[open] .plus::after { transform: rotate(0deg); }
+.faq .a { padding: 0 24px 24px; }
+.faq .a p { max-width: 56ch; }
+@media (max-width: 900px) {
+  .faq h2 { grid-column: 1 / -1; position: static; margin-bottom: 28px; }
+  .faq .list { grid-column: 1 / -1; gap: 6px; }
+  .faq summary { min-height: 64px; padding: 16px 20px; }
+  .faq .a { padding: 0 20px 20px; }
+}
+
+/* cta, inverted */
+.cta { background: var(--black); color: #fff; display: flex; flex-direction: column; justify-content: space-between; gap: 64px; }
+.cta h2 { grid-column: 1 / span 11; }
+.cta .row { align-items: end; }
+.cta .row p { grid-column: 1 / span 5; font-size: var(--m); line-height: 1.3; max-width: 30ch; }
+.cta .row .act { grid-column: 9 / -1; display: flex; justify-content: flex-end; align-items: center; gap: 24px; }
+@media (max-width: 900px) {
+  .cta { min-height: 80svh; }
+  .cta h2, .cta .row p, .cta .row .act { grid-column: 1 / -1; }
+  .cta .row .act { margin-top: 28px; flex-direction: column; align-items: stretch; }
+  .cta .row .act .btn { width: 100%; }
+  .cta .row .act .link { text-align: center; }
+}
+
+/* footer: the mark, built from blocks */
+.site-foot { background: var(--white); color: #000; padding: 56px var(--pad) 28px; }
+.blocks { display: flex; gap: 4px; align-items: flex-end; height: 34svh; min-height: 220px; }
+.blocks .word { display: flex; gap: 4px; align-items: flex-end; height: 100%; flex: var(--n); }
+.blocks .sp { width: 3vw; flex: none; }
+.blocks span { flex: 1; height: var(--h); background: var(--c); color: var(--k); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; font-size: var(--l); font-weight: 600; line-height: 1; transition: height 300ms var(--ease); }
+.blocks:hover span { height: calc(var(--h) - 4%); }
+.flinks { margin-top: 56px; display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); column-gap: var(--gap); row-gap: 32px; }
+.flinks .col { grid-column: span 2; display: grid; gap: 6px; align-content: start; }
+.flinks .col b { font-weight: 600; margin-bottom: 4px; }
+.flinks .col a { text-decoration: none; }
+.flinks .col a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.flinks .contact { grid-column: 9 / -1; display: grid; gap: 6px; align-content: start; }
+.last { margin-top: 56px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+@media (max-width: 900px) {
+  .blocks { flex-wrap: wrap; height: auto; min-height: 0; row-gap: 4px; }
+  .blocks .word { flex: 1 1 100%; height: 11svh; min-height: 96px; }
+  .blocks .sp { display: none; }
+  .blocks span { padding-bottom: 6px; }
+  .flinks .col { grid-column: span 6; }
+  .flinks .contact { grid-column: 1 / -1; }
+}
+
+/* entrances */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease), transform 900ms var(--ease); transition-delay: calc(var(--d, 0) * 80ms); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero" id="top">
+  <div class="hero__top"></div>
+  <div class="hero__bottom"></div>
+  <nav class="hero__nav" aria-label="Main">
+    <a class="wordmark" href="#top">Ultimate Study</a>
+    <div class="right">
+      <a class="link" href="/login">Sign in</a>
+      <a class="btn btn--sm" href="/signup">Get started</a>
+    </div>
+  </nav>
+  <h1 class="hero__h hero__h--top">
+    <span class="line"><span data-line style="--i:0">26 weeks to</span></span>
+    <span class="line"><span data-line style="--i:1">Architect</span></span>
+  </h1>
+  <div class="hero__h hero__h--bottom" aria-hidden="true">
+    <span class="line"><span data-line style="--i:0">&nbsp;</span></span>
+    <span class="line"><span data-line style="--i:1">Architect</span></span>
+  </div>
+  <p class="hero__sub">A gamified study roadmap to becoming an AI engineer, built around the Claude Certified Architect exam. Pay once: ₦20,000 or $15.</p>
+</header>
+
+<main>
+
+<!-- The exam, drawn to scale -->
+<section class="chapter intro pt" id="exam" aria-labelledby="exam-h">
+  <div class="grid">
+    <h2 id="exam-h" class="xl" data-reveal>The exam, to&nbsp;scale</h2>
+    <p class="lede" data-reveal style="--d:1">Five domains, weighted unevenly. Each band below is exactly as tall as its share of the exam.</p>
+    <dl class="facts" data-reveal style="--d:2">
+      <div><dt>5</dt><dd>domains, from agentic architecture to context management</dd></div>
+      <div><dt>30</dt><dd>task statements behind them</dd></div>
+      <div><dt>6</dt><dd>scenario-based questions</dd></div>
+      <div><dt>720</dt><dd>out of 1000 needed to pass</dd></div>
+    </dl>
+  </div>
+  <nav class="ratio" aria-label="The five domains by weight" data-reveal style="--d:3">
+    <a href="#d1" class="d1" style="flex:27;background:var(--d1);color:var(--d1-ink)"><b>27%</b><span>Agentic Architecture</span></a>
+    <a href="#d2" class="d2" style="flex:19;background:var(--d2);color:var(--d2-ink)"><b>19%</b><span>Tool Integration</span></a>
+    <a href="#d3" class="d3" style="flex:19;background:var(--d3);color:var(--d3-ink)"><b>19%</b><span>Claude Code</span></a>
+    <a href="#d4" class="d4" style="flex:20;background:var(--d4);color:var(--d4-ink)"><b>20%</b><span>Prompt Engineering</span></a>
+    <a href="#d5" class="d5" style="flex:15;background:var(--d5);color:var(--d5-ink)"><b>15%</b><span>Context Management</span></a>
+  </nav>
+</section>
+
+<!-- Five bands, heights = weights -->
+<section aria-label="The five exam domains, each band sized by its weight">
+  <article class="band grid d1" id="d1" style="--w:27">
+    <p class="fig" data-reveal>27%</p>
+    <div class="txt">
+      <h3 data-reveal style="--d:1">Agentic Architecture</h3>
+      <p class="covers" data-reveal style="--d:2">Agentic loops, coordinators and subagents, session forking, task decomposition and escalation logic.</p>
+      <p class="meta" data-reveal style="--d:3">Domain 1, the heaviest. Week 13 is given to it alone, and it supplies 8 of the 30 practice-exam questions.</p>
+    </div>
+  </article>
+  <article class="band grid d2" id="d2" style="--w:19">
+    <p class="fig" data-reveal>19%</p>
+    <div class="txt">
+      <h3 data-reveal style="--d:1">Tool Integration</h3>
+      <p class="covers" data-reveal style="--d:2">Tool schemas, tool_choice, MCP servers, transports and security.</p>
+      <p class="meta" data-reveal style="--d:3">Domain 2. Shares week 14 with Claude Code and supplies 6 practice-exam questions.</p>
+    </div>
+  </article>
+  <article class="band grid d3" id="d3" style="--w:19">
+    <p class="fig" data-reveal>19%</p>
+    <div class="txt">
+      <h3 data-reveal style="--d:1">Claude Code</h3>
+      <p class="covers" data-reveal style="--d:2">CLAUDE.md hierarchies, hooks, permissions, commands and plan mode.</p>
+      <p class="meta" data-reveal style="--d:3">Domain 3. Practised from week 8, revised in week 14, and worth 6 practice-exam questions.</p>
+    </div>
+  </article>
+  <article class="band grid d4" id="d4" style="--w:20">
+    <p class="fig" data-reveal>20%</p>
+    <div class="txt">
+      <h3 data-reveal style="--d:1">Prompt Engineering</h3>
+      <p class="covers" data-reveal style="--d:2">Structured output, chain of thought, few-shot examples and XML tags.</p>
+      <p class="meta" data-reveal style="--d:3">Domain 4. Started in week 3, sharpened in week 15, and worth 6 practice-exam questions.</p>
+    </div>
+  </article>
+  <article class="band grid d5" id="d5" style="--w:15">
+    <p class="fig" data-reveal>15%</p>
+    <div class="txt">
+      <h3 data-reveal style="--d:1">Context Management</h3>
+      <p class="covers" data-reveal style="--d:2">Long sessions, summarising and pruning, and keeping agents reliable.</p>
+      <p class="meta" data-reveal style="--d:3">Domain 5, the lightest. Week 16 covers it, and it supplies 4 practice-exam questions.</p>
+    </div>
+  </article>
+</section>
+
+<!-- One live question -->
+<section class="chapter try pt" id="try" aria-labelledby="try-h">
+  <div class="grid">
+    <h2 id="try-h" class="xl" data-reveal>Answer one now</h2>
+    <p class="note" data-reveal style="--d:1">Pick a domain. Each question is taken unchanged from the app’s domain quizzes, explanation included.</p>
+    <div class="tabs" role="group" aria-label="Choose a domain">
+      <button type="button" aria-pressed="true" data-q="0"><i class="chip" style="--c:var(--d1)"></i>D1<span class="full">&nbsp;Agentic</span></button>
+      <button type="button" aria-pressed="false" data-q="1"><i class="chip" style="--c:var(--d2)"></i>D2<span class="full">&nbsp;Tools</span></button>
+      <button type="button" aria-pressed="false" data-q="2"><i class="chip" style="--c:var(--d3)"></i>D3<span class="full">&nbsp;Claude Code</span></button>
+      <button type="button" aria-pressed="false" data-q="3"><i class="chip" style="--c:var(--d4)"></i>D4<span class="full">&nbsp;Prompting</span></button>
+      <button type="button" aria-pressed="false" data-q="4"><i class="chip" style="--c:var(--d5)"></i>D5<span class="full">&nbsp;Context</span></button>
+    </div>
+    <div class="qs">
+      <div class="q on" data-ui data-correct="2">
+        <p class="qtext">What stop_reason indicates Claude wants to use a tool?</p>
+        <p class="qfrom small">Domain 1 quiz, Agentic Architecture</p>
+        <ol>
+          <li><button class="opt" type="button"><span class="k">A</span><span>end_turn</span></button></li>
+          <li><button class="opt" type="button"><span class="k">B</span><span>max_tokens</span></button></li>
+          <li><button class="opt" type="button"><span class="k">C</span><span>tool_use</span></button></li>
+          <li><button class="opt" type="button"><span class="k">D</span><span>stop_sequence</span></button></li>
+        </ol>
+        <p class="verdict" aria-live="polite"></p>
+        <details class="fallback"><summary>Show the answer</summary><p><b>C, tool_use.</b> When Claude returns stop_reason: 'tool_use', it means the model wants to call one or more tools. Your code should execute the tools and return results.</p></details>
+        <template>When Claude returns stop_reason: 'tool_use', it means the model wants to call one or more tools. Your code should execute the tools and return results.</template>
+      </div>
+      <div class="q" data-ui data-correct="2">
+        <p class="qtext">What does tool_choice: 'auto' mean in the Anthropic API?</p>
+        <p class="qfrom small">Domain 2 quiz, Tool Integration</p>
+        <ol>
+          <li><button class="opt" type="button"><span class="k">A</span><span>Claude must use at least one tool</span></button></li>
+          <li><button class="opt" type="button"><span class="k">B</span><span>Claude will automatically pick tools without any instructions</span></button></li>
+          <li><button class="opt" type="button"><span class="k">C</span><span>Claude decides whether to use tools or respond directly based on the conversation</span></button></li>
+          <li><button class="opt" type="button"><span class="k">D</span><span>A random tool is selected</span></button></li>
+        </ol>
+        <p class="verdict" aria-live="polite"></p>
+        <details class="fallback"><summary>Show the answer</summary><p><b>C.</b> tool_choice: 'auto' (the default) lets Claude decide whether to use a tool or respond directly based on the context of the conversation.</p></details>
+        <template>tool_choice: 'auto' (the default) lets Claude decide whether to use a tool or respond directly based on the context of the conversation.</template>
+      </div>
+      <div class="q" data-ui data-correct="1">
+        <p class="qtext">What is the purpose of a CLAUDE.md file in a project?</p>
+        <p class="qfrom small">Domain 3 quiz, Claude Code</p>
+        <ol>
+          <li><button class="opt" type="button"><span class="k">A</span><span>It replaces the README.md file</span></button></li>
+          <li><button class="opt" type="button"><span class="k">B</span><span>It provides project-specific instructions, conventions, and context that Claude Code uses when working in that codebase</span></button></li>
+          <li><button class="opt" type="button"><span class="k">C</span><span>It stores Claude API keys</span></button></li>
+          <li><button class="opt" type="button"><span class="k">D</span><span>It configures the build process</span></button></li>
+        </ol>
+        <p class="verdict" aria-live="polite"></p>
+        <details class="fallback"><summary>Show the answer</summary><p><b>B.</b> CLAUDE.md provides project-level instructions that Claude Code reads to understand conventions, architecture decisions, and how to work within a specific codebase.</p></details>
+        <template>CLAUDE.md provides project-level instructions that Claude Code reads to understand conventions, architecture decisions, and how to work within a specific codebase.</template>
+      </div>
+      <div class="q" data-ui data-correct="1">
+        <p class="qtext">What is chain-of-thought prompting?</p>
+        <p class="qfrom small">Domain 4 quiz, Prompt Engineering</p>
+        <ol>
+          <li><button class="opt" type="button"><span class="k">A</span><span>Sending multiple API calls in sequence</span></button></li>
+          <li><button class="opt" type="button"><span class="k">B</span><span>Asking Claude to work through its reasoning step-by-step before giving a final answer</span></button></li>
+          <li><button class="opt" type="button"><span class="k">C</span><span>Connecting multiple Claude models together</span></button></li>
+          <li><button class="opt" type="button"><span class="k">D</span><span>A technique for reducing API costs</span></button></li>
+        </ol>
+        <p class="verdict" aria-live="polite"></p>
+        <details class="fallback"><summary>Show the answer</summary><p><b>B.</b> Chain-of-thought prompting asks Claude to show its reasoning process step by step, which improves accuracy on complex tasks by breaking them into smaller logical steps.</p></details>
+        <template>Chain-of-thought prompting asks Claude to show its reasoning process step by step, which improves accuracy on complex tasks by breaking them into smaller logical steps.</template>
+      </div>
+      <div class="q" data-ui data-correct="1">
+        <p class="qtext">What is the purpose of context window management in long-running agent sessions?</p>
+        <p class="qfrom small">Domain 5 quiz, Context Management</p>
+        <ol>
+          <li><button class="opt" type="button"><span class="k">A</span><span>To increase the API rate limit</span></button></li>
+          <li><button class="opt" type="button"><span class="k">B</span><span>To keep conversations within token limits while preserving important information through summarization and pruning</span></button></li>
+          <li><button class="opt" type="button"><span class="k">C</span><span>To translate between languages</span></button></li>
+          <li><button class="opt" type="button"><span class="k">D</span><span>To save money on API calls</span></button></li>
+        </ol>
+        <p class="verdict" aria-live="polite"></p>
+        <details class="fallback"><summary>Show the answer</summary><p><b>B.</b> Long sessions accumulate tokens. Context management uses techniques like summarization, pruning tool results, and prioritizing recent context to stay within limits.</p></details>
+        <template>Long sessions accumulate tokens. Context management uses techniques like summarization, pruning tool results, and prioritizing recent context to stay within limits.</template>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The 26-week path -->
+<section class="path" id="path" aria-label="The 26-week path in five phases">
+  <div class="path__left">
+    <div class="no-js-list">
+      <div class="phase on" data-p="0">
+        <h2>First, the AI foundations</h2>
+        <p class="when">Weeks 1–6, AI Foundations</p>
+        <ol>
+          <li><span>Week 1</span><span>The Big Picture</span></li>
+          <li><span>Week 2</span><span>Generative AI &amp; First API Call</span></li>
+          <li><span>Week 3</span><span>Prompt Engineering Foundations</span></li>
+          <li><span>Week 4</span><span>AI Agents Intro + Low-Code</span></li>
+          <li><span>Week 5</span><span>Git/GitHub + Tool Use</span></li>
+          <li><span>Week 6</span><span>MCP Fundamentals</span></li>
+        </ol>
+      </div>
+      <div class="phase" data-p="1">
+        <h2>Then, the developer skills</h2>
+        <p class="when">Weeks 7–12, Developer Skills</p>
+        <ol>
+          <li><span>Week 7</span><span>MCP Advanced + Agent Skills</span></li>
+          <li><span>Week 8</span><span>Claude Code Mastery</span></li>
+          <li><span>Week 9</span><span>Hugging Face + Open-Source Models</span></li>
+          <li><span>Week 10</span><span>LangChain + AI Orchestration</span></li>
+          <li><span>Week 11</span><span>RAG + Multi-Agent Orchestration</span></li>
+          <li><span>Week 12</span><span>Structured Output &amp; Data Extraction</span></li>
+        </ol>
+      </div>
+      <div class="phase" data-p="2">
+        <h2>Then, the exam sprint</h2>
+        <p class="when">Weeks 13–18, Architect Exam Sprint</p>
+        <ol>
+          <li><span>Week 13</span><span>Domain 1: Agentic Architecture</span></li>
+          <li><span>Week 14</span><span>Domains 2 and 3: Tools, MCP, Claude Code</span></li>
+          <li><span>Week 15</span><span>Domain 4: Prompt Engineering</span></li>
+          <li><span>Week 16</span><span>Domain 5: Context &amp; Reliability</span></li>
+          <li><span>Week 17</span><span>Scenario Mastery + Cross-Domain</span></li>
+          <li><span>Week 18</span><span>Mock Exams &amp; Final Review</span></li>
+        </ol>
+      </div>
+      <div class="phase" data-p="3">
+        <h2>Next, AI in production</h2>
+        <p class="when">Weeks 19–22, Production AI &amp; LLMOps</p>
+        <ol>
+          <li><span>Week 19</span><span>LLMOps Fundamentals</span></li>
+          <li><span>Week 20</span><span>Cloud AI Platforms</span></li>
+          <li><span>Week 21</span><span>Advanced Agent Patterns</span></li>
+          <li><span>Week 22</span><span>Fine-Tuning &amp; Open-Source Deep Dive</span></li>
+        </ol>
+      </div>
+      <div class="phase" data-p="4">
+        <h2>Last, a portfolio to show</h2>
+        <p class="when">Weeks 23–26, Portfolio &amp; Career</p>
+        <ol>
+          <li><span>Week 23</span><span>Portfolio: RAG Assistant</span></li>
+          <li><span>Week 24</span><span>Portfolio: SQL Data Analyst Agent</span></li>
+          <li><span>Week 25</span><span>Teaching, Content &amp; LinkedIn</span></li>
+          <li><span>Week 26</span><span>Portfolio Showcase &amp; Next Steps</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="slider">
+      <label class="sr" for="phase-range">Phase of the 26-week path</label>
+      <div class="trk"><i class="rail"></i><i class="fill"></i><input id="phase-range" type="range" min="0" max="4" step="1" value="0" aria-valuetext="AI Foundations, weeks 1 to 6"></div>
+      <div class="stops">
+        <button type="button" data-p="0" aria-pressed="true">AI Foundations</button>
+        <button type="button" data-p="1" aria-pressed="false">Developer Skills</button>
+        <button type="button" data-p="2" aria-pressed="false">Architect Exam Sprint</button>
+        <button type="button" data-p="3" aria-pressed="false">Production AI &amp; LLMOps</button>
+        <button type="button" data-p="4" aria-pressed="false">Portfolio &amp; Career</button>
+      </div>
+    </div>
+  </div>
+  <div class="path__right">
+    <div class="wks">
+      <div class="wk on" data-ui data-p="0" role="img" aria-label="Week 3 card from the app, two of five resources done">
+        <div class="week">
+          <div class="top"><span>Week 3 of 26</span><span>AI Foundations</span></div>
+          <div class="t">Prompt Engineering Foundations</div>
+          <div class="d">Master the art of communicating effectively with AI models</div>
+          <div class="bar"><i style="width:40%"></i></div>
+          <div class="prog"><span>2 of 5 done</span><span>+90 XP earned</span></div>
+          <ul>
+            <li class="done"><span class="box"></span><span class="n">Prompt Engineering for ChatGPT (Vanderbilt)<span class="ty">Course, 18hr</span></span><span class="xp">+50 XP</span></li>
+            <li class="done"><span class="box"></span><span class="n">Anthropic docs: Prompt Engineering guide<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Anthropic Cookbook: prompt engineering tutorials<span class="ty">Practice</span></span><span class="xp">+40 XP</span></li>
+            <li><span class="box"></span><span class="n">Practice: 10 prompt challenges (few-shot, CoT, system prompts, XML)<span class="ty">Practice</span></span><span class="xp">+40 XP</span></li>
+            <li><span class="box"></span><span class="n">Quiz: Prompt techniques<span class="ty">Quiz</span></span><span class="xp">+75 XP</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wk" data-ui data-p="1" role="img" aria-label="Week 8 card from the app">
+        <div class="week">
+          <div class="top"><span>Week 8 of 26</span><span>Developer Skills</span></div>
+          <div class="t">Claude Code Mastery</div>
+          <div class="d">Master Claude Code configuration, hooks, and workflows</div>
+          <div class="bar"><i style="width:60%"></i></div>
+          <div class="prog"><span>3 of 5 done</span><span>+125 XP earned</span></div>
+          <ul>
+            <li class="done"><span class="box"></span><span class="n">Anthropic Skilljar: Claude Code in Action<span class="ty">Course, 6hr</span></span><span class="xp">+50 XP</span></li>
+            <li class="done"><span class="box"></span><span class="n">Anthropic Skilljar: Introduction to Claude Cowork<span class="ty">Course</span></span><span class="xp">+50 XP</span></li>
+            <li class="done"><span class="box"></span><span class="n">Anthropic docs: Claude Code, Config, CLI, Hooks, Permissions<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Practice: Configure project with CLAUDE.md hierarchy, commands, rules<span class="ty">Practice</span></span><span class="xp">+40 XP</span></li>
+            <li><span class="box"></span><span class="n">Quiz: Claude Code configuration, hooks, plan mode<span class="ty">Quiz</span></span><span class="xp">+75 XP</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wk" data-ui data-p="2" role="img" aria-label="Week 13 card from the app">
+        <div class="week">
+          <div class="top"><span>Week 13 of 26</span><span>Exam Sprint</span></div>
+          <div class="t">Domain 1: Agentic Architecture (27%)</div>
+          <div class="d">Master agentic loops, orchestration patterns, and the Agent SDK</div>
+          <div class="bar"><i style="width:29%"></i></div>
+          <div class="prog"><span>2 of 7 done</span><span>+50 XP earned</span></div>
+          <ul>
+            <li class="done"><span class="box"></span><span class="n">Re-read: Agent SDK docs (task statements 1.1–1.7)<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li class="done"><span class="box"></span><span class="n">Architect’s Playbook: Customer Support + Multi-Agent Systems<span class="ty">Reading</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Exam Exercise 1: Multi-Tool Agent with Escalation Logic<span class="ty">Build</span></span><span class="xp">+200 XP</span></li>
+            <li><span class="box"></span><span class="n">Exam Exercise 4: Multi-Agent Research System<span class="ty">Build</span></span><span class="xp">+200 XP</span></li>
+            <li><span class="box"></span><span class="n">Domain 1 practice questions<span class="ty">Practice</span></span><span class="xp">+40 XP</span></li>
+            <li><span class="box"></span><span class="n">Exam Guide: format, scenarios, and anti-patterns<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Domain 1 Quiz<span class="ty">Quiz</span></span><span class="xp">+75 XP</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wk" data-ui data-p="3" role="img" aria-label="Week 19 card from the app">
+        <div class="week">
+          <div class="top"><span>Week 19 of 26</span><span>Production AI</span></div>
+          <div class="t">LLMOps Fundamentals</div>
+          <div class="d">Learn the AI operations lifecycle from idea to production</div>
+          <div class="bar"><i style="width:17%"></i></div>
+          <div class="prog"><span>1 of 6 done</span><span>+25 XP earned</span></div>
+          <ul>
+            <li class="done"><span class="box"></span><span class="n">LLMOps lifecycle: from idea to production<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Track and analyze prompts and responses<span class="ty">Practice</span></span><span class="xp">+40 XP</span></li>
+            <li><span class="box"></span><span class="n">Test and optimize RAG performance<span class="ty">Practice</span></span><span class="xp">+40 XP</span></li>
+            <li><span class="box"></span><span class="n">LangChain Evaluation &amp; Monitoring docs<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Build: Add monitoring/logging to an existing agent project<span class="ty">Build</span></span><span class="xp">+200 XP</span></li>
+            <li><span class="box"></span><span class="n">Quiz: LLMOps concepts, monitoring, cost tracking<span class="ty">Quiz</span></span><span class="xp">+75 XP</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wk" data-ui data-p="4" role="img" aria-label="Week 23 card from the app">
+        <div class="week">
+          <div class="top"><span>Week 23 of 26</span><span>Portfolio</span></div>
+          <div class="t">Portfolio: RAG Assistant</div>
+          <div class="d">Build a ‘Talk to Documents’ app with PDF upload and citations</div>
+          <div class="bar"><i style="width:0%"></i></div>
+          <div class="prog"><span>0 of 5 done</span><span>Not started</span></div>
+          <ul>
+            <li><span class="box"></span><span class="n">Build: RAG ‘Talk to Documents’ app with PDF upload, vector search, cited answers<span class="ty">Build</span></span><span class="xp">+200 XP</span></li>
+            <li><span class="box"></span><span class="n">Pinecone docs: vector database setup, indexing, querying<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">LangChain RAG tutorial: loading, chunking, retrieval chain<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Streamlit docs: chat interface with file upload<span class="ty">Docs</span></span><span class="xp">+25 XP</span></li>
+            <li><span class="box"></span><span class="n">Build: conversation memory, architecture diagram, README<span class="ty">Build</span></span><span class="xp">+200 XP</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Inside the app: output index -->
+<section class="show" id="app" aria-label="Inside the app">
+  <div class="show__index">
+    <ul role="tablist" aria-label="Parts of the app">
+      <li><button role="tab" aria-selected="true" data-s="0" id="tab-s0" aria-controls="sheet-0">Your level</button></li>
+      <li><button role="tab" aria-selected="false" data-s="1" id="tab-s1" aria-controls="sheet-1">Your streak</button></li>
+      <li><button role="tab" aria-selected="false" data-s="2" id="tab-s2" aria-controls="sheet-2">Badges</button></li>
+      <li><button role="tab" aria-selected="false" data-s="3" id="tab-s3" aria-controls="sheet-3">Quiz results</button></li>
+      <li><button role="tab" aria-selected="false" data-s="4" id="tab-s4" aria-controls="sheet-4">Check-ins</button></li>
+    </ul>
+    <div class="show__cap">
+      <p class="on" data-s="0">Every finished resource earns XP: 50 for a course, 200 for a build. Ten levels run from Curious Beginner to AI Master at 12,000&nbsp;XP.</p>
+      <p data-s="1">Study on consecutive days and XP multiplies: 1.5x from a 7-day streak, 2x from 30 days.</p>
+      <p data-s="2">Nineteen badges in four groups: streaks, knowledge, builds and milestones. Locked ones tell you what earns them.</p>
+      <p data-s="3">Five domain quizzes, twelve weekly quizzes and the practice exam. Your best score is kept; 90% or more marks a quiz as mastered.</p>
+      <p data-s="4">A short reflection at the end of each week, worth 25&nbsp;XP, kept as a timeline you can read back.</p>
+    </div>
+  </div>
+  <div class="stage">
+    <div class="nojs-sheets">
+      <div class="sheet on" data-ui data-s="0" id="sheet-0" role="tabpanel" aria-labelledby="tab-s0">
+        <h4>Level 6 of 10</h4>
+        <div class="row"><div class="big">Agent Crafter</div><div class="big tab">3,420 XP</div></div>
+        <div class="pbar"><i style="width:28%"></i></div>
+        <div class="row sub"><span>Next: System Designer at 4,500 XP</span><span>1,080 to go</span></div>
+        <div class="sec">
+          <h4>All levels</h4>
+          <ol class="ladder">
+            <li class="past"><span>1</span><span>Curious Beginner</span><span>0</span></li>
+            <li class="past"><span>2</span><span>Prompt Apprentice</span><span>250</span></li>
+            <li class="past"><span>3</span><span>API Explorer</span><span>600</span></li>
+            <li class="past"><span>4</span><span>Tool Wielder</span><span>1,200</span></li>
+            <li class="past"><span>5</span><span>MCP Builder</span><span>2,000</span></li>
+            <li class="now"><span>6</span><span>Agent Crafter</span><span>3,000</span></li>
+            <li><span>7</span><span>System Designer</span><span>4,500</span></li>
+            <li><span>8</span><span>Exam Warrior</span><span>6,500</span></li>
+            <li><span>9</span><span>Claude Architect</span><span>9,000</span></li>
+            <li><span>10</span><span>AI Master</span><span>12,000</span></li>
+          </ol>
+        </div>
+      </div>
+      <div class="sheet" data-ui data-s="1" id="sheet-1" role="tabpanel" aria-labelledby="tab-s1">
+        <h4>Study streak</h4>
+        <div class="row"><div class="big">12 days</div><div class="big">1.5x</div></div>
+        <div class="row sub"><span>Multiplier active since day 7</span><span>2x in 18 days</span></div>
+        <div class="sec">
+          <h4>Last five weeks</h4>
+          <div class="days"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+          <div class="heat">
+            <i class="s"></i><i></i><i class="s"></i><i class="s"></i><i></i><i></i><i class="s"></i>
+            <i class="s"></i><i class="s"></i><i></i><i class="s"></i><i class="s"></i><i></i><i></i>
+            <i></i><i class="s"></i><i class="s"></i><i></i><i class="s"></i><i class="s"></i><i class="s"></i>
+            <i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i>
+            <i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="t"></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="sec">
+          <h4>Streak badges</h4>
+          <ul class="badges">
+            <li class="got">First Flame<small>3-day streak, earned</small></li>
+            <li class="got">Week Warrior<small>7-day streak, earned</small></li>
+            <li>Monthly Machine<small>30-day streak, 12 of 30</small></li>
+          </ul>
+        </div>
+      </div>
+      <div class="sheet" data-ui data-s="2" id="sheet-2" role="tabpanel" aria-labelledby="tab-s2">
+        <h4>Badges</h4>
+        <div class="big">7 of 19 earned</div>
+        <div class="sec"><h4>Streak</h4>
+          <ul class="badges"><li class="got">First Flame<small>3-day study streak</small></li><li class="got">Week Warrior<small>7-day study streak</small></li><li>Monthly Machine<small>30-day study streak</small></li></ul>
+        </div>
+        <div class="sec"><h4>Knowledge</h4>
+          <ul class="badges"><li class="got">Domain Master: D1<small>90%+ on Domain 1 quiz</small></li><li>Domain Master: D2<small>90%+ on Domain 2 quiz</small></li><li class="got">Domain Master: D3<small>90%+ on Domain 3 quiz</small></li><li>Domain Master: D4<small>90%+ on Domain 4 quiz</small></li><li>Domain Master: D5<small>90%+ on Domain 5 quiz</small></li></ul>
+        </div>
+        <div class="sec"><h4>Build</h4>
+          <ul class="badges"><li class="got">First Build<small>Complete your first build project</small></li><li class="got">Tool Smith<small>Build a multi-tool agent</small></li><li>MCP Pioneer<small>Build an MCP server</small></li><li>Agent Architect<small>Build a multi-agent system</small></li></ul>
+        </div>
+        <div class="sec"><h4>Milestone</h4>
+          <ul class="badges"><li class="got">First Steps<small>Complete Week 1</small></li><li>Foundation Layer<small>Complete Phase 1</small></li><li>AI Engineer<small>Complete Phase 2</small></li><li>Exam Ready<small>Complete all mock exams</small></li><li>Certified Architect<small>Pass the Claude Certified Architect exam</small></li><li>Production Engineer<small>Complete Phase 4</small></li><li>AI Master<small>Complete the full 26-week journey</small></li></ul>
+        </div>
+      </div>
+      <div class="sheet" data-ui data-s="3" id="sheet-3" role="tabpanel" aria-labelledby="tab-s3">
+        <h4>Practice exam, attempt 2</h4>
+        <div class="row"><div class="big">23 / 30</div><div class="big">77%</div></div>
+        <span class="pass">Passed, 72% needed</span>
+        <div class="row sub"><span>Time used 38:12 of 45:00</span><span>Questions drawn at random</span></div>
+        <div class="sec">
+          <h4>By domain</h4>
+          <ul class="dom">
+            <li style="--c:#ff6831"><span>D1 Agentic Architecture</span><b>6/8</b><span class="tr"><i style="width:75%"></i></span></li>
+            <li style="--c:#9a9a9a"><span>D2 Tool Integration</span><b>5/6</b><span class="tr"><i style="width:83%"></i></span></li>
+            <li style="--c:#111"><span>D3 Claude Code</span><b>4/6</b><span class="tr"><i style="width:67%"></i></span></li>
+            <li style="--c:#49c23a"><span>D4 Prompt Engineering</span><b>5/6</b><span class="tr"><i style="width:83%"></i></span></li>
+            <li style="--c:#0d5c3a"><span>D5 Context Management</span><b>3/4</b><span class="tr"><i style="width:75%"></i></span></li>
+          </ul>
+        </div>
+        <div class="sec">
+          <h4>Best scores</h4>
+          <ul class="dom">
+            <li style="--c:#111"><span>Domain 3 quiz</span><b>100%</b><span class="tr"><i style="width:100%"></i></span></li>
+            <li style="--c:#111"><span>Week 8 quiz</span><b>92%</b><span class="tr"><i style="width:92%"></i></span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="sheet" data-ui data-s="4" id="sheet-4" role="tabpanel" aria-labelledby="tab-s4">
+        <h4>Weekly check-in</h4>
+        <div class="big">Week 8: Claude Code Mastery</div>
+        <label>How well did you learn this week?</label>
+        <div class="stars"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div>
+        <label>What did you learn?</label>
+        <div class="ta">Set up a CLAUDE.md hierarchy for my side project and wrote my first hook. Plan mode finally makes sense.</div>
+        <label>What was challenging?</label>
+        <div class="ta">Permissions. I kept approving the same commands until I wrote rules for them.</div>
+        <label>Focus for next week</label>
+        <div class="ta">Hugging Face models, and redo the week 8 quiz.</div>
+        <span class="save">Save check-in, +25 XP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The practice exam and its receipt -->
+<section class="chapter exam grid pt" id="practice" aria-labelledby="practice-h">
+  <div class="exam__left">
+    <div>
+      <h2 id="practice-h" data-reveal>The practice exam</h2>
+      <p class="note" data-reveal style="--d:1">A full mock, weighted like the real exam and drawn fresh from the question bank on every attempt.</p>
+    </div>
+    <div class="exam__total">
+      <p class="fig" data-reveal style="--d:2">30</p>
+      <p data-reveal style="--d:3">questions in 45 minutes, with 72% to pass. The receipt shows where they come from.</p>
+    </div>
+  </div>
+  <div class="exam__slip" data-reveal style="--d:2">
+    <div class="slip" data-ui role="img" aria-label="Practice exam breakdown: 8, 6, 6, 6 and 4 questions from domains 1 to 5, total 30">
+      <div class="hd">Practice exam</div>
+      <div class="hd2">One attempt, as drawn</div>
+      <div class="grp">Conditions</div>
+      <ul>
+        <li><span>Time allowed</span><span class="dots"></span><span>45 min</span></li>
+        <li><span>Pass mark</span><span class="dots"></span><span>72%</span></li>
+        <li><span>Question order</span><span class="dots"></span><span>random</span></li>
+      </ul>
+      <div class="grp">Questions by domain</div>
+      <ul>
+        <li><i class="sw" style="--c:#ff6831"></i><span>D1 Agentic Architecture</span><span class="dots"></span><span>8</span></li>
+        <li><i class="sw" style="--c:#c5c5c5"></i><span>D2 Tool Integration</span><span class="dots"></span><span>6</span></li>
+        <li><i class="sw" style="--c:#000"></i><span>D3 Claude Code</span><span class="dots"></span><span>6</span></li>
+        <li><i class="sw" style="--c:#7fe073"></i><span>D4 Prompt Engineering</span><span class="dots"></span><span>6</span></li>
+        <li><i class="sw" style="--c:#0d5c3a"></i><span>D5 Context Management</span><span class="dots"></span><span>4</span></li>
+      </ul>
+      <div class="tot"><span>Total questions</span><span>30</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing: two fields -->
+<section class="price" id="pricing" aria-label="Pricing">
+  <div class="plan plan--ng">
+    <div>
+      <h2 data-reveal>In Nigeria</h2>
+      <p class="for" data-reveal style="--d:1">For learners paying in naira.</p>
+      <p class="inc" data-reveal style="--d:2">One payment, no subscription, access for life. All 26 weeks, every quiz and the practice exam, 19 badges, weekly check-ins, the 27-page Architect’s Playbook PDF, and progress that syncs across your devices.</p>
+    </div>
+    <div class="foot">
+      <p class="amt" data-reveal>₦20,000<small>once</small></p>
+      <a class="btn btn--ink" href="/signup">Get started</a>
+    </div>
+  </div>
+  <div class="plan plan--intl">
+    <div>
+      <h2 data-reveal>Everywhere else</h2>
+      <p class="for" data-reveal style="--d:1">For learners paying in US dollars.</p>
+      <p class="inc" data-reveal style="--d:2">Exactly the same app: every week, quiz, badge and the Playbook, paid once and kept for life. Your progress follows you from phone to laptop.</p>
+    </div>
+    <div class="foot">
+      <p class="amt" data-reveal>$15<small>once</small></p>
+      <a class="btn" href="/signup">Get started</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="chapter faq grid pt" id="faq" aria-labelledby="faq-h">
+  <h2 id="faq-h">Fair questions</h2>
+  <div class="list">
+    <details name="faq" open>
+      <summary>Does the price include the exam?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>No. ₦20,000 or $15 pays for Ultimate Study: the roadmap, the quizzes, the practice exam and the Playbook. You request access to the Claude Certified Architect exam from Anthropic separately.</p></div>
+    </details>
+    <details name="faq">
+      <summary>Is this run by Anthropic?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>No. It is an independent study plan. Many of its resources are Anthropic’s own courses and docs, linked straight from each week.</p></div>
+    </details>
+    <details name="faq">
+      <summary>Is it a subscription?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>No. You pay once and keep access for life. Nothing renews.</p></div>
+    </details>
+    <details name="faq">
+      <summary>Do I need to code already?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>Week 1 starts with the big picture and no code; Python for Everybody is listed there as an optional catch-up. Your first API call comes in week 2.</p></div>
+    </details>
+    <details name="faq">
+      <summary>Are the courses inside the app?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>The quizzes, the practice exam, check-ins and the Playbook are. Courses and docs come from Anthropic, DeepLearning.AI, Coursera, Hugging Face and others: the app links each one, tracks what you finish and turns it into XP.</p></div>
+    </details>
+    <details name="faq">
+      <summary>What happens if I miss a day?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>Nothing you have completed is lost. Streaks only add a multiplier on top: 1.5x XP from 7 days in a row, 2x from 30.</p></div>
+    </details>
+    <details name="faq">
+      <summary>I have an invite code.<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>Enter it when you sign up or at checkout, and access opens straight away.</p></div>
+    </details>
+    <details name="faq">
+      <summary>Is anything sold separately?<i class="plus" aria-hidden="true"></i></summary>
+      <div class="a"><p>The shop has extra courses and PDFs, bought one at a time. They are optional; the 26-week roadmap is complete without them.</p></div>
+    </details>
+  </div>
+</section>
+
+<!-- CTA, inverted -->
+<section class="chapter cta pt" aria-labelledby="cta-h">
+  <div class="grid">
+    <h2 id="cta-h" class="xl" data-reveal>Week one starts today</h2>
+  </div>
+  <div class="grid row">
+    <p data-reveal style="--d:1">₦20,000 or $15, once. Your progress is saved from the first resource you tick.</p>
+    <div class="act" data-reveal style="--d:2">
+      <a class="link" href="/login">Sign in</a>
+      <a class="btn" href="/signup">Get started</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="blocks" aria-label="Ultimate Study" role="img">
+    <div class="word" style="--n:8">
+      <span style="--h:100%;--c:var(--orange);--k:#000">U</span>
+      <span style="--h:72%;--c:var(--grey);--k:#000">L</span>
+      <span style="--h:88%;--c:var(--black);--k:#fff">T</span>
+      <span style="--h:64%;--c:var(--mint);--k:#000">I</span>
+      <span style="--h:94%;--c:var(--green);--k:#fff">M</span>
+      <span style="--h:78%;--c:var(--orange);--k:#000">A</span>
+      <span style="--h:68%;--c:var(--grey);--k:#000">T</span>
+      <span style="--h:90%;--c:var(--black);--k:#fff">E</span>
+    </div>
+    <div class="sp"></div>
+    <div class="word" style="--n:5">
+      <span style="--h:76%;--c:var(--mint);--k:#000">S</span>
+      <span style="--h:96%;--c:var(--green);--k:#fff">T</span>
+      <span style="--h:66%;--c:var(--orange);--k:#000">U</span>
+      <span style="--h:84%;--c:var(--grey);--k:#000">D</span>
+      <span style="--h:100%;--c:var(--black);--k:#fff">Y</span>
+    </div>
+  </div>
+  <div class="flinks">
+    <div class="col"><b>Start</b><a href="/signup">Get started</a><a href="/login">Sign in</a><a href="#pricing">Pricing</a></div>
+    <div class="col"><b>The exam</b><a href="#exam">Domains</a><a href="#try">Try a question</a><a href="#practice">Practice exam</a></div>
+    <div class="col"><b>The app</b><a href="#path">26-week path</a><a href="#app">Levels and badges</a><a href="#faq">Questions</a></div>
+    <div class="col"><b>More</b><a href="/products">Shop</a><a href="/updates">Updates</a></div>
+    <div class="contact">
+      <p>ultimatestudy.xyz</p>
+      <p>Pay once: ₦20,000 in Nigeria, $15 everywhere else.</p>
+      <p>An independent study plan, not affiliated with Anthropic.</p>
+    </div>
+  </div>
+  <div class="last">
+    <span>© 2026 Ultimate Study</span>
+    <a class="btn btn--sm" href="/signup">Get started</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // reveal once
+  var els = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    els.forEach(function (el) { io.observe(el); });
+  } else { els.forEach(function (el) { el.classList.add('is-in'); }); }
+
+  // live question
+  var tabs = document.querySelectorAll('.tabs button');
+  var qs = document.querySelectorAll('.q');
+  var letters = ['A', 'B', 'C', 'D'];
+  function showQ(i) {
+    tabs.forEach(function (t, k) { t.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+    qs.forEach(function (q, k) { q.classList.toggle('on', k === i); if (k === i) { q.classList.remove('fade'); void q.offsetWidth; q.classList.add('fade'); } });
+  }
+  tabs.forEach(function (t, i) { t.addEventListener('click', function () { showQ(i); }); });
+  qs.forEach(function (q) {
+    var correct = +q.dataset.correct;
+    var opts = q.querySelectorAll('.opt');
+    var verdict = q.querySelector('.verdict');
+    var expl = q.querySelector('template').innerHTML;
+    opts.forEach(function (o, i) {
+      o.addEventListener('click', function () {
+        if (q.classList.contains('answered')) return;
+        q.classList.add('answered');
+        opts[correct].classList.add('right');
+        if (i !== correct) o.classList.add('wrong');
+        verdict.innerHTML = (i === correct ? '<b>Right.</b> ' : '<b>Not quite. The answer is ' + letters[correct] + '.</b> ') + expl +
+          ' <br><button type="button" class="again">Try again</button>';
+        verdict.querySelector('.again').addEventListener('click', function () {
+          q.classList.remove('answered'); verdict.innerHTML = '';
+          opts.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+          opts[0].focus();
+        });
+      });
+    });
+  });
+
+  // the path slider
+  var range = document.getElementById('phase-range');
+  var stops = document.querySelectorAll('.stops button');
+  var phases = document.querySelectorAll('.phase');
+  var wks = document.querySelectorAll('.wk');
+  var names = ['AI Foundations, weeks 1 to 6', 'Developer Skills, weeks 7 to 12', 'Architect Exam Sprint, weeks 13 to 18', 'Production AI and LLMOps, weeks 19 to 22', 'Portfolio and Career, weeks 23 to 26'];
+  function setPhase(p) {
+    range.value = p;
+    range.parentNode.style.setProperty('--p', 'calc(' + (p / 4) + ' * (100% - 32px) + 16px)');
+    range.setAttribute('aria-valuetext', names[p]);
+    stops.forEach(function (s, k) { s.setAttribute('aria-pressed', k === p ? 'true' : 'false'); });
+    [phases, wks].forEach(function (list) {
+      list.forEach(function (el) { var on = +el.dataset.p === p; el.classList.toggle('on', on); if (on) { el.classList.remove('fade'); void el.offsetWidth; el.classList.add('fade'); } });
+    });
+  }
+  range.addEventListener('input', function () { setPhase(+range.value); });
+  stops.forEach(function (s) { s.addEventListener('click', function () { setPhase(+s.dataset.p); }); });
+  setPhase(0);
+
+  // output index
+  var stabs = document.querySelectorAll('.show__index [role="tab"]');
+  var sheets = document.querySelectorAll('.sheet');
+  var caps = document.querySelectorAll('.show__cap p');
+  function setSheet(i) {
+    stabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+    [sheets, caps].forEach(function (list) { list.forEach(function (el, k) { el.classList.toggle('on', k === i); if (k === i) { el.classList.remove('fade'); void el.offsetWidth; el.classList.add('fade'); } }); });
+  }
+  stabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { setSheet(i); });
+    t.addEventListener('keydown', function (e) {
+      var n = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+      if (!n) return; e.preventDefault(); var j = (i + n + stabs.length) % stabs.length; setSheet(j); stabs[j].focus();
+    });
+  });
+  setSheet(0);
+})();
+</script>
+</body>
+</html>

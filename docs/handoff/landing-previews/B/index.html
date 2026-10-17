@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultimate Study: 26 weeks to the Claude Certified Architect exam</title>
+<meta name="description" content="A gamified 26-week study plan for the Claude Certified Architect exam. One payment of ₦20,000 or $15, lifetime access.">
+<meta name="theme-color" content="#062b8a">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e6dbc7;
+  --surface: #ddd0b9;
+  --ink: #062b8a;
+  --muted: #3a5aa8;
+  --accent: #062b8a;
+  --accent-ink: #e6dbc7;
+
+  --step-small: 0.875rem;
+  --step-body: clamp(1.0625rem, 1.02rem + 0.25vw, 1.25rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 2.6vw, 4rem);
+  --step-display: clamp(3rem, 7.2vw, 8.25rem);
+
+  --margin: clamp(1rem, 2.2vw, 2rem);
+  --gutter: clamp(1rem, 2vw, 2.5rem);
+  --axis: 42%;
+  --section-gap: clamp(5rem, 10vw, 11rem);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Literata", Georgia, serif; font-size: var(--step-body); line-height: 1.6;
+  font-optical-sizing: auto; text-rendering: optimizeLegibility; overflow-x: hidden;
+}
+h1, h2, h3, p, ol, ul, dl, dd, figure, table { margin: 0; }
+h1, h2, h3 { font-weight: 500; line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance; }
+p { text-wrap: pretty; }
+a { color: inherit; }
+img { display: block; max-width: 100%; height: auto; }
+::selection { background: var(--ink); color: var(--bg); }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.on-ink :focus-visible { outline-color: var(--bg); }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.num { font-variant-numeric: lining-nums tabular-nums; }
+
+/* buttons: square, one fill */
+.button {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 3.25rem;
+  padding: 0 1.75rem; background: var(--accent); color: var(--accent-ink);
+  font: inherit; font-size: var(--step-body); font-weight: 600; text-decoration: none; border: 0; cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease, color var(--t-hover) ease;
+}
+.button:active { transform: scale(0.97); }
+.button--paper { background: var(--bg); color: var(--ink); }
+.link { text-decoration: underline; text-decoration-thickness: 0.07em; text-underline-offset: 0.22em; text-decoration-color: currentColor; transition: text-decoration-color var(--t-hover) ease; }
+@media (hover: hover) and (pointer: fine) {
+  .button:hover { background: var(--muted); }
+  .button--paper:hover { background: var(--surface); color: var(--ink); }
+  .link:hover { text-decoration-color: transparent; }
+}
+
+/* the axis: every section is a two-zone grid split at 42% */
+.axis { display: grid; grid-template-columns: var(--axis) 1fr; }
+.axis > .side { padding: 0 var(--gutter) 0 var(--margin); }
+.axis > .main { padding: 0 var(--margin) 0 0; min-width: 0; }
+
+/* ───────── header + masthead ───────── */
+.masthead { position: relative; }
+.bar { display: grid; grid-template-columns: var(--axis) 1fr; align-items: stretch; min-height: 3.5rem; }
+.bar-left { display: flex; }
+.wordmark {
+  display: flex; align-items: center; padding: 0 1.25rem 0 var(--margin); background: var(--ink); color: var(--bg);
+  font-weight: 600; text-decoration: none; letter-spacing: -0.01em; white-space: nowrap; font-size: var(--step-body);
+}
+.tab { flex: 1; display: flex; align-items: center; gap: clamp(1rem, 2vw, 2rem); padding: 0 1.25rem; background: var(--muted); color: var(--bg); }
+.tab a { text-decoration: none; font-size: var(--step-body); }
+@media (hover: hover) and (pointer: fine) { .tab a:hover { text-decoration: underline; text-underline-offset: 0.22em; } }
+.bar-right { display: flex; align-items: center; justify-content: flex-end; gap: 1.5rem; padding-right: var(--margin); padding-left: 1rem; }
+.bar-right .button { min-height: 2.75rem; padding: 0 1.25rem; }
+
+.mosaic {
+  display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(2, 1fr);
+  height: clamp(17rem, 28vw, 30rem); background: var(--surface);
+}
+.mosaic > * { min-width: 0; min-height: 0; overflow: hidden; position: relative; }
+.mosaic img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; filter: grayscale(1) contrast(1.05); }
+.cell-a { grid-column: 1 / 3; grid-row: 1; background: var(--bg); }
+.cell-t { grid-column: 3; grid-row: 1 / 3; background: var(--ink); color: var(--bg); }
+.cell-b { grid-column: 4; grid-row: 1; background: var(--surface); }
+.cell-m { grid-column: 5; grid-row: 1; background: var(--muted); color: var(--bg); }
+.cell-c { grid-column: 6; grid-row: 1; background: var(--bg); }
+.cell-s { grid-column: 1; grid-row: 2; background: var(--surface); }
+.cell-d { grid-column: 2; grid-row: 2; background: var(--bg); }
+.cell-p { grid-column: 4 / 6; grid-row: 2; background: var(--bg); }
+.cell-i { grid-column: 6; grid-row: 2; background: var(--ink); color: var(--bg); }
+.tile { display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(0.75rem, 1.4vw, 1.25rem); }
+.tile b { display: block; font-weight: 500; font-size: var(--step-head); line-height: 1; letter-spacing: -0.03em; }
+.tile span { display: block; font-size: var(--step-small); line-height: 1.35; margin-top: 0.4rem; max-width: 16ch; }
+.cell-b img { object-position: 50% 40%; }
+.cell-c img { object-position: 30% 50%; }
+.cell-d img { object-position: 40% 50%; }
+.cell-p img { object-position: 50% 45%; }
+
+.hero { padding-top: clamp(2.5rem, 6vh, 5.5rem); padding-bottom: clamp(3rem, 7vh, 6rem); align-items: start; }
+.standfirst { font-size: var(--step-lead); line-height: 1.4; max-width: 30ch; padding-top: 0.6rem; }
+.title { font-size: var(--step-display); line-height: 0.92; letter-spacing: -0.045em; font-weight: 500; }
+.title .line { display: block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.title [data-line] { display: block; }
+.hero-actions { display: flex; align-items: center; gap: 1.75rem; margin-top: clamp(1.75rem, 4vh, 2.75rem); flex-wrap: wrap; }
+
+/* ───────── plan bar ───────── */
+.plan { padding: var(--section-gap) var(--margin) 0; }
+.plan h2 { font-size: var(--step-head); margin-left: calc(var(--axis) - var(--margin)); margin-bottom: 4rem; }
+.stages { display: flex; gap: 6px; }
+.stage { min-width: 12%; display: flex; flex-direction: column; }
+.stage .block { height: 22vh; min-height: 10rem; padding: 1.25rem; font-size: var(--step-lead); line-height: 1.15; }
+.stage p { font-size: var(--step-body); line-height: 1.45; max-width: 24ch; margin-top: 1rem; padding-right: 1rem; }
+.stage strong { font-weight: 600; }
+.s1 .block { background: var(--ink); color: var(--bg); }
+.s2 .block { background: var(--muted); color: var(--bg); }
+.s3 .block { background: var(--ink); color: var(--bg); }
+.s4 .block { background: var(--surface); color: var(--ink); }
+.s5 .block { background: var(--surface); color: var(--ink); }
+.s3 .block { outline: 0; }
+.block small { display: block; font-size: var(--step-small); margin-top: 0.4rem; line-height: 1.35; }
+
+/* ───────── contents ───────── */
+.contents { background: var(--surface); margin-top: var(--section-gap); padding: var(--section-gap) 0; }
+.contents h2 { font-size: var(--step-head); margin-bottom: 3rem; }
+.notes { display: grid; gap: 2rem; max-width: 22rem; }
+.note b { display: block; font-size: var(--step-head); font-weight: 500; line-height: 1; letter-spacing: -0.03em; }
+.note span { display: block; font-size: var(--step-small); line-height: 1.45; margin-top: 0.5rem; max-width: 26ch; }
+.side figure { margin-top: 3.5rem; max-width: 26rem; }
+.side figure img { mix-blend-mode: multiply; filter: grayscale(1) contrast(1.05); background: var(--surface); }
+figcaption { font-size: var(--step-small); line-height: 1.45; margin-top: 0.6rem; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--gutter); row-gap: 3rem; }
+.part h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: var(--step-lead); font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 0.9rem; }
+.part h3 .num { font-weight: 500; }
+.part ol { list-style: none; padding: 0; }
+.part li { display: flex; justify-content: space-between; gap: 1.25rem; padding: 0.42rem 0; line-height: 1.35; }
+.part li .num { flex: none; min-width: 1.6em; text-align: right; }
+.part li.key { font-weight: 600; }
+.part + .part { margin-top: 0; }
+
+/* ───────── exam domains ───────── */
+.exam { padding: var(--section-gap) 0; }
+.exam h2 { font-size: var(--step-head); margin-bottom: 1.25rem; }
+.exam .intro { max-width: 40ch; margin-bottom: 3rem; }
+.weights { width: 100%; border-collapse: collapse; }
+.weights th { text-align: left; font-weight: 400; font-size: var(--step-small); padding: 0 1rem 0.75rem 0; vertical-align: bottom; }
+.weights td { padding: 1rem 1rem 1rem 0; vertical-align: baseline; border-top: 3px solid var(--ink); }
+.weights td.w { font-size: var(--step-head); font-weight: 500; line-height: 1; letter-spacing: -0.03em; width: 1%; white-space: nowrap; padding-right: 2rem; }
+.weights td.d { font-size: var(--step-lead); line-height: 1.2; }
+.weights td.r { white-space: nowrap; text-align: right; }
+.weights th.r { text-align: right; }
+
+/* ───────── showcase: one live question ───────── */
+.try { display: grid; grid-template-columns: 1fr 1fr; min-height: min(90svh, 50rem); }
+.try-in { background: var(--ink); color: var(--bg); padding: clamp(2rem, 8vh, 5rem) var(--gutter) 2rem var(--margin); display: flex; flex-direction: column; }
+.try-out { background: var(--surface); padding: clamp(2rem, 8vh, 5rem) var(--margin) 2rem var(--gutter); display: flex; flex-direction: column; }
+.try h2 { font-size: var(--step-head); line-height: 1; margin-top: auto; padding-top: 3rem; }
+.try-out h2 { text-align: right; }
+.domains { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 2.25rem; }
+html:not(.js) .domains { display: none; }
+.domains button {
+  font: inherit; font-size: var(--step-small); line-height: 1.2; text-align: left; cursor: pointer;
+  background: transparent; color: var(--bg); border: 2px solid rgba(230, 219, 199, 0.55); padding: 0.55rem 0.8rem; min-height: 2.75rem;
+  transition: background-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+}
+.domains button b { font-weight: 600; }
+.domains button[aria-pressed="true"] { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+.domains button:active { transform: scale(0.97); }
+.q { font-size: var(--step-lead); line-height: 1.35; max-width: 34ch; margin-bottom: 1.5rem; }
+.opt code { font-size: 0.92em; }
+.q code { font-family: inherit; font-weight: 600; }
+.opts { display: grid; gap: 6px; max-width: 40rem; list-style: none; padding: 0; }
+.opt {
+  width: 100%; display: grid; grid-template-columns: 2rem 1fr; align-items: baseline; text-align: left;
+  font: inherit; font-size: var(--step-body); line-height: 1.4; color: var(--bg); cursor: pointer;
+  background: rgba(230, 219, 199, 0.12); border: 0; padding: 0.85rem 1rem; min-height: 3rem;
+  transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+}
+.opt .k { font-weight: 600; }
+.opt:active { transform: scale(0.99); }
+@media (hover: hover) and (pointer: fine) {
+  .opt:hover { background: rgba(230, 219, 199, 0.22); }
+  .domains button:hover { border-color: var(--bg); }
+}
+.opt[data-state="right"] { background: var(--bg); color: var(--ink); }
+.opt[data-state="wrong"] { background: transparent; outline: 2px solid var(--bg); outline-offset: -2px; text-decoration: line-through; text-decoration-thickness: 0.06em; }
+.nojs-answer { margin-top: 1.5rem; font-size: var(--step-body); max-width: 40rem; }
+.nojs-answer summary { cursor: pointer; font-weight: 600; }
+.js .nojs-answer { display: none; }
+
+/* product fragment: the app's own marking card */
+[data-ui].result { background: var(--bg); color: var(--ink); max-width: 32rem; width: 100%; padding: 1.5rem 1.6rem 1.6rem; border-radius: 6px; }
+[data-ui] .r-top { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--step-small); }
+[data-ui] .r-verdict { font-size: var(--step-head); font-weight: 500; letter-spacing: -0.03em; line-height: 1; margin: 1.25rem 0 0.75rem; }
+[data-ui] .r-answer { font-size: var(--step-body); font-weight: 600; margin-bottom: 0.75rem; }
+[data-ui] .r-expl { font-size: var(--step-body); line-height: 1.5; }
+[data-ui] .r-foot { margin-top: 1.4rem; padding-top: 1rem; border-top: 2px solid var(--surface); font-size: var(--step-small); line-height: 1.5; }
+[data-ui] .r-meter { height: 10px; background: var(--surface); margin-top: 0.6rem; border-radius: 5px; overflow: hidden; }
+[data-ui] .r-meter i { display: block; height: 100%; background: var(--ink); border-radius: 5px; width: var(--w, 27%); transition: width 600ms var(--ease-out); }
+[data-ui] .r-empty { font-size: var(--step-body); line-height: 1.5; margin-top: 1rem; }
+.try-note { font-size: var(--step-small); margin-top: 1rem; max-width: 32rem; }
+
+/* ───────── stats: figures inside a sentence ───────── */
+.stats { padding: var(--section-gap) 0; align-items: center; }
+.stats .sentence { font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem); line-height: 1.25; letter-spacing: -0.01em; max-width: 34ch; color: var(--muted); }
+.stats .sentence .num { color: var(--ink); font-weight: 600; }
+[data-ui].record { background: var(--surface); color: var(--ink); padding: 1.25rem 1.35rem 1.4rem; border-radius: 6px; max-width: 26rem; font-size: var(--step-small); line-height: 1.45; }
+[data-ui].record .lvl { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+[data-ui].record .lvl strong { font-size: var(--step-body); font-weight: 600; letter-spacing: -0.01em; }
+[data-ui].record .bar2 { height: 12px; background: var(--bg); border-radius: 6px; margin: 0.8rem 0 0.45rem; overflow: hidden; }
+[data-ui].record .bar2 i { display: block; height: 100%; width: 41%; background: var(--ink); border-radius: 6px; }
+[data-ui].record dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 1rem; margin-top: 1.1rem; }
+[data-ui].record dt { font-size: var(--step-small); }
+[data-ui].record dd { font-size: var(--step-lead); font-weight: 600; line-height: 1.1; }
+.record-cap { font-size: var(--step-small); margin-top: 0.7rem; max-width: 24rem; }
+
+/* ───────── pricing: two fields ───────── */
+.pricing { display: grid; grid-template-columns: 5fr 7fr; min-height: min(80svh, 46rem); }
+.plan-field { display: flex; flex-direction: column; padding: 2.5rem var(--gutter); }
+.plan-field:first-child { padding-left: var(--margin); background: var(--surface); }
+.plan-field:last-child { padding-right: var(--margin); background: var(--ink); color: var(--bg); }
+.plan-field h3 { font-size: var(--step-head); }
+.plan-field .who { font-size: var(--step-lead); line-height: 1.35; max-width: 26ch; margin-top: 1rem; }
+.plan-field .incl { max-width: 38ch; margin-top: 2rem; }
+.price-row { margin-top: auto; padding-top: 3rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+.price { font-size: var(--step-display); font-weight: 500; line-height: 0.85; letter-spacing: -0.045em; }
+.price small { font-size: var(--step-body); letter-spacing: 0; font-weight: 400; margin-left: 0.5rem; }
+
+/* ───────── FAQ ───────── */
+.faq { padding: var(--section-gap) 0; }
+.faq h2 { font-size: var(--step-head); }
+.faq .cols { columns: 2; column-gap: 3.5rem; }
+.faq .cols p { break-inside: avoid; margin-bottom: 1.4rem; font-size: var(--step-body); line-height: 1.55; }
+.faq .cols b { font-weight: 600; }
+
+/* ───────── CTA + footer ───────── */
+.cta { background: var(--ink); color: var(--bg); min-height: min(80svh, 44rem); display: flex; flex-direction: column; padding: clamp(4rem, 12vh, 8rem) var(--margin) 2.5rem; }
+.cta h2 { font-size: var(--step-display); line-height: 0.92; letter-spacing: -0.045em; margin-left: calc(var(--axis) - var(--margin)); }
+.cta-row { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; padding-top: 4rem; }
+.cta-row p { font-size: var(--step-lead); line-height: 1.35; max-width: 32ch; }
+.cta .button { min-height: 3.5rem; }
+
+footer { background: var(--ink); color: var(--bg); padding: 10rem var(--margin) 2rem; }
+.f-name { font-size: var(--step-display); font-weight: 500; line-height: 0.92; letter-spacing: -0.045em; padding-bottom: 4.5rem; }
+.f-row { display: grid; grid-template-columns: var(--axis) 1fr; }
+.f-places { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
+.f-places a { font-size: var(--step-lead); text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .f-places a:hover, .f-links a:hover { text-decoration: underline; text-underline-offset: 0.22em; } }
+.f-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.f-links p { font-weight: 600; font-size: var(--step-small); margin-bottom: 0.5rem; }
+.f-links ul { list-style: none; padding: 0; display: grid; gap: 0.35rem; }
+.f-links a { font-size: var(--step-small); text-decoration: none; }
+.f-credit { margin-top: 4rem; font-size: var(--step-small); max-width: 62ch; margin-left: var(--axis); }
+.f-legal { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-top: 4rem; font-size: var(--step-small); }
+
+/* ───────── tablet ───────── */
+@media (max-width: 1100px) {
+  :root { --axis: 30%; }
+  .toc { grid-template-columns: 1fr; }
+  .faq .cols { columns: 1; }
+  .tab { gap: 1rem; }
+  /* hero and stats stack: title, standfirst, action */
+  .hero, .stats { display: flex; flex-direction: column; align-items: stretch; }
+  .hero > .main { display: contents; }
+  .hero .title { order: 1; padding: 0 var(--margin); }
+  .hero > .side { order: 2; padding: 0 var(--margin); }
+  .hero .hero-actions { order: 3; padding: 0 var(--margin); }
+  .standfirst { margin-top: 1.5rem; max-width: 40ch; }
+  .stats > .side, .stats > .main { padding: 0 var(--margin); }
+  .stats > .main { order: -1; margin-bottom: 3rem; }
+  .stats .side, .stats .main { margin-left: calc(var(--axis) - var(--margin)); }
+}
+@media (max-width: 900px) {
+  .try { grid-template-columns: 1fr; }
+  .try-in { padding: 3rem var(--margin) 0; min-height: min(62svh, 36rem); }
+  .try-out { padding: 0 var(--margin) 3rem; }
+  .try-in h2 { padding-top: 3rem; padding-bottom: 1rem; }
+  .try-out h2 { order: -1; text-align: left; margin: 0; padding: 1rem 0 2rem; }
+  .pricing { grid-template-columns: 1fr; }
+  .plan-field { min-height: min(70svh, 34rem); padding: 2.5rem var(--margin); }
+  .plan-field:last-child { order: -1; }
+  .plan-field .price-row .button { width: 100%; }
+}
+
+/* ───────── phone: the axis collapses to the margin ───────── */
+@media (max-width: 760px) {
+  :root { --step-display: 10.6vw; --step-lead: 1.375rem; --step-head: 2.25rem; --step-body: 1.0625rem; --step-mega: 14vw; }
+  .axis { grid-template-columns: 1fr; }
+  .axis > .side, .axis > .main { padding: 0 var(--margin); }
+  .bar { grid-template-columns: 1fr auto; min-height: 3.25rem; }
+  .tab { display: none; }
+  .bar-right { gap: 1rem; padding-right: 0; }
+  .bar-right .link { display: none; }
+  .bar-right .button { padding: 0 1rem; min-height: 3.25rem; white-space: nowrap; }
+  .wordmark { white-space: nowrap; }
+  .stats .side, .stats .main { margin-left: 0; }
+  .mosaic { grid-template-columns: repeat(3, 1fr); height: 66vw; min-height: 0; }
+  .cell-a { grid-column: 1 / 3; grid-row: 1; }
+  .cell-t { grid-column: 3; grid-row: 1 / 3; }
+  .cell-s { grid-column: 1; grid-row: 2; }
+  .cell-b { grid-column: 2; grid-row: 2; }
+  .cell-m, .cell-c, .cell-d, .cell-p, .cell-i { display: none; }
+  .hero { padding-top: 2rem; padding-bottom: 3rem; }
+  .standfirst { font-size: var(--step-body); margin-top: 1.25rem; max-width: 34ch; }
+  .hero-actions .button { flex: 1 1 100%; }
+  .plan { padding-top: 6rem; }
+  .plan h2 { margin-left: 0; margin-bottom: 2rem; }
+  .stages { flex-direction: column; }
+  .stage { min-width: 0; flex: none !important; }
+  .stage .block { height: auto; min-height: 0; }
+  .s1 .block, .s2 .block, .s3 .block { padding-bottom: 4.5rem; }
+  .s4 .block, .s5 .block { padding-bottom: 3rem; }
+  .stage p { margin: 0.7rem 0 1.25rem; max-width: none; }
+  .contents, .exam, .faq, .stats { padding: 6rem 0; }
+  .contents { margin-top: 5rem; }
+  .side figure { display: none; }
+  .notes { grid-template-columns: 1fr 1fr; max-width: none; margin-bottom: 3rem; gap: 1.5rem; }
+  .weights .hide-s { display: none; }
+  .weights td.w { padding-right: 1rem; }
+  .weights td.r { white-space: normal; }
+  .stats .sentence { font-size: var(--step-lead); }
+  .faq h2 { margin-bottom: 1.5rem; }
+  .cta { min-height: min(80svh, 40rem); }
+  .cta h2 { margin-left: 0; font-size: var(--step-mega); }
+  .cta .button { width: 100%; }
+  .f-name { font-size: var(--step-mega); }
+  .f-row { grid-template-columns: 1fr; gap: 3rem; }
+  .f-links { grid-template-columns: 1fr 1fr; }
+  .f-credit { margin-left: 0; }
+  .plan-field .price-row .button { width: 100%; }
+  .price { font-size: var(--step-mega); }
+}
+
+/* ───────── motion ───────── */
+@media (prefers-reduced-motion: no-preference) {
+  .js .title [data-line] { transform: translateY(105%); animation: line-up 900ms var(--ease-out) forwards; animation-delay: calc(var(--i) * 110ms + 150ms); }
+  .js .hero-lead { opacity: 0; animation: fade-up 700ms var(--ease-out) 520ms forwards; }
+  .js .mosaic img { animation: settle 2400ms var(--ease-soft) both; }
+  .js .mosaic .tile > * { opacity: 0; animation: fade-up 700ms var(--ease-out) forwards; animation-delay: calc(var(--d, 0) * 80ms + 300ms); }
+  .js .cell-a img { animation: drift 24s ease-in-out 2s infinite alternate; }
+  .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: calc(var(--r, 0) * 75ms); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+  .js .stage[data-reveal] { transform: translateX(-24px); }
+  .js .stage[data-reveal].is-in { transform: none; }
+}
+@keyframes line-up { to { transform: none; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes settle { from { transform: scale(1.08); } to { transform: none; } }
+@keyframes drift { from { transform: scale(1) translateX(0); } to { transform: scale(1.08) translateX(-2%); } }
+</style>
+</head>
+<body>
+
+<header class="masthead" id="top">
+  <nav class="bar" aria-label="Main">
+    <div class="bar-left">
+      <a class="wordmark" href="#top">Ultimate Study</a>
+      <div class="tab">
+        <a href="#plan">Plan</a>
+        <a href="#exam">Exam</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+    </div>
+    <div class="bar-right">
+      <a class="link" href="/login">Sign in</a>
+      <a class="button" href="/signup">Get started</a>
+    </div>
+  </nav>
+
+  <div class="mosaic" aria-label="Figures from the Architect’s Playbook, the 27-page PDF included with the plan">
+    <div class="cell-a"><img src="assets/pb-layers.jpg" width="1000" height="450" fetchpriority="high" decoding="async" alt="Isometric drawing of a three-layer LLM system: ingestion and routing, multi-agent orchestration, validation and delivery"></div>
+    <div class="cell-t tile"><b class="num" style="--d:0">720</b><span style="--d:1">out of 1,000 to pass the Claude Certified Architect exam</span></div>
+    <div class="cell-b"><img src="assets/pb-memory.jpg" width="520" height="430" decoding="async" alt="Drawing of a shared vector store that several agents write findings to and read from"></div>
+    <div class="cell-m tile"><b class="num" style="--d:2">5</b><span style="--d:3">domains, weighted 27, 19, 19, 20 and 15 per cent</span></div>
+    <div class="cell-c"><img src="assets/pb-curve.jpg" width="1630" height="560" decoding="async" alt="Bell curve of extraction confidence scores with a cut-off at 90 per cent for human review"></div>
+    <div class="cell-s tile"><b class="num" style="--d:4">26</b><span style="--d:5">weeks, five parts</span></div>
+    <div class="cell-d"><img src="assets/pb-funnel.jpg" width="1330" height="780" decoding="async" alt="Drawing of a funnel filtering a raw API response down to the few fields an agent needs"></div>
+    <div class="cell-p"><img src="assets/pb-blueprint.jpg" width="2112" height="985" decoding="async" alt="Production architecture blueprint: pattern router, execution layer with application intercepts, state management"></div>
+    <div class="cell-i tile"><b class="num" style="--d:6">30</b><span style="--d:7">task statements</span></div>
+  </div>
+
+  <div class="hero axis">
+    <div class="side">
+      <p class="standfirst hero-lead">A gamified study plan that takes you from your first API call to the Claude Certified Architect exam. You pay once, ₦20,000 or $15, and keep it for good.</p>
+    </div>
+    <div class="main">
+      <h1 class="title">
+        <span class="line"><span data-line style="--i:0">Twenty-six weeks</span></span>
+        <span class="line"><span data-line style="--i:1">to 720</span></span>
+      </h1>
+      <div class="hero-actions hero-lead">
+        <a class="button" href="/signup">Get started</a>
+        <a class="link" href="/login">Sign in</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="plan" id="plan" aria-labelledby="plan-h">
+  <h2 id="plan-h" data-reveal>Five parts, one exam</h2>
+  <div class="stages" data-ui>
+    <div class="stage s1" style="flex-grow:6;--r:0" data-reveal>
+      <div class="block">Six weeks<small>Weeks 1–6</small></div>
+      <p><strong>First,</strong> AI Foundations: what AI is, then your first Claude API call.</p>
+    </div>
+    <div class="stage s2" style="flex-grow:6;--r:1" data-reveal>
+      <div class="block">Six weeks<small>Weeks 7–12</small></div>
+      <p><strong>Then</strong> Developer Skills: tools, MCP, Claude Code, RAG and agents.</p>
+    </div>
+    <div class="stage s3" style="flex-grow:6;--r:2" data-reveal>
+      <div class="block">Six weeks<small>Weeks 13–18</small></div>
+      <p><strong>Then</strong> the Architect Exam Sprint, one domain at a time, ending in mock exams.</p>
+    </div>
+    <div class="stage s4" style="flex-grow:4;--r:3" data-reveal>
+      <div class="block">Four weeks<small>Weeks 19–22</small></div>
+      <p><strong>After it,</strong> Production AI and LLMOps.</p>
+    </div>
+    <div class="stage s5" style="flex-grow:4;--r:4" data-reveal>
+      <div class="block">Four weeks<small>Weeks 23–26</small></div>
+      <p><strong>Last,</strong> Portfolio and Career: two projects and a showcase.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contents axis" aria-labelledby="contents-h">
+  <div class="side">
+    <div class="notes">
+      <div class="note" data-reveal><b class="num">200+</b><span>curated resources: courses, docs, videos and builds, each worth its own XP</span></div>
+      <div class="note" data-reveal style="--r:1"><b class="num">17</b><span>quizzes: 5 on the exam domains and 12 at the end of weeks</span></div>
+      <div class="note" data-reveal style="--r:2"><b class="num">45</b><span>minutes for the 30-question practice exam in week 18, drawn fresh each attempt, 72% to pass</span></div>
+    </div>
+    <figure data-reveal style="--r:3">
+      <img src="assets/pb-files.jpg" width="600" height="720" loading="lazy" decoding="async" alt="Drawing of fifteen code files crossed out: the anti-pattern of reading a whole codebase in sequence">
+      <figcaption>Directed codebase exploration, from the Architect’s Playbook, read in week 12.</figcaption>
+    </figure>
+  </div>
+  <div class="main">
+    <h2 id="contents-h" data-reveal>Contents</h2>
+    <div class="toc">
+      <div>
+        <div class="part" data-reveal>
+          <h3><span>AI Foundations</span><span class="num">1–6</span></h3>
+          <ol>
+            <li><span>The Big Picture</span><span class="num">1</span></li>
+            <li><span>Generative AI and your first API call</span><span class="num">2</span></li>
+            <li><span>Prompt Engineering Foundations</span><span class="num">3</span></li>
+            <li><span>AI Agents Intro and low-code</span><span class="num">4</span></li>
+            <li><span>Git, GitHub and Tool Use</span><span class="num">5</span></li>
+            <li><span>MCP Fundamentals</span><span class="num">6</span></li>
+          </ol>
+        </div>
+        <div class="part" data-reveal style="margin-top:3rem">
+          <h3><span>Developer Skills</span><span class="num">7–12</span></h3>
+          <ol>
+            <li><span>MCP Advanced and Agent Skills</span><span class="num">7</span></li>
+            <li><span>Claude Code Mastery</span><span class="num">8</span></li>
+            <li><span>Hugging Face and open-source models</span><span class="num">9</span></li>
+            <li><span>LangChain and AI orchestration</span><span class="num">10</span></li>
+            <li><span>RAG and multi-agent orchestration</span><span class="num">11</span></li>
+            <li><span>Structured output and data extraction</span><span class="num">12</span></li>
+          </ol>
+        </div>
+      </div>
+      <div>
+        <div class="part" data-reveal>
+          <h3><span>Architect Exam Sprint</span><span class="num">13–18</span></h3>
+          <ol>
+            <li><span>Domain 1: Agentic Architecture</span><span class="num">13</span></li>
+            <li><span>Domains 2 and 3: Tools, MCP, Claude Code</span><span class="num">14</span></li>
+            <li><span>Domain 4: Prompt Engineering</span><span class="num">15</span></li>
+            <li><span>Domain 5: Context and Reliability</span><span class="num">16</span></li>
+            <li><span>Scenario mastery, cross-domain</span><span class="num">17</span></li>
+            <li class="key"><span>Mock exams and final review</span><span class="num">18</span></li>
+          </ol>
+        </div>
+        <div class="part" data-reveal style="margin-top:3rem">
+          <h3><span>Production AI and LLMOps</span><span class="num">19–22</span></h3>
+          <ol>
+            <li><span>LLMOps Fundamentals</span><span class="num">19</span></li>
+            <li><span>Cloud AI Platforms</span><span class="num">20</span></li>
+            <li><span>Advanced Agent Patterns</span><span class="num">21</span></li>
+            <li><span>Fine-tuning and open-source deep dive</span><span class="num">22</span></li>
+          </ol>
+        </div>
+        <div class="part" data-reveal style="margin-top:3rem">
+          <h3><span>Portfolio and Career</span><span class="num">23–26</span></h3>
+          <ol>
+            <li><span>Portfolio: RAG Assistant</span><span class="num">23</span></li>
+            <li><span>Portfolio: SQL Data Analyst Agent</span><span class="num">24</span></li>
+            <li><span>Teaching, content and LinkedIn</span><span class="num">25</span></li>
+            <li><span>Portfolio showcase and next steps</span><span class="num">26</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="exam axis" id="exam" aria-labelledby="exam-h">
+  <div class="side">
+    <div class="notes">
+      <div class="note" data-reveal><b class="num">720</b><span>out of 1,000 is the pass mark</span></div>
+      <div class="note" data-reveal style="--r:1"><b class="num">30</b><span>task statements across the five domains</span></div>
+      <div class="note" data-reveal style="--r:2"><b class="num">6</b><span>scenario-based questions. <a class="link" href="https://anthropic.skilljar.com/claude-certified-architect-foundations-access-request">Registration is with Anthropic</a></span></div>
+    </div>
+  </div>
+  <div class="main">
+    <h2 id="exam-h" data-reveal>What the exam weighs</h2>
+    <p class="intro" data-reveal style="--r:1">The plan spends its time where the marks are. Each domain gets its own week in the exam sprint and its own share of the practice exam.</p>
+    <table class="weights" data-reveal style="--r:2">
+      <thead class="vh">
+        <tr><th scope="col">Weight</th><th scope="col">Domain</th><th scope="col" class="r hide-s">Studied in</th><th scope="col" class="r">Mock questions</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="w num">27%</td><td class="d">Agentic Architecture</td><td class="r hide-s num">Week 13</td><td class="r num">8 in the mock</td></tr>
+        <tr><td class="w num">20%</td><td class="d">Prompt Engineering</td><td class="r hide-s num">Week 15</td><td class="r num">6 in the mock</td></tr>
+        <tr><td class="w num">19%</td><td class="d">Tool Integration</td><td class="r hide-s num">Week 14</td><td class="r num">6 in the mock</td></tr>
+        <tr><td class="w num">19%</td><td class="d">Claude Code</td><td class="r hide-s num">Week 14</td><td class="r num">6 in the mock</td></tr>
+        <tr><td class="w num">15%</td><td class="d">Context Management</td><td class="r hide-s num">Week 16</td><td class="r num">4 in the mock</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="try" id="try" aria-labelledby="try-h">
+  <div class="try-in on-ink">
+    <div class="domains" role="group" aria-label="Choose a domain">
+      <button type="button" data-d="1" aria-pressed="true"><b>D1</b> 27%</button>
+      <button type="button" data-d="2" aria-pressed="false"><b>D2</b> 19%</button>
+      <button type="button" data-d="3" aria-pressed="false"><b>D3</b> 19%</button>
+      <button type="button" data-d="4" aria-pressed="false"><b>D4</b> 20%</button>
+      <button type="button" data-d="5" aria-pressed="false"><b>D5</b> 15%</button>
+    </div>
+    <p class="q" id="q-text">What <code>stop_reason</code> indicates Claude wants to use a tool?</p>
+    <ol class="opts" id="q-opts" aria-labelledby="q-text">
+      <li><button type="button" class="opt" data-i="0"><span class="k">A</span><span><code>end_turn</code></span></button></li>
+      <li><button type="button" class="opt" data-i="1"><span class="k">B</span><span><code>max_tokens</code></span></button></li>
+      <li><button type="button" class="opt" data-i="2"><span class="k">C</span><span><code>tool_use</code></span></button></li>
+      <li><button type="button" class="opt" data-i="3"><span class="k">D</span><span><code>stop_sequence</code></span></button></li>
+    </ol>
+    <details class="nojs-answer">
+      <summary>Show the answer</summary>
+      <p>C, <code>tool_use</code>. When Claude returns <code>stop_reason: 'tool_use'</code>, it means the model wants to call one or more tools. Your code should execute the tools and return results.</p>
+    </details>
+    <h2 id="try-h"><span>Sit one</span> <span class="vh">question</span></h2>
+  </div>
+  <div class="try-out">
+    <div data-ui class="result" aria-live="polite" id="result">
+      <div class="r-top"><span id="r-domain">Domain 1: Agentic Architecture</span><span id="r-id">d1-4</span></div>
+      <p class="r-empty" id="r-empty">Pick an answer on the left. It is marked here the way the app marks it, with the explanation from the question bank.</p>
+      <div id="r-body" hidden>
+        <p class="r-verdict" id="r-verdict">Correct</p>
+        <p class="r-answer" id="r-answer"></p>
+        <p class="r-expl" id="r-expl"></p>
+      </div>
+      <div class="r-foot">
+        <span id="r-foot">This domain is 27% of the exam. You study it in week 13 and meet 8 questions like it in the practice exam.</span>
+        <div class="r-meter" aria-hidden="true"><i id="r-meter"></i></div>
+      </div>
+    </div>
+    <p class="try-note">Real questions from the plan’s domain quizzes, one per domain.</p>
+    <h2 aria-hidden="true">question</h2>
+  </div>
+</section>
+
+<section class="stats axis" aria-labelledby="stats-h">
+  <h2 id="stats-h" class="vh">The game</h2>
+  <div class="side">
+    <div data-ui class="record" data-reveal>
+      <div class="lvl"><strong>Level 6, Agent Crafter</strong><span class="num">3,240 XP</span></div>
+      <div class="bar2" aria-hidden="true"><i></i></div>
+      <div class="lvl"><span>Next: System Designer</span><span class="num">1,260 to go</span></div>
+      <dl>
+        <div><dt>Streak</dt><dd class="num">9 days ×1.5</dd></div>
+        <div><dt>Badges</dt><dd class="num">7 of 19</dd></div>
+        <div><dt>Week</dt><dd class="num">14 of 26</dd></div>
+        <div><dt>Practice exam</dt><dd class="num">77%, passed</dd></div>
+      </dl>
+    </div>
+    <p class="record-cap" data-reveal style="--r:1">A sample record, as your profile shows it.</p>
+  </div>
+  <div class="main">
+    <p class="sentence" data-reveal style="--r:1">Ten levels climb to AI Master at <span class="num">12,000&nbsp;XP</span>. A <span class="num">7&#8209;day</span> streak multiplies your XP by <span class="num">1.5</span>, a <span class="num">30&#8209;day</span> streak by <span class="num">2</span>.</p>
+  </div>
+</section>
+
+<section class="pricing" id="pricing" aria-labelledby="pricing-h">
+  <h2 id="pricing-h" class="vh">Pricing</h2>
+  <div class="plan-field">
+    <h3>Everywhere else</h3>
+    <p class="who">For learners paying in dollars, anywhere outside Nigeria.</p>
+    <p class="incl">All 26 weeks and 200+ resources, 17 quizzes, the practice exam, the 27-page Architect’s Playbook, and progress that syncs across your devices. No subscription.</p>
+    <div class="price-row">
+      <p class="price num">$15<small>once</small></p>
+      <a class="button" href="/signup">Get started</a>
+    </div>
+  </div>
+  <div class="plan-field on-ink">
+    <h3>Nigeria</h3>
+    <p class="who">For learners in Nigeria, paid in naira.</p>
+    <p class="incl">The same plan, the same Playbook, the same lifetime access. The page picks your currency from where you are, and you can switch it.</p>
+    <div class="price-row">
+      <p class="price num">₦20,000<small>once</small></p>
+      <a class="button button--paper" href="/signup">Get started</a>
+    </div>
+  </div>
+</section>
+
+<section class="faq axis" aria-labelledby="faq-h">
+  <div class="side"><h2 id="faq-h" data-reveal>Questions, answered</h2></div>
+  <div class="main cols" data-reveal style="--r:1">
+    <p><b>Is this an Anthropic course?</b> No. It is an independent study plan built around the Claude Certified Architect exam. It links to Anthropic’s own Skilljar courses and docs where they are the best source.</p>
+    <p><b>Does the price include the exam?</b> No. You register for the exam with Anthropic. The ₦20,000 or $15 pays for the plan, its quizzes and the Playbook.</p>
+    <p><b>Is it a subscription?</b> No. You pay once and keep access for life, including weeks you have not reached yet.</p>
+    <p><b>Do I need to code already?</b> Week 1 starts with what AI is. You make your first Claude API call in week 2, and Python for Everybody sits in week 1 as a bonus if you need it.</p>
+    <p><b>Is the practice exam the real exam?</b> No. It is 30 questions from the plan’s own bank, weighted like the real domains, 45 minutes, 72% to pass, and different each attempt.</p>
+    <p><b>Are the linked courses free?</b> The plan links out to Anthropic, Coursera, Hugging Face, DeepLearning.AI and others. Those sites set their own terms.</p>
+    <p><b>Can I go faster or slower?</b> Yes. Weeks are a pace, not a lock. Your streak counts the days you study.</p>
+    <p><b>What happens if I change phones?</b> Your progress, XP and badges are saved to your account and sync across devices.</p>
+    <p><b>What is the shop?</b> Extra courses and PDFs, sold one by one. You do not need any of them to finish the plan.</p>
+    <p><b>Why two prices?</b> ₦20,000 is the price in naira for Nigeria; $15 is the price everywhere else.</p>
+  </div>
+</section>
+
+<section class="cta on-ink" aria-labelledby="cta-h">
+  <h2 id="cta-h" data-reveal>Week one<br>starts today</h2>
+  <div class="cta-row">
+    <p data-reveal style="--r:1">Twenty-six weeks to a 720, for ₦20,000 or $15, paid once.</p>
+    <a class="button button--paper" href="/signup" data-reveal style="--r:2">Get started</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="on-ink">
+  <p class="f-name">Ultimate Study</p>
+  <div class="f-row">
+    <ul class="f-places">
+      <li><a href="/signup">Get started</a></li>
+      <li><a href="/login">Sign in</a></li>
+      <li><a href="/products">The shop</a></li>
+    </ul>
+    <div class="f-links">
+      <div><p>Plan</p><ul><li><a href="#plan">Five parts</a></li><li><a href="#exam">Exam domains</a></li><li><a href="#try">Sample question</a></li></ul></div>
+      <div><p>Buy</p><ul><li><a href="#pricing">Pricing</a></li><li><a href="/products">Courses and PDFs</a></li></ul></div>
+      <div><p>News</p><ul><li><a href="/updates">Updates</a></li></ul></div>
+    </div>
+  </div>
+  <p class="f-credit">Figures on this page are drawings from the Architect’s Playbook, the 27-page PDF included with the plan, shown in greyscale.</p>
+  <div class="f-legal">
+    <p>Independent study plan, not affiliated with or endorsed by Anthropic. Claude is a trademark of Anthropic.</p>
+    <a class="link" href="#top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const Q = {
+    1: { id: 'd1-4', name: 'Domain 1: Agentic Architecture', w: 27, week: 'week 13', mock: 8,
+      q: 'What <code>stop_reason</code> indicates Claude wants to use a tool?',
+      o: ['<code>end_turn</code>', '<code>max_tokens</code>', '<code>tool_use</code>', '<code>stop_sequence</code>'], c: 2,
+      e: "When Claude returns stop_reason: 'tool_use', it means the model wants to call one or more tools. Your code should execute the tools and return results." },
+    2: { id: 'd2-2', name: 'Domain 2: Tool Design and MCP', w: 19, week: 'week 14', mock: 6,
+      q: 'What does <code>tool_choice: \'auto\'</code> mean in the Anthropic API?',
+      o: ['Claude must use at least one tool', 'Claude will automatically pick tools without any instructions', 'Claude decides whether to use tools or respond directly based on the conversation', 'A random tool is selected'], c: 2,
+      e: "tool_choice: 'auto' (the default) lets Claude decide whether to use a tool or respond directly based on the context of the conversation." },
+    3: { id: 'd3-3', name: 'Domain 3: Claude Code', w: 19, week: 'week 14', mock: 6,
+      q: 'What are Claude Code hooks used for?',
+      o: ['Connecting to external APIs', 'Running custom shell commands in response to events like tool calls, enabling pre/post-processing and automation', 'Managing git branches', 'Scheduling recurring tasks'], c: 1,
+      e: 'Hooks let you run shell commands triggered by Claude Code events (PreToolUse, PostToolUse, etc.), enabling custom validation, formatting, or other automation.' },
+    4: { id: 'd4-5', name: 'Domain 4: Prompt Engineering', w: 20, week: 'week 15', mock: 6,
+      q: 'What is a resilient catch-all in structured data extraction?',
+      o: ['A fallback API endpoint', "A field in the output schema that captures data the model found but couldn't map to existing fields", 'An error handler that retries failed extractions', 'A default value applied to all empty fields'], c: 1,
+      e: "A resilient catch-all is an 'other_info' or 'additional_data' field that captures valuable information that doesn't fit predefined schema fields, preventing data loss." },
+    5: { id: 'd5-6', name: 'Domain 5: Context and Reliability', w: 15, week: 'week 16', mock: 4,
+      q: 'What is the recommended approach for handling errors in an agentic loop?',
+      o: ['Stop the loop immediately on any error', 'Silently ignore all errors', 'Propagate error context to Claude so it can adapt its strategy, with configurable retry logic and escalation thresholds', 'Log the error and continue without telling Claude'], c: 2,
+      e: 'Errors should be communicated back to Claude via isError tool results so it can adjust. Implement retry logic for transient errors and escalate persistent failures.' }
+  };
+  const $ = (id) => document.getElementById(id);
+  const letters = 'ABCD';
+  let cur = 1, done = false;
+  const opts = $('q-opts');
+  function render(d) {
+    cur = d; done = false; const x = Q[d];
+    $('q-text').innerHTML = x.q;
+    opts.innerHTML = x.o.map((t, i) => `<li><button type="button" class="opt" data-i="${i}"><span class="k">${letters[i]}</span><span>${t}</span></button></li>`).join('');
+    $('r-domain').textContent = x.name; $('r-id').textContent = x.id;
+    $('r-empty').hidden = false; $('r-body').hidden = true;
+    $('r-foot').textContent = `This domain is ${x.w}% of the exam. You study it in ${x.week} and meet ${x.mock} questions like it in the practice exam.`;
+    $('r-meter').style.setProperty('--w', x.w + '%');
+    document.querySelectorAll('.domains button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.d == d)));
+  }
+  opts.addEventListener('click', (ev) => {
+    const b = ev.target.closest('.opt'); if (!b || done) return;
+    const x = Q[cur], i = +b.dataset.i, right = i === x.c; done = true;
+    opts.querySelectorAll('.opt').forEach((o) => { const k = +o.dataset.i; if (k === x.c) o.dataset.state = 'right'; else if (k === i) o.dataset.state = 'wrong'; o.setAttribute('aria-disabled', 'true'); });
+    $('r-empty').hidden = true; $('r-body').hidden = false;
+    $('r-verdict').textContent = right ? 'Correct' : 'Not this one';
+    const tmp = document.createElement('div'); tmp.innerHTML = x.o[x.c];
+    $('r-answer').textContent = `Answer ${letters[x.c]}: ${tmp.textContent}`;
+    $('r-expl').textContent = x.e;
+  });
+  document.querySelector('.domains').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (b) render(+b.dataset.d); });
+  $('r-meter').style.setProperty('--w', '27%');
+
+  // reveal once
+  const targets = document.querySelectorAll('[data-reveal]');
+  if (!('IntersectionObserver' in window)) { targets.forEach((el) => el.classList.add('is-in')); return; }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+  targets.forEach((el) => io.observe(el));
+  addEventListener('load', () => setTimeout(() => targets.forEach((el) => { const r = el.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) el.classList.add('is-in'); }), 2500));
+})();
+</script>
+</body>
+</html>
