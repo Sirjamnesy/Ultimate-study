@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { hasUserPurchasedProduct } from "@/lib/supabase/product-purchases";
+import { isAdminUser } from "@/lib/auth/admin";
 import { Header } from "@/components/shared/header";
 import { PdfViewer } from "@/components/library/pdf-viewer";
 import { CourseReader } from "@/components/library/course-reader";
@@ -26,7 +27,10 @@ export default async function LibraryItemPage({
 
   if (!product) notFound();
 
-  const owned = await hasUserPurchasedProduct(user.id, product.id);
+  // Admins can open any product — drafts included — so the owner can check a
+  // course or PDF exactly as a customer sees it, without buying their own.
+  const adminPreview = isAdminUser(user);
+  const owned = adminPreview || (await hasUserPurchasedProduct(user.id, product.id));
   if (!owned) {
     redirect(`/products/${slug}`);
   }
@@ -43,6 +47,13 @@ export default async function LibraryItemPage({
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Library
         </Link>
+
+        {adminPreview && (
+          <div className="rounded-lg border border-violet-500/30 bg-violet-500/10 px-3 py-2 text-xs text-violet-300">
+            Admin preview — this is what a customer sees after buying
+            {typed.status !== "published" && <> (this product is <b>{typed.status}</b>, so customers can&apos;t find it yet)</>}.
+          </div>
+        )}
 
         <h1 className="text-2xl font-bold font-sketch">{typed.title}</h1>
 

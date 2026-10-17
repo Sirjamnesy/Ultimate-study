@@ -56,7 +56,10 @@ export default async function AdminProductsPage() {
                   <TableCell className="font-mono text-xs text-muted-foreground">
                     {formatPrice(p.price_ngn_kobo, "NGN")} / {formatPrice(p.price_usd_cents, "USD")}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right whitespace-nowrap">
+                    <Link href={`/library/${p.slug}`} target="_blank">
+                      <Button variant="ghost" size="sm">Preview</Button>
+                    </Link>
                     <Link href={`/admin/products/${p.id}/edit`}>
                       <Button variant="ghost" size="sm">Edit</Button>
                     </Link>

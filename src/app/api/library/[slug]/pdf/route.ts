@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { hasUserPurchasedProduct } from "@/lib/supabase/product-purchases";
+import { isAdminUser } from "@/lib/auth/admin";
 import type { PdfContent } from "@/lib/data/products";
 
 const SIGNED_URL_TTL_SECONDS = 600;
@@ -28,7 +29,8 @@ export async function GET(
     return NextResponse.json({ error: "Not found." }, { status: 404 });
   }
 
-  const owned = await hasUserPurchasedProduct(user.id, product.id);
+  // Admins can fetch any product's file (the admin preview page uses this).
+  const owned = isAdminUser(user) || (await hasUserPurchasedProduct(user.id, product.id));
   if (!owned) {
     return NextResponse.json({ error: "Forbidden." }, { status: 403 });
   }
