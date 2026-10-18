@@ -1,4 +1,4 @@
-// Quiz question seed data for the Ultimate Study app.
+// Quiz question seed data for the Wekaro app.
 // Covers 5 exam domains + weekly topic quizzes.
 
 export type QuizQuestion = {

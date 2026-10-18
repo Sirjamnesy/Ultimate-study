@@ -21,15 +21,11 @@ A 26-week gamified study roadmap web app for becoming an AI Engineer, with a foc
 - **Deployment:** Vercel
 
 ## Design System
-Sketch/notebook aesthetic with hand-drawn borders, tape decorations, stickers, and a ruled-paper background. Key CSS classes:
-- `notebook-bg` — ruled paper background
-- `sketch-card` — hand-drawn border cards
-- `sketch-border-sm` — lighter sketch borders
-- `sketch-progress` — hand-drawn progress bars
-- `sketch-underline` — wavy underline effect
-- `.sticker` — pill badges with sketch borders
-- `.tape` — decorative tape on completed cards
-- `font-sketch` — Caveat handwriting font
+Wekaro brand (renamed from Ultimate Study): flat, type-led. Six colours as `--wk-*` tokens in `globals.css` (white, black, grey #c5c5c5, orange #ff6831, mint #a7ff9c, deep green #0d5c3a), usable as Tailwind `wk-*` colours. Theme-aware text roles: `text-wk-accent` (orange in dark, black in light), `text-wk-good` (mint / deep green), `text-wk-info` (grey / deep green). Never white text on orange, never orange text on white, no purple.
+- **Fonts:** Epilogue (body + 900 headlines), Geist Mono (scores, dates, labels). Caveat/handwriting is gone.
+- **Logo:** `src/components/brand/wekaro-logo.tsx` — R1 "Rising cut" W mark + lowercase wordmark A. Favicon: `src/app/icon.svg`.
+- **Legacy class names** still used by pages but restyled flat: `font-sketch` (Epilogue 900 tight), `sketch-card` (2px rule), `sticker` (mono caps tag), `sketch-progress`, `sketch-underline` (orange week bar), `tape` (mint "done" bar). `notebook-bg` is now plain.
+- Say "Independent. Not affiliated with Anthropic." wherever the exam is named.
 
 Dark mode is the default. Theme toggle exists in header.
 

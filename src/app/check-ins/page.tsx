@@ -45,7 +45,7 @@ function StarRating({
           <Star
             className={`h-5 w-5 ${
               n <= value
-                ? "fill-amber-400 text-amber-400"
+                ? "fill-wk-orange text-wk-accent"
                 : "text-muted-foreground/30"
             }`}
           />
@@ -110,14 +110,14 @@ export default function CheckInsPage() {
         {/* Hero */}
         <motion.section variants={item} className="text-center space-y-4 py-4">
           <div className="inline-block">
-            <span className="sticker border-emerald-400 bg-emerald-500/10 text-emerald-400 font-mono text-xs tracking-wider">
+            <span className="sticker border-wk-good bg-wk-good/10 text-wk-good font-mono text-xs tracking-wider">
               <ClipboardCheck className="h-3 w-3" />
               WEEKLY CHECK-INS
             </span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight">
             Reflect &{" "}
-            <span className="sketch-underline font-sketch text-emerald-400 text-4xl sm:text-6xl">
+            <span className="sketch-underline font-sketch text-wk-good text-4xl sm:text-6xl">
               Grow
             </span>
           </h2>
@@ -134,7 +134,7 @@ export default function CheckInsPage() {
               className="w-full flex items-center justify-between p-4 hover:bg-accent/20 transition-colors"
             >
               <span className="font-sketch text-lg font-bold flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-emerald-400" />
+                <Sparkles className="h-4 w-4 text-wk-good" />
                 New Check-In
               </span>
               {formOpen ? (
@@ -188,7 +188,7 @@ export default function CheckInsPage() {
                         onChange={(e) => setReflection(e.target.value)}
                         placeholder="Share your key takeaways from this week..."
                         rows={3}
-                        className="w-full sketch-border-sm bg-background px-3 py-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+                        className="w-full sketch-border-sm bg-background px-3 py-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-wk-orange/30"
                       />
                     </div>
 
@@ -202,7 +202,7 @@ export default function CheckInsPage() {
                         onChange={(e) => setChallenges(e.target.value)}
                         placeholder="Any topics that were difficult or confusing..."
                         rows={2}
-                        className="w-full sketch-border-sm bg-background px-3 py-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+                        className="w-full sketch-border-sm bg-background px-3 py-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-wk-orange/30"
                       />
                     </div>
 
@@ -216,7 +216,7 @@ export default function CheckInsPage() {
                         onChange={(e) => setNextFocus(e.target.value)}
                         placeholder="What will you focus on next..."
                         rows={2}
-                        className="w-full sketch-border-sm bg-background px-3 py-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+                        className="w-full sketch-border-sm bg-background px-3 py-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-wk-orange/30"
                       />
                     </div>
 
@@ -228,7 +228,7 @@ export default function CheckInsPage() {
                     >
                       {submitted ? (
                         <>
-                          <Sparkles className="h-3.5 w-3.5 text-emerald-300" />
+                          <Sparkles className="h-3.5 w-3.5 text-wk-good" />
                           Saved! +25 XP
                         </>
                       ) : (
@@ -251,7 +251,7 @@ export default function CheckInsPage() {
         {/* History */}
         <motion.section variants={item} className="space-y-4">
           <h3 className="font-sketch text-2xl font-bold flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-blue-400" />
+            <Calendar className="h-5 w-5 text-wk-info" />
             Check-In History
           </h3>
 
@@ -283,7 +283,7 @@ export default function CheckInsPage() {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 min-w-0">
-                          <span className="sticker border-blue-400/50 bg-blue-500/10 text-blue-400 text-[10px] shrink-0">
+                          <span className="sticker border-wk-info/50 bg-wk-info/10 text-wk-info text-[10px] shrink-0">
                             W{ci.weekNumber}
                           </span>
                           <div className="min-w-0">
@@ -299,7 +299,7 @@ export default function CheckInsPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0 ml-2">
-                          <span className="sticker border-emerald-400/50 bg-emerald-500/10 text-emerald-400 text-[9px]">
+                          <span className="sticker border-wk-good/50 bg-wk-good/10 text-wk-good text-[9px]">
                             <Zap className="h-2.5 w-2.5" />
                             +25 XP
                           </span>

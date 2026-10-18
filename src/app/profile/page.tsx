@@ -90,7 +90,7 @@ export default function ProfilePage() {
       `${totalStudyDays} study days | ${totalQuizAttempts} quizzes taken`,
       bestOverallQuiz !== null ? `Best quiz: ${bestOverallQuiz}%` : "",
       "",
-      "Ultimate Study — AI Engineering Learning Hub",
+      "Wekaro. AI Engineering, one week at a time.",
     ]
       .filter(Boolean)
       .join("\n");
@@ -113,8 +113,8 @@ export default function ProfilePage() {
         <motion.section variants={item} className="sketch-card bg-card p-6 relative">
           <div className="tape" />
           <div className="flex flex-col sm:flex-row items-center gap-5 pt-2">
-            <div className="h-20 w-20 rounded-2xl bg-violet-500/15 flex items-center justify-center sketch-border-sm border-violet-500/30 shrink-0">
-              <span className="text-3xl font-bold font-mono text-violet-400">
+            <div className="h-20 w-20 rounded-2xl bg-wk-orange/15 flex items-center justify-center sketch-border-sm border-wk-orange/30 shrink-0">
+              <span className="text-3xl font-bold font-mono text-wk-accent">
                 {levelInfo.current.level}
               </span>
             </div>
@@ -127,7 +127,7 @@ export default function ProfilePage() {
               </p>
               <div className="sketch-progress h-3 mt-3 max-w-sm mx-auto sm:mx-0">
                 <div
-                  className="h-full bg-gradient-to-r from-violet-500 to-violet-400 rounded-[6px] transition-all duration-500"
+                  className="h-full bg-wk-orange rounded-[6px] transition-all duration-500"
                   style={{ width: `${levelInfo.progress}%` }}
                 />
               </div>
@@ -144,12 +144,12 @@ export default function ProfilePage() {
         {/* Stats Grid */}
         <motion.section variants={item} className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
-            { icon: <Zap className="h-5 w-5" />, value: xp.toLocaleString(), label: "Total XP", color: "text-violet-400 bg-violet-500/10" },
-            { icon: <Calendar className="h-5 w-5" />, value: totalStudyDays, label: "Study Days", color: "text-blue-400 bg-blue-500/10" },
-            { icon: <BookOpen className="h-5 w-5" />, value: `${completedCount}/${totalResources}`, label: "Resources", color: "text-emerald-400 bg-emerald-500/10" },
-            { icon: <ClipboardCheck className="h-5 w-5" />, value: totalQuizAttempts, label: "Quizzes Taken", color: "text-amber-400 bg-amber-500/10" },
-            { icon: <Target className="h-5 w-5" />, value: bestOverallQuiz !== null ? `${bestOverallQuiz}%` : "—", label: "Best Quiz", color: "text-rose-400 bg-rose-500/10" },
-            { icon: <Flame className="h-5 w-5" />, value: streak, label: "Day Streak", color: "text-orange-400 bg-orange-500/10" },
+            { icon: <Zap className="h-5 w-5" />, value: xp.toLocaleString(), label: "Total XP", color: "text-wk-accent bg-wk-orange/10" },
+            { icon: <Calendar className="h-5 w-5" />, value: totalStudyDays, label: "Study Days", color: "text-wk-info bg-wk-info/10" },
+            { icon: <BookOpen className="h-5 w-5" />, value: `${completedCount}/${totalResources}`, label: "Resources", color: "text-wk-good bg-wk-good/10" },
+            { icon: <ClipboardCheck className="h-5 w-5" />, value: totalQuizAttempts, label: "Quizzes Taken", color: "text-wk-accent bg-wk-orange/10" },
+            { icon: <Target className="h-5 w-5" />, value: bestOverallQuiz !== null ? `${bestOverallQuiz}%` : "—", label: "Best Quiz", color: "text-wk-accent bg-wk-orange/10" },
+            { icon: <Flame className="h-5 w-5" />, value: streak, label: "Day Streak", color: "text-wk-accent bg-wk-orange/10" },
           ].map((stat, i) => (
             <div
               key={i}
@@ -172,11 +172,11 @@ export default function ProfilePage() {
         {/* Badge Showcase */}
         <motion.section variants={item}>
           <Link href="/badges">
-            <div className="sketch-card bg-amber-500/5 border-amber-500/30 p-4 hover:scale-[1.01] transition-transform cursor-pointer">
+            <div className="sketch-card bg-wk-orange/5 border-wk-orange/30 p-4 hover:scale-[1.01] transition-transform cursor-pointer">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-amber-500/10">
-                    <Trophy className="h-5 w-5 text-amber-400" />
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-wk-orange/10">
+                    <Trophy className="h-5 w-5 text-wk-accent" />
                   </div>
                   <div>
                     <p className="font-sketch text-lg font-bold">
@@ -197,7 +197,7 @@ export default function ProfilePage() {
                     .map((b) => (
                       <span
                         key={b.id}
-                        className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[10px]"
+                        className="sticker border-wk-orange/50 bg-wk-orange/10 text-wk-accent text-[10px]"
                       >
                         <Star className="h-2.5 w-2.5" />
                         {b.name}
@@ -217,7 +217,7 @@ export default function ProfilePage() {
         {/* Domain Strengths */}
         <motion.section variants={item} className="sketch-card bg-card p-5 space-y-3">
           <h3 className="font-sketch text-xl font-bold flex items-center gap-2">
-            <GraduationCap className="h-5 w-5 text-violet-400" />
+            <GraduationCap className="h-5 w-5 text-wk-accent" />
             Domain Strengths
           </h3>
           {Object.keys(domainScores).length > 0 ? (
@@ -235,10 +235,10 @@ export default function ProfilePage() {
                         className={`h-full rounded-[3px] transition-all duration-500 ${
                           score !== undefined
                             ? score >= 90
-                              ? "bg-emerald-500"
+                              ? "bg-wk-mint"
                               : score >= 70
-                              ? "bg-amber-500"
-                              : "bg-rose-500"
+                              ? "bg-wk-orange"
+                              : "bg-wk-orange"
                             : "bg-muted"
                         }`}
                         style={{ width: `${score ?? 0}%` }}
@@ -261,7 +261,7 @@ export default function ProfilePage() {
         {/* Study Heatmap */}
         <motion.section variants={item} className="sketch-card bg-card p-5 space-y-3">
           <h3 className="font-sketch text-xl font-bold flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-blue-400" />
+            <Calendar className="h-5 w-5 text-wk-info" />
             Study Activity
             <span className="text-xs font-normal text-muted-foreground font-sans ml-1">
               (last 12 weeks)
@@ -273,7 +273,7 @@ export default function ProfilePage() {
                 key={i}
                 className={`aspect-square rounded-sm ${
                   day.active
-                    ? "bg-emerald-500/70"
+                    ? "bg-wk-good/70"
                     : "bg-muted/30"
                 }`}
                 title={`${day.date}${day.active ? " — studied" : ""}`}
@@ -285,13 +285,13 @@ export default function ProfilePage() {
               <span className="h-2.5 w-2.5 rounded-sm bg-muted/30" /> No activity
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-sm bg-emerald-500/70" /> Studied
+              <span className="h-2.5 w-2.5 rounded-sm bg-wk-good/70" /> Studied
             </span>
           </div>
         </motion.section>
 
         {/* Share Card */}
-        <motion.section variants={item} className="sketch-card bg-gradient-to-br from-violet-500/5 to-blue-500/5 p-5 space-y-4">
+        <motion.section variants={item} className="sketch-card bg-wk-orange/5 p-5 space-y-4">
           <h3 className="font-sketch text-xl font-bold">Share Your Progress</h3>
           <div className="sketch-card bg-card p-4 space-y-2">
             <p className="font-sketch text-lg font-bold">
@@ -306,7 +306,7 @@ export default function ProfilePage() {
               </p>
             )}
             <p className="text-xs text-muted-foreground/60 pt-1">
-              Ultimate Study — AI Engineering Learning Hub
+              Wekaro. AI Engineering, one week at a time.
             </p>
           </div>
           <Button
@@ -317,7 +317,7 @@ export default function ProfilePage() {
           >
             {copied ? (
               <>
-                <Check className="h-3.5 w-3.5 text-emerald-400" />
+                <Check className="h-3.5 w-3.5 text-wk-good" />
                 Copied!
               </>
             ) : (

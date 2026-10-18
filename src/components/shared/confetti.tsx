@@ -87,7 +87,7 @@ export function Confetti({
               transition={{ type: "spring", damping: 12, delay: 0.2 }}
               className="absolute inset-0 flex items-center justify-center"
             >
-              <div className="bg-card/95 backdrop-blur-md border-2 border-dashed border-violet-500/40 rounded-2xl px-8 py-5 shadow-2xl sketch-border text-center">
+              <div className="bg-card/95 backdrop-blur-md border-2 border-solid border-wk-orange/40 rounded-2xl px-8 py-5 shadow-2xl sketch-border text-center">
                 <p className="text-2xl font-sketch font-bold">{message}</p>
               </div>
             </motion.div>
@@ -115,7 +115,7 @@ export function XPToast({
           transition={{ type: "spring", damping: 15 }}
           className="fixed bottom-6 right-6 z-[90]"
         >
-          <div className="bg-violet-600 text-white px-4 py-2 rounded-xl font-mono text-sm font-bold shadow-lg sketch-border-sm flex items-center gap-2">
+          <div className="bg-wk-orange text-black px-4 py-2 rounded-xl font-mono text-sm font-bold shadow-lg sketch-border-sm flex items-center gap-2">
             <span className="text-lg">⚡</span>
             {amount > 0 ? "+" : ""}
             {amount} XP
@@ -178,8 +178,8 @@ export function LevelUpCelebration({
         transition={{ type: "spring", damping: 12, delay: 0.2 }}
         className="absolute inset-0 flex items-center justify-center"
       >
-        <div className="bg-card/95 backdrop-blur-md border-2 border-dashed border-amber-500/50 rounded-2xl px-10 py-6 shadow-2xl sketch-border text-center">
-          <p className="text-sm font-mono text-amber-400 uppercase tracking-widest mb-1">Level Up!</p>
+        <div className="bg-card/95 backdrop-blur-md border-2 border-solid border-wk-orange/50 rounded-2xl px-10 py-6 shadow-2xl sketch-border text-center">
+          <p className="text-sm font-mono text-wk-accent uppercase tracking-widest mb-1">Level Up!</p>
           <p className="text-3xl font-sketch font-bold">
             Level {level} — {title}
           </p>

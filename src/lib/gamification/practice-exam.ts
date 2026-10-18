@@ -55,9 +55,9 @@ export const PRACTICE_EXAM_CONFIG = {
 };
 
 export const DOMAIN_WEIGHTS: Record<number, { name: string; weight: string; color: string }> = {
-  1: { name: "Agentic Architecture", weight: "27%", color: "text-rose-400" },
-  2: { name: "Tool Design & MCP", weight: "19%", color: "text-blue-400" },
-  3: { name: "Claude Code", weight: "19%", color: "text-emerald-400" },
-  4: { name: "Prompt Engineering", weight: "20%", color: "text-amber-400" },
-  5: { name: "Context & Reliability", weight: "15%", color: "text-violet-400" },
+  1: { name: "Agentic Architecture", weight: "27%", color: "text-wk-accent" },
+  2: { name: "Tool Design & MCP", weight: "19%", color: "text-wk-info" },
+  3: { name: "Claude Code", weight: "19%", color: "text-wk-good" },
+  4: { name: "Prompt Engineering", weight: "20%", color: "text-wk-accent" },
+  5: { name: "Context & Reliability", weight: "15%", color: "text-wk-accent" },
 };

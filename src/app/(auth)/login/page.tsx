@@ -133,7 +133,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
             />
           </div>
 
@@ -144,7 +144,7 @@ export default function LoginPage() {
               </label>
               <Link
                 href="/forgot-password"
-                className="text-xs text-muted-foreground hover:text-violet-400 transition-colors"
+                className="text-xs text-muted-foreground hover:text-wk-accent transition-colors"
               >
                 Forgot password?
               </Link>
@@ -158,7 +158,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3 py-2 pr-10 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+                className="w-full px-3 py-2 pr-10 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
               />
               <button
                 type="button"
@@ -171,8 +171,8 @@ export default function LoginPage() {
           </div>
 
           {unconfirmedEmail && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-3 space-y-2">
-              <div className="flex items-center gap-2 text-amber-400">
+            <div className="bg-wk-orange/10 border border-wk-orange/30 rounded-lg px-4 py-3 space-y-2">
+              <div className="flex items-center gap-2 text-wk-accent">
                 <Mail className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">Email not confirmed</span>
               </div>
@@ -186,7 +186,7 @@ export default function LoginPage() {
                 size="sm"
                 onClick={handleResend}
                 disabled={resendLoading || resendSent}
-                className="w-full text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 gap-2 h-8 text-xs"
+                className="w-full text-wk-accent hover:text-wk-accent hover:bg-wk-orange/10 gap-2 h-8 text-xs"
               >
                 {resendLoading ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -199,7 +199,7 @@ export default function LoginPage() {
           )}
 
           {error && (
-            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            <div className="text-sm text-wk-accent bg-wk-orange/10 border border-wk-orange/20 rounded-lg px-3 py-2">
               {error}
             </div>
           )}
@@ -207,7 +207,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={loading || googleLoading}
-            className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+            className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black gap-2"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -220,7 +220,7 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-violet-400 hover:text-violet-300 font-medium transition-colors">
+          <Link href="/signup" className="text-wk-accent hover:text-wk-accent font-medium transition-colors">
             Sign up
           </Link>
         </p>

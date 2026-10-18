@@ -33,11 +33,11 @@ const domainIcons: Record<number, React.ReactNode> = {
 };
 
 const domainColors: Record<number, { border: string; bg: string; text: string }> = {
-  1: { border: "border-rose-500/40", bg: "bg-rose-500/10", text: "text-rose-400" },
-  2: { border: "border-blue-500/40", bg: "bg-blue-500/10", text: "text-blue-400" },
-  3: { border: "border-emerald-500/40", bg: "bg-emerald-500/10", text: "text-emerald-400" },
-  4: { border: "border-amber-500/40", bg: "bg-amber-500/10", text: "text-amber-400" },
-  5: { border: "border-violet-500/40", bg: "bg-violet-500/10", text: "text-violet-400" },
+  1: { border: "border-wk-orange/40", bg: "bg-wk-orange/10", text: "text-wk-accent" },
+  2: { border: "border-wk-info/40", bg: "bg-wk-info/10", text: "text-wk-info" },
+  3: { border: "border-wk-good/40", bg: "bg-wk-good/10", text: "text-wk-good" },
+  4: { border: "border-wk-orange/40", bg: "bg-wk-orange/10", text: "text-wk-accent" },
+  5: { border: "border-wk-orange/40", bg: "bg-wk-orange/10", text: "text-wk-accent" },
 };
 
 const domainWeights = ["27%", "19%", "19%", "20%", "15%"];
@@ -76,14 +76,14 @@ export default function QuizHub() {
           </span>
 
           <div className="inline-block">
-            <span className="sticker border-blue-400 bg-blue-500/10 text-blue-400 font-mono text-xs tracking-wider">
+            <span className="sticker border-wk-info bg-wk-info/10 text-wk-info font-mono text-xs tracking-wider">
               <BookOpen className="h-3 w-3" />
               QUIZ HUB
             </span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight">
             Test Your{" "}
-            <span className="sketch-underline font-sketch text-blue-400 text-4xl sm:text-6xl">
+            <span className="sketch-underline font-sketch text-wk-info text-4xl sm:text-6xl">
               Knowledge
             </span>
           </h2>
@@ -95,16 +95,16 @@ export default function QuizHub() {
         {/* Practice Exam */}
         <motion.section variants={item}>
           <Link href="/quiz/practice-exam">
-            <div className="sketch-card bg-gradient-to-r from-violet-500/10 to-amber-500/10 border-amber-500/40 border-l-4 p-5 relative hover:scale-[1.01] transition-transform">
+            <div className="sketch-card bg-wk-orange/10 border-wk-orange/40 border-l-4 p-5 relative hover:scale-[1.01] transition-transform">
               <div className="tape" />
               <div className="flex items-center gap-4 pt-1">
-                <div className="h-14 w-14 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0 sketch-border-sm border-amber-500/30">
-                  <GraduationCap className="h-7 w-7 text-amber-400" />
+                <div className="h-14 w-14 rounded-xl bg-wk-orange/15 flex items-center justify-center shrink-0 sketch-border-sm border-wk-orange/30">
+                  <GraduationCap className="h-7 w-7 text-wk-accent" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h4 className="text-xl font-sketch font-bold">{PRACTICE_EXAM_CONFIG.title}</h4>
-                    <span className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[9px]">
+                    <span className="sticker border-wk-orange/50 bg-wk-orange/10 text-wk-accent text-[9px]">
                       <Star className="h-2.5 w-2.5" />
                       FULL EXAM
                     </span>
@@ -113,7 +113,7 @@ export default function QuizHub() {
                   <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                     <span>{PRACTICE_EXAM_CONFIG.totalQuestions} questions</span>
                     <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {PRACTICE_EXAM_CONFIG.timeMinutes} min</span>
-                    <span className="font-mono text-amber-400">Pass: {PRACTICE_EXAM_CONFIG.passingScore}%</span>
+                    <span className="font-mono text-wk-accent">Pass: {PRACTICE_EXAM_CONFIG.passingScore}%</span>
                   </div>
                 </div>
                 <div className="text-right shrink-0 ml-2">
@@ -121,7 +121,7 @@ export default function QuizHub() {
                     <div className="space-y-1">
                       <p className={`text-xl font-bold font-mono ${
                         getBestQuizScore(PRACTICE_EXAM_CONFIG.id)! >= PRACTICE_EXAM_CONFIG.passingScore
-                          ? "text-emerald-400"
+                          ? "text-wk-good"
                           : "text-muted-foreground"
                       }`}>
                         {getBestQuizScore(PRACTICE_EXAM_CONFIG.id)}%
@@ -142,11 +142,12 @@ export default function QuizHub() {
         {/* Domain Quizzes */}
         <motion.section variants={item} className="space-y-4">
           <h3 className="font-sketch text-2xl font-bold flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-amber-400" />
+            <Trophy className="h-5 w-5 text-wk-accent" />
             Exam Domain Quizzes
           </h3>
           <p className="text-sm text-muted-foreground">
-            These map directly to the 5 Claude Certified Architect exam domains
+            These map directly to the 5 Claude Certified Architect exam domains.
+            Wekaro is independent and not affiliated with Anthropic.
           </p>
 
           <div className="space-y-3">
@@ -172,7 +173,7 @@ export default function QuizHub() {
                         <div className="flex items-center gap-2">
                           <h4 className="font-semibold truncate">{quiz.title}</h4>
                           {mastered && (
-                            <span className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[9px]">
+                            <span className="sticker border-wk-orange/50 bg-wk-orange/10 text-wk-accent text-[9px]">
                               <Star className="h-2.5 w-2.5" />
                               MASTERED
                             </span>
@@ -190,7 +191,7 @@ export default function QuizHub() {
                       <div className="text-right shrink-0 ml-2">
                         {bestScore !== null ? (
                           <div className="space-y-1">
-                            <p className={`text-xl font-bold font-mono ${passed ? "text-emerald-400" : "text-muted-foreground"}`}>
+                            <p className={`text-xl font-bold font-mono ${passed ? "text-wk-good" : "text-muted-foreground"}`}>
                               {bestScore}%
                             </p>
                             <p className="text-[10px] text-muted-foreground">Best</p>
@@ -212,7 +213,7 @@ export default function QuizHub() {
         {/* Weekly Quizzes */}
         <motion.section variants={item} className="space-y-4">
           <h3 className="font-sketch text-2xl font-bold flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-violet-400" />
+            <Sparkles className="h-5 w-5 text-wk-accent" />
             Weekly Topic Quizzes
           </h3>
           <p className="text-sm text-muted-foreground">
@@ -242,14 +243,14 @@ export default function QuizHub() {
                               <span>{quiz.timeMinutes} min</span>
                             </>
                           ) : (
-                            <span className="text-amber-400 font-medium">Coming Soon</span>
+                            <span className="text-wk-accent font-medium">Coming Soon</span>
                           )}
                         </div>
                       </div>
                       {bestScore !== null ? (
                         <div className="flex items-center gap-1.5">
-                          {passed && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}
-                          <span className={`text-lg font-bold font-mono ${passed ? "text-emerald-400" : "text-muted-foreground"}`}>
+                          {passed && <CheckCircle2 className="h-4 w-4 text-wk-good" />}
+                          <span className={`text-lg font-bold font-mono ${passed ? "text-wk-good" : "text-muted-foreground"}`}>
                             {bestScore}%
                           </span>
                         </div>

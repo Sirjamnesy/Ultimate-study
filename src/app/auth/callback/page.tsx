@@ -56,7 +56,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="min-h-screen notebook-bg flex items-center justify-center">
       <div className="text-center space-y-3">
-        <Loader2 className="h-8 w-8 animate-spin text-violet-500 mx-auto" />
+        <Loader2 className="h-8 w-8 animate-spin text-wk-accent mx-auto" />
         <p className="text-sm text-muted-foreground font-sketch">Completing sign in…</p>
       </div>
     </div>

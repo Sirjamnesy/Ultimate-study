@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat } from "next/font/google";
+import { Epilogue, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { ProgressProvider } from "@/components/shared/progress-provider";
 import { LevelUpOverlay } from "@/components/shared/level-up-overlay";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const epilogue = Epilogue({
+  variable: "--font-epilogue",
   subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -16,17 +17,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://ultimate-study-nu.vercel.app"),
-  title: "Ultimate Study | AI Engineering Learning Hub",
+  title: "Wekaro | AI Engineering, one week at a time",
   description:
-    "A 26-week interactive roadmap to master AI Engineering and pass the Claude Certified Architect exam. Gamified study tracker with quizzes, XP, badges, and practice exams.",
+    "A 26-week roadmap to AI Engineering and the Claude Certified Architect exam, with quizzes, XP, badges and practice exams. Independent, not affiliated with Anthropic.",
   keywords: [
     "AI Engineering",
     "Claude Certified Architect",
@@ -37,15 +32,15 @@ export const metadata: Metadata = {
     "Anthropic",
   ],
   openGraph: {
-    title: "Ultimate Study | AI Engineering Learning Hub",
+    title: "Wekaro | AI Engineering, one week at a time",
     description:
       "26-week gamified roadmap to master AI Engineering and pass the Claude Certified Architect exam",
     type: "website",
-    siteName: "Ultimate Study",
+    siteName: "Wekaro",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ultimate Study | AI Engineering Learning Hub",
+    title: "Wekaro | AI Engineering, one week at a time",
     description:
       "26-week gamified roadmap to master AI Engineering and pass the Claude Certified Architect exam",
   },
@@ -59,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} dark h-full antialiased`}
+      className={`${epilogue.variable} ${geistMono.variable} dark h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">

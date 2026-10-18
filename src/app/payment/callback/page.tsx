@@ -60,7 +60,7 @@ function CallbackContent() {
         <div className="sketch-card bg-card p-8 rounded-2xl text-center">
           {state === "verifying" && (
             <>
-              <Loader2 className="h-12 w-12 text-violet-400 animate-spin mx-auto mb-4" />
+              <Loader2 className="h-12 w-12 text-wk-accent animate-spin mx-auto mb-4" />
               <h1 className="text-xl font-bold font-sketch mb-2">Confirming your payment…</h1>
               <p className="text-sm text-muted-foreground">This usually takes just a moment.</p>
             </>
@@ -68,16 +68,16 @@ function CallbackContent() {
 
           {state === "success" && (
             <>
-              <div className="h-16 w-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-9 w-9 text-emerald-400" />
+              <div className="h-16 w-16 rounded-full bg-wk-good/20 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-9 w-9 text-wk-good" />
               </div>
               <h1 className="text-2xl font-bold font-sketch mb-2">You&apos;re in! 🎉</h1>
               <p className="text-sm text-muted-foreground mb-6">
-                Payment confirmed. Welcome to Ultimate Study — your progress is waiting for you.
+                Payment confirmed. Welcome to Wekaro — your progress is waiting for you.
               </p>
               <Button
                 onClick={() => router.push("/")}
-                className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+                className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black gap-2"
               >
                 <Zap className="h-4 w-4" />
                 Start Learning
@@ -87,8 +87,8 @@ function CallbackContent() {
 
           {state === "failed" && (
             <>
-              <div className="h-16 w-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-                <XCircle className="h-9 w-9 text-red-400" />
+              <div className="h-16 w-16 rounded-full bg-wk-orange/20 flex items-center justify-center mx-auto mb-4">
+                <XCircle className="h-9 w-9 text-wk-accent" />
               </div>
               <h1 className="text-xl font-bold font-sketch mb-2">Payment not confirmed</h1>
               <p className="text-sm text-muted-foreground mb-6">
@@ -97,7 +97,7 @@ function CallbackContent() {
               <div className="space-y-3">
                 <Button
                   onClick={() => router.push("/checkout")}
-                  className="w-full bg-violet-600 hover:bg-violet-500 text-white"
+                  className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black"
                 >
                   Try Again
                 </Button>
@@ -120,7 +120,7 @@ export default function PaymentCallbackPage() {
     <Suspense
       fallback={
         <div className="min-h-screen notebook-bg flex items-center justify-center">
-          <Loader2 className="h-10 w-10 text-violet-400 animate-spin" />
+          <Loader2 className="h-10 w-10 text-wk-accent animate-spin" />
         </div>
       }
     >

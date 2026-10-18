@@ -50,10 +50,10 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const categoryMeta: Record<string, { title: string; color: string; bgColor: string }> = {
-  streak: { title: "Streak Badges", color: "text-orange-400", bgColor: "bg-orange-500/10 border-orange-500/30" },
-  knowledge: { title: "Knowledge Badges", color: "text-blue-400", bgColor: "bg-blue-500/10 border-blue-500/30" },
-  build: { title: "Build Badges", color: "text-emerald-400", bgColor: "bg-emerald-500/10 border-emerald-500/30" },
-  milestone: { title: "Milestone Badges", color: "text-violet-400", bgColor: "bg-violet-500/10 border-violet-500/30" },
+  streak: { title: "Streak Badges", color: "text-wk-accent", bgColor: "bg-wk-orange/10 border-wk-orange/30" },
+  knowledge: { title: "Knowledge Badges", color: "text-wk-info", bgColor: "bg-wk-info/10 border-wk-info/30" },
+  build: { title: "Build Badges", color: "text-wk-good", bgColor: "bg-wk-good/10 border-wk-good/30" },
+  milestone: { title: "Milestone Badges", color: "text-wk-accent", bgColor: "bg-wk-orange/10 border-wk-orange/30" },
 };
 
 const categoryOrder: BadgeDef["category"][] = ["streak", "knowledge", "build", "milestone"];
@@ -97,12 +97,12 @@ export default function BadgesPage() {
 
           {/* Progress bar */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-4 rounded-full bg-muted/50 border border-dashed border-border/60 overflow-hidden sketch-border-sm">
+            <div className="flex-1 h-4 rounded-full bg-muted/50 border border-solid border-border/60 overflow-hidden sketch-border-sm">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: mounted ? `${progressPct}%` : 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="h-full bg-gradient-to-r from-violet-600 to-amber-500 rounded-full"
+                className="h-full bg-wk-orange rounded-full"
               />
             </div>
             <span className="font-mono text-sm text-muted-foreground whitespace-nowrap">
@@ -135,7 +135,7 @@ export default function BadgesPage() {
                   <motion.div
                     key={badge.id}
                     variants={item}
-                    className={`relative rounded-xl border-2 border-dashed p-4 text-center transition-all ${
+                    className={`relative rounded-xl border-2 border-solid p-4 text-center transition-all ${
                       isEarned
                         ? `${group.bgColor} shadow-md`
                         : "border-border/40 bg-muted/20 opacity-60"
