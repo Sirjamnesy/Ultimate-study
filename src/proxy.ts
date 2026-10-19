@@ -23,6 +23,7 @@ const AUTH_ROUTES = [
 // Always-public routes (never redirect)
 const PUBLIC_ROUTES = [
   "/",
+  "/courses",            // Public course pages (statically generated)
   "/login",
   "/signup",
   "/auth/callback",      // OAuth callback — tokens processed client-side
