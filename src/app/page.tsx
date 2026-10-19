@@ -75,8 +75,10 @@ export default function Home() {
     return daysSince >= 7;
   }, [mounted, getLatestCheckIn]);
 
-  // Show landing/sales page for unauthenticated or anonymous (unpaid) visitors
-  if (mounted && !hasPaid) {
+  // Show the landing page to visitors who haven't paid. It is also what renders
+  // before the session check finishes, so the server HTML (search engines, link
+  // previews) is the landing page and first-time visitors never see the dashboard flash.
+  if (!mounted || !hasPaid) {
     return <LandingPage />;
   }
 
