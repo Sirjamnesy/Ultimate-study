@@ -10,7 +10,6 @@ import { Picker } from "./picker";
 import { Shelf } from "./shelf";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
-import { StickBar } from "./stick-bar";
 import { TryQuestion } from "./try-question";
 
 function i(n: number): React.CSSProperties {
@@ -453,7 +452,6 @@ export function HubHome() {
         <Questions />
         <Closing />
       </main>
-      <StickBar heroId="top" endId="start" />
       <SiteFooter home />
     </HubShell>
   );

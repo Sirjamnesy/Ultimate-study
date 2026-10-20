@@ -35,17 +35,24 @@ function NavLink({ item, ...rest }: { item: NavItem } & React.AnchorHTMLAttribut
 export function SiteHeader({ home = false }: { home?: boolean }) {
   const items = nav(home);
   const [small, setSmall] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [current, setCurrent] = useState(-1);
   const [open, setOpen] = useState(false);
   const menuBtn = useRef<HTMLButtonElement>(null);
 
-  // Tighten after the top of the page; on the homepage, mark the section in view.
+  // Tighten after the top of the page, slide away while scrolling down and come back on any scroll up;
+  // on the homepage, mark the section in view.
   useEffect(() => {
     const targets = items.map((i) =>
       i.href.startsWith("#") ? document.getElementById(i.href.slice(1)) : null
     );
+    let lastY = window.scrollY;
     function onScroll() {
-      setSmall(window.scrollY > 80);
+      const sy = window.scrollY;
+      setSmall(sy > 80);
+      if (sy < 80 || sy < lastY - 4) setHidden(false);
+      else if (sy > lastY + 4) setHidden(true);
+      if (Math.abs(sy - lastY) > 4) lastY = sy;
       const y = window.innerHeight * 0.35;
       let cur = -1;
       targets.forEach((t, i) => {
@@ -84,7 +91,7 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
 
   return (
     <>
-      <header className={`hdr${small ? " small" : ""}`} id="hdr">
+      <header className={`hdr${small ? " small" : ""}${hidden && !open ? " hide" : ""}`} id="hdr">
         <div className="hdr__in">
           <BrandTag className="brand" href={home ? "#top" : "/"} aria-label="Wekaro, home">
             <Use id="r1" />
