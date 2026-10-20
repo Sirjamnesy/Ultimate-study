@@ -213,6 +213,31 @@ function Plans({ c }: { c: Course }) {
       </section>
     );
   }
+  if (c.free) {
+    return (
+      <section className="plans sec" id="plans" aria-labelledby="pl-h">
+        <Intro id="pl-h" title="Free, all of it">
+          Make a free account and the whole {c.kind} is yours. No card, nothing to pay.
+        </Intro>
+        <div className="grid">
+          <div className="plan-grid">
+            <div className="plan plan--free" data-reveal>
+              <h3>Free</h3>
+              <p className="big">₦0</p>
+              <ul>
+                {(c.freeGets ?? []).map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+              <Link className="btn btn--ink" href="/signup">
+                Start free
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="plans sec" id="plans" aria-labelledby="pl-h">
       <Intro id="pl-h" title="Free, or the whole thing">
@@ -245,7 +270,7 @@ function Plans({ c }: { c: Course }) {
             </Link>
             <p className="note">
               Paid in naira or US dollars, by card or bank transfer, through Paystack.{" "}
-              {c.slug === "playbook" ? c.note : "No subscription."}
+              No subscription.
             </p>
           </div>
         </div>

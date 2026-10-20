@@ -16,6 +16,8 @@ export type Course = {
   kind: "course" | "read";
   /** Not open yet: shows "Tell me when it opens" instead of a price plan. */
   soon?: boolean;
+  /** Free in full with an account: one free plan, no price and no checkout. */
+  free?: boolean;
   colour: CourseColour;
   /** The folder tab label on the card. */
   tab: string;
@@ -131,15 +133,15 @@ export const courses: Course[] = [
     slug: "playbook",
     title: "The Architect’s Playbook",
     kind: "read",
+    free: true,
     colour: "k-grey",
-    tab: "PDF, 27 pages",
+    tab: "PDF, 27 pages, free",
     media: "playbook",
     short: "How real teams ship LLM systems: patterns, anti-patterns and workflows, drawn as clear diagrams.",
     promise: "How real teams ship LLM systems: design patterns, the anti-patterns that sink them, and the workflows behind production deployments, drawn as clear diagrams you can come back to.",
-    price: "₦8,000 or $6, once.",
-    full: "₦8,000 or $6",
-    cta: "Get the Playbook",
-    note: "Example price, to be confirmed.",
+    price: "Free with a free account.",
+    cta: "Read it free",
+    note: "No card needed.",
     facts: [
       ["27", "pages of diagrams and notes"],
       ["6", "big ideas, each drawn out"],
@@ -159,8 +161,7 @@ export const courses: Course[] = [
       ["pb-files.jpg", "Why an agent should not read every file"],
       ["pb-memory.jpg", "A shared memory store"]
     ],
-    freeGets: ["The cover and four sample pages, on this page", "The weekly AI news"],
-    fullGets: ["All 27 pages as a PDF you keep", "Every page we add later, free"],
+    freeGets: ["All 27 pages as a PDF you keep", "Every page we add later", "The weekly AI news"],
     faq: [
       ["What format is it?", "A PDF you download and keep. It reads well on a phone, a laptop or on paper."],
       ["Is it part of the Architect course?", "The Architect course uses it in two weeks. You can also get it on its own."]

@@ -196,12 +196,12 @@ function Courses() {
             alt="A page from The Architect’s Playbook: a layered architecture diagram"
           />
           <div>
-            <h3>Not ready to start? Take a free chapter.</h3>
+            <h3>Not ready to sign up? Get the Playbook by email.</h3>
             <p>
-              Get the structured data extraction chapter of The Architect’s Playbook by email, with the weekly AI
-              read. Leave any time.
+              The Architect’s Playbook is free. Leave your email and we’ll send it, with the weekly AI read. Leave any
+              time.
             </p>
-            <EmailForm list="free-chapter" className="gift__row" button="Send me the chapter" done="On its way" />
+            <EmailForm list="free-chapter" className="gift__row" button="Send me the Playbook" done="On its way" />
             <p className="note">Sample offer, to be confirmed.</p>
           </div>
         </div>
