@@ -321,6 +321,63 @@ function Pick() {
   );
 }
 
+const firstWeek = [
+  { t: "Make your free account", done: true },
+  { t: "Read this week’s AI news" },
+  { t: "Finish your first lesson" },
+  { t: "Answer three practice questions" },
+];
+
+function Closing() {
+  return (
+    <section className="cta" id="start" aria-labelledby="start-h">
+      <div className="cta__main">
+        <h2 id="start-h" data-reveal>
+          Start this week
+        </h2>
+        <p data-reveal style={d(1)}>
+          Make a free account. Your progress saves from the first thing you tick.
+        </p>
+        <div className="cta__act" data-reveal style={d(2)}>
+          <Link className="btn btn--ink" href="/signup">
+            Start free
+          </Link>
+          <a className="cta__alt" href="#start-here">
+            Not sure? Find your course
+          </a>
+        </div>
+        <ul className="cta__pts" data-reveal style={d(3)}>
+          <li>No card needed</li>
+          <li>First week of every course is free</li>
+          <li>Pay once, in naira or dollars</li>
+        </ul>
+      </div>
+      <div className="cta__card" data-reveal style={d(2)} aria-label="Example of a first week">
+        <p className="cta__card-h">
+          <b>Your first week</b>
+          <span>Example</span>
+        </p>
+        <ul>
+          {firstWeek.map((it) => (
+            <li key={it.t} className={it.done ? "done" : undefined}>
+              <span className="tk" aria-hidden="true" />
+              {it.t}
+              <span className="sr-only">{it.done ? " (done)" : ""}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="cta__bar" aria-hidden="true">
+          <i style={{ width: "25%" }} />
+        </div>
+        <p className="cta__card-f">
+          <span>1 of 4 done</span>
+          <span className="hot">Streak starts today</span>
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function Paying() {
   return (
     <section className="pay sec" id="paying" aria-labelledby="pay-h">
@@ -394,17 +451,7 @@ export function HubHome() {
         <Paying />
         <Try />
         <Questions />
-        <section className="cta" id="start" aria-labelledby="start-h">
-          <h2 id="start-h" data-reveal>
-            Start this week
-          </h2>
-          <div className="cta__side" data-reveal style={d(1)}>
-            <p>Make a free account. Your progress saves from the first thing you tick.</p>
-            <Link className="btn btn--ink" href="/signup">
-              Start free
-            </Link>
-          </div>
-        </section>
+        <Closing />
       </main>
       <StickBar heroId="top" endId="start" />
       <SiteFooter home />
