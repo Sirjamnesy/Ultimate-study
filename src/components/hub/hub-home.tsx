@@ -34,7 +34,11 @@ function MarqueeSet() {
 function Hero() {
   return (
     <section className="hero" id="top">
-      <div className="hero__top" />
+      <div className="hero__top">
+        <svg className="hero__wm" aria-hidden="true" focusable="false">
+          <use href="#r1" />
+        </svg>
+      </div>
       <div className="hero__bottom" />
       <h1>
         <span className="line l1">
