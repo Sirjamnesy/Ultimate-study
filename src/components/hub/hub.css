@@ -172,7 +172,7 @@ body.hub-locked { overflow: hidden; }
 .hub .news { background: var(--white); color: #000; padding-bottom: clamp(56px, 5vw, 80px); }
 .hub .stories { grid-column: 1 / -1; display: grid; gap: 10px; }
 .hub .stories details { border-radius: var(--r); background: var(--surface); transition: background-color 200ms; }
-.hub .stories details[open] { background: var(--surface-2); }
+.hub .stories details[open] { background: var(--mint); }
 .hub .stories summary { list-style: none; display: grid; grid-template-columns: 8em minmax(0,1fr) 20px; align-items: center; gap: 24px; min-height: 72px; padding: 20px 28px; border-radius: var(--r); font-weight: 700; line-height: 1.3; cursor: pointer; transition: background-color 160ms; }
 .hub .stories summary::-webkit-details-marker { display: none; }
 .hub .stories summary:hover { background: var(--surface-2); }
