@@ -30,6 +30,7 @@ const PUBLIC_ROUTES = [
   "/forgot-password",    // Anyone can request a reset
   "/reset-password",     // Token in URL hash IS the auth — must be public
   "/api/webhooks",
+  "/api/subscribe",       // Email sign-ups from the public site
 ];
 
 function isPublic(pathname: string): boolean {

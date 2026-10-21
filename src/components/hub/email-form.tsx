@@ -5,8 +5,8 @@ import { useId, useState } from "react";
 /**
  * Email sign-up box (newsletter, free chapter, "tell me when it opens").
  *
- * TODO: front-end only for now. On submit it shows a thank-you and stores
- * nothing; a later step wires `list` to the database.
+ * Posts to /api/subscribe, which stores the address against `list`
+ * in the email_signups table.
  */
 export function EmailForm({
   list,
@@ -17,7 +17,7 @@ export function EmailForm({
   done,
   buttonClassName = "btn btn--ink",
 }: {
-  /** Which list this signs up to, for when it is wired to the database. */
+  /** Which list this signs up to: newsletter, free-chapter or notify:<course slug>. */
   list: string;
   className: string;
   /** When set, the field and button sit in their own row element. */
@@ -28,7 +28,26 @@ export function EmailForm({
   buttonClassName?: string;
 }) {
   const id = useId();
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const sent = state === "sent";
+  const status = sent ? done : state === "error" ? "That didn't go through. Please try again." : "";
+
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (state === "sending" || sent) return;
+    const email = new FormData(e.currentTarget).get("email");
+    setState("sending");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, list }),
+      });
+      setState(res.ok ? "sent" : "error");
+    } catch {
+      setState("error");
+    }
+  }
 
   const fields = (
     <>
@@ -36,8 +55,8 @@ export function EmailForm({
         Email address
       </label>
       <input id={id} name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
-      <button className={buttonClassName} type="submit">
-        {sent ? done : button}
+      <button className={buttonClassName} type="submit" disabled={state === "sending"}>
+        {sent ? done : state === "error" ? "Try again" : button}
       </button>
     </>
   );
@@ -46,15 +65,12 @@ export function EmailForm({
     <form
       className={className}
       data-list={list}
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSent(true);
-      }}
+      onSubmit={submit}
     >
       {intro}
       {rowClassName ? <div className={rowClassName}>{fields}</div> : fields}
       <span className="sr" role="status">
-        {sent ? done : ""}
+        {status}
       </span>
     </form>
   );
