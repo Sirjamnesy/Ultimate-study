@@ -16,27 +16,27 @@ import { useProgress } from "@/components/shared/progress-provider";
 import { phases, weeks, type Week } from "@/lib/data/roadmap";
 
 const phaseDots: Record<string, string> = {
-  emerald: "bg-emerald-500",
-  blue: "bg-blue-500",
-  violet: "bg-violet-500",
-  amber: "bg-amber-500",
-  rose: "bg-rose-500",
+  emerald: "bg-wk-mint",
+  blue: "bg-wk-green",
+  violet: "bg-wk-orange",
+  amber: "bg-wk-orange",
+  rose: "bg-wk-orange",
 };
 
 const phaseLines: Record<string, string> = {
-  emerald: "border-emerald-500/30",
-  blue: "border-blue-500/30",
-  violet: "border-violet-500/30",
-  amber: "border-amber-500/30",
-  rose: "border-rose-500/30",
+  emerald: "border-wk-good/30",
+  blue: "border-wk-info/30",
+  violet: "border-wk-orange/30",
+  amber: "border-wk-orange/30",
+  rose: "border-wk-orange/30",
 };
 
 const phaseSticker: Record<string, string> = {
-  emerald: "border-emerald-400 text-emerald-400",
-  blue: "border-blue-400 text-blue-400",
-  violet: "border-violet-400 text-violet-400",
-  amber: "border-amber-400 text-amber-400",
-  rose: "border-rose-400 text-rose-400",
+  emerald: "border-wk-good text-wk-good",
+  blue: "border-wk-info text-wk-info",
+  violet: "border-wk-orange text-wk-accent",
+  amber: "border-wk-orange text-wk-accent",
+  rose: "border-wk-orange text-wk-accent",
 };
 
 function WeekCard({ week, completed, total }: { week: Week; completed: number; total: number }) {
@@ -46,8 +46,8 @@ function WeekCard({ week, completed, total }: { week: Week; completed: number; t
     <Link href={`/roadmap/${week.phase}/${week.id}`}>
       <div className="sketch-card bg-card p-4 group relative">
         {isDone && (
-          <span className="absolute -top-2 -right-2 text-emerald-400">
-            <CheckCircle2 className="h-5 w-5 fill-emerald-500/20" />
+          <span className="absolute -top-2 -right-2 text-wk-good">
+            <CheckCircle2 className="h-5 w-5 fill-wk-good/20" />
           </span>
         )}
         <div className="flex items-start justify-between gap-4">
@@ -58,7 +58,7 @@ function WeekCard({ week, completed, total }: { week: Week; completed: number; t
               </span>
               <h4 className="font-medium truncate">{week.title}</h4>
               {week.badge && (
-                <span className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[9px]">
+                <span className="sticker border-wk-orange/50 bg-wk-orange/10 text-wk-accent text-[9px]">
                   <Star className="h-2.5 w-2.5" />
                   {week.badge}
                 </span>
@@ -71,7 +71,7 @@ function WeekCard({ week, completed, total }: { week: Week; completed: number; t
               <span className="font-mono">
                 {completed}/{total} resources
               </span>
-              <span className="font-mono text-violet-400">+{week.xp} XP</span>
+              <span className="font-mono text-wk-accent">+{week.xp} XP</span>
               {week.examDomains && week.examDomains.length > 0 && (
                 <span className="font-mono opacity-60">
                   {week.examDomains.map((d) => `D${d}`).join(", ")}
@@ -97,7 +97,7 @@ export default function RoadmapPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-sketch text-4xl font-bold flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-violet-400" />
+            <Sparkles className="h-6 w-6 text-wk-accent" />
             Roadmap
           </h2>
           <span className="text-sm text-muted-foreground font-mono">
@@ -158,7 +158,7 @@ export default function RoadmapPage() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className={`ml-2.5 pl-6 border-l-2 border-dashed ${phaseLines[phase.color]} mt-4 space-y-3 pb-2`}
+                    className={`ml-2.5 pl-6 border-l-2 border-solid ${phaseLines[phase.color]} mt-4 space-y-3 pb-2`}
                   >
                     {phaseWeeks.map((week) => {
                       const total = week.resources.length;

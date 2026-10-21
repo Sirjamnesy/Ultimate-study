@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { Epilogue, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { ProgressProvider } from "@/components/shared/progress-provider";
 import { LevelUpOverlay } from "@/components/shared/level-up-overlay";
+import { ogImage, siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const epilogue = Epilogue({
+  variable: "--font-epilogue",
   subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -16,39 +19,43 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+const title = "Wekaro: learn AI, week by week";
+const description =
+  "Weekly AI news, courses in a sensible order, and a plan you can follow, including the Claude Certified Architect exam. Free to start. Independent, not affiliated with Anthropic.";
+const shareDescription =
+  "Weekly AI news, courses in a sensible order, and a plan you can follow. Free to start.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ultimate-study-nu.vercel.app"),
-  title: "Ultimate Study | AI Engineering Learning Hub",
-  description:
-    "A 26-week interactive roadmap to master AI Engineering and pass the Claude Certified Architect exam. Gamified study tracker with quizzes, XP, badges, and practice exams.",
+  // Built from NEXT_PUBLIC_APP_URL (see src/lib/site-url.ts); omitted when unset.
+  metadataBase: siteUrl(),
+  title,
+  description,
   keywords: [
     "AI Engineering",
     "Claude Certified Architect",
     "study roadmap",
     "certification prep",
     "AI learning",
+    "AI news",
     "Claude",
-    "Anthropic",
   ],
   openGraph: {
-    title: "Ultimate Study | AI Engineering Learning Hub",
-    description:
-      "26-week gamified roadmap to master AI Engineering and pass the Claude Certified Architect exam",
+    title,
+    description: shareDescription,
     type: "website",
-    siteName: "Ultimate Study",
+    siteName: "Wekaro",
+    images: [ogImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ultimate Study | AI Engineering Learning Hub",
-    description:
-      "26-week gamified roadmap to master AI Engineering and pass the Claude Certified Architect exam",
+    title,
+    description: shareDescription,
+    images: [ogImage.url],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -59,10 +66,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} dark h-full antialiased`}
+      className={`${epilogue.variable} ${geistMono.variable} dark h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        {/* Marks the page as scripted before paint, so the public site's entrance
+            animations start hidden instead of flashing (styles in hub.css). */}
+        <Script id="js-flag" strategy="beforeInteractive">
+          {`document.documentElement.classList.add("js")`}
+        </Script>
         <ThemeProvider>
           <ProgressProvider>
             <TooltipProvider>

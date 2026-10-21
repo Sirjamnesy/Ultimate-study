@@ -29,8 +29,8 @@ export default function ForgotPasswordPage() {
     return (
       <div className="w-full max-w-md">
         <div className="sketch-card bg-card p-8 rounded-2xl text-center">
-          <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-5 sketch-border-sm border-emerald-500/30">
-            <CheckCircle className="h-8 w-8 text-emerald-400" />
+          <div className="h-16 w-16 rounded-full bg-wk-good/10 flex items-center justify-center mx-auto mb-5 sketch-border-sm border-wk-good/30">
+            <CheckCircle className="h-8 w-8 text-wk-good" />
           </div>
           <h1 className="text-2xl font-bold font-sketch mb-2">Check your email</h1>
           <p className="text-sm text-muted-foreground mb-1">
@@ -57,8 +57,8 @@ export default function ForgotPasswordPage() {
     <div className="w-full max-w-md">
       <div className="sketch-card bg-card p-8 rounded-2xl">
         <div className="mb-6 text-center">
-          <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center mx-auto mb-4 sketch-border-sm border-violet-500/30">
-            <Mail className="h-6 w-6 text-violet-400" />
+          <div className="h-12 w-12 rounded-xl bg-wk-orange/10 flex items-center justify-center mx-auto mb-4 sketch-border-sm border-wk-orange/30">
+            <Mail className="h-6 w-6 text-wk-accent" />
           </div>
           <h1 className="text-2xl font-bold font-sketch mb-1">Forgot your password?</h1>
           <p className="text-sm text-muted-foreground">
@@ -79,12 +79,12 @@ export default function ForgotPasswordPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
             />
           </div>
 
           {error && (
-            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            <div className="text-sm text-wk-accent bg-wk-orange/10 border border-wk-orange/20 rounded-lg px-3 py-2">
               {error}
             </div>
           )}
@@ -92,7 +92,7 @@ export default function ForgotPasswordPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+            className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black gap-2"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
             {loading ? "Sending…" : "Send Reset Link"}
@@ -103,7 +103,7 @@ export default function ForgotPasswordPage() {
           Remember it?{" "}
           <Link
             href="/login"
-            className="text-violet-400 hover:text-violet-300 font-medium transition-colors"
+            className="text-wk-accent hover:text-wk-accent font-medium transition-colors"
           >
             Sign in
           </Link>

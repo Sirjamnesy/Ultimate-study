@@ -23,12 +23,14 @@ const AUTH_ROUTES = [
 // Always-public routes (never redirect)
 const PUBLIC_ROUTES = [
   "/",
+  "/courses",            // Public course pages (statically generated)
   "/login",
   "/signup",
   "/auth/callback",      // OAuth callback — tokens processed client-side
   "/forgot-password",    // Anyone can request a reset
   "/reset-password",     // Token in URL hash IS the auth — must be public
   "/api/webhooks",
+  "/api/subscribe",       // Email sign-ups from the public site
 ];
 
 function isPublic(pathname: string): boolean {

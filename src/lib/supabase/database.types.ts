@@ -62,6 +62,27 @@ export type Database = {
         }
         Relationships: []
       }
+      email_signups: {
+        Row: {
+          id: number
+          email: string
+          list: string
+          created_at: string
+        }
+        Insert: {
+          id?: never
+          email: string
+          list: string
+          created_at?: string
+        }
+        Update: {
+          id?: never
+          email?: string
+          list?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
       invite_codes: {
         Row: {
           code: string

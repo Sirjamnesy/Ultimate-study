@@ -131,8 +131,8 @@ export default function SignupPage() {
     return (
       <div className="w-full max-w-md">
         <div className="sketch-card bg-card p-8 rounded-2xl text-center">
-          <div className="h-16 w-16 rounded-full bg-violet-500/10 flex items-center justify-center mx-auto mb-5 sketch-border-sm border-violet-500/30">
-            <Mail className="h-8 w-8 text-violet-400" />
+          <div className="h-16 w-16 rounded-full bg-wk-orange/10 flex items-center justify-center mx-auto mb-5 sketch-border-sm border-wk-orange/30">
+            <Mail className="h-8 w-8 text-wk-accent" />
           </div>
           <h1 className="text-2xl font-bold font-sketch mb-2">Check your email</h1>
           <p className="text-sm text-muted-foreground mb-1">
@@ -148,7 +148,7 @@ export default function SignupPage() {
           <div className="space-y-3">
             <Button
               onClick={() => router.push("/checkout")}
-              className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+              className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black gap-2"
             >
               Continue to Checkout
             </Button>
@@ -162,7 +162,7 @@ export default function SignupPage() {
               {resendLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : resendSent ? (
-                <CheckCircle className="h-4 w-4 text-emerald-400" />
+                <CheckCircle className="h-4 w-4 text-wk-good" />
               ) : null}
               {resendSent ? "Email sent!" : resendLoading ? "Sending…" : "Resend confirmation email"}
             </Button>
@@ -172,7 +172,7 @@ export default function SignupPage() {
             Wrong email?{" "}
             <button
               onClick={() => setConfirmedEmail(null)}
-              className="text-violet-400 hover:text-violet-300 underline"
+              className="text-wk-accent hover:text-wk-accent underline"
             >
               Go back
             </button>
@@ -231,7 +231,7 @@ export default function SignupPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
             />
           </div>
 
@@ -248,7 +248,7 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min. 8 characters"
-                className="w-full px-3 py-2 pr-10 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+                className="w-full px-3 py-2 pr-10 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
               />
               <button
                 type="button"
@@ -272,7 +272,7 @@ export default function SignupPage() {
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
             />
           </div>
 
@@ -281,7 +281,7 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => { setShowInvite(!showInvite); setInviteCode(""); }}
-              className="flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-wk-accent hover:text-wk-accent transition-colors"
             >
               <Tag className="h-3.5 w-3.5" />
               {showInvite ? "Remove invite code" : "Have an invite code?"}
@@ -292,13 +292,13 @@ export default function SignupPage() {
                 value={inviteCode}
                 onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                 placeholder="e.g. FRIEND-JAMES"
-                className="mt-2 w-full px-3 py-2 rounded-lg border border-violet-500/30 bg-violet-500/5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors placeholder:font-sans"
+                className="mt-2 w-full px-3 py-2 rounded-lg border border-wk-orange/30 bg-wk-orange/5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors placeholder:font-sans"
               />
             )}
           </div>
 
           {error && (
-            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            <div className="text-sm text-wk-accent bg-wk-orange/10 border border-wk-orange/20 rounded-lg px-3 py-2">
               {error}
               {error.includes("already exists") && (
                 <span>
@@ -314,7 +314,7 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={loading || googleLoading}
-            className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+            className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black gap-2"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -333,7 +333,7 @@ export default function SignupPage() {
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-violet-400 hover:text-violet-300 font-medium transition-colors">
+          <Link href="/login" className="text-wk-accent hover:text-wk-accent font-medium transition-colors">
             Sign in
           </Link>
         </p>

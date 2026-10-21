@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Zap, Globe, Tag, ChevronDown } from "lucide-react";
+import { Loader2, Globe, Tag, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/shared/header";
 import { useProgress } from "@/components/shared/progress-provider";
+import { WekaroMark } from "@/components/brand/wekaro-logo";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -77,8 +78,8 @@ export default function CheckoutPage() {
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-md">
           <div className="sketch-card bg-card p-8 rounded-2xl text-center">
-            <div className="h-16 w-16 rounded-2xl bg-violet-600 flex items-center justify-center mx-auto mb-5 sketch-border-sm rotate-[-2deg]">
-              <Zap className="h-8 w-8 text-white" />
+            <div className="h-16 w-16 rounded-sm bg-wk-orange text-black flex items-center justify-center mx-auto mb-5">
+              <WekaroMark className="h-10 w-10" />
             </div>
 
             <h1 className="text-2xl font-bold font-sketch mb-2">One-Time Access</h1>
@@ -88,20 +89,20 @@ export default function CheckoutPage() {
 
             <div className="grid grid-cols-2 gap-3 mb-6">
               {/* NGN option */}
-              <div className="sketch-border-sm rounded-xl p-4 bg-emerald-500/5 border-emerald-500/30">
+              <div className="sketch-border-sm rounded-xl p-4 bg-wk-good/5 border-wk-good/30">
                 <div className="text-xs text-muted-foreground mb-1 flex items-center justify-center gap-1">
                   🇳🇬 Nigerian
                 </div>
-                <div className="text-2xl font-bold font-mono text-emerald-400">₦20,000</div>
+                <div className="text-2xl font-bold font-mono text-wk-good">₦20,000</div>
                 <div className="text-xs text-muted-foreground mt-1">one-time</div>
               </div>
 
               {/* USD option */}
-              <div className="sketch-border-sm rounded-xl p-4 bg-blue-500/5 border-blue-500/30">
+              <div className="sketch-border-sm rounded-xl p-4 bg-wk-info/5 border-wk-info/30">
                 <div className="text-xs text-muted-foreground mb-1 flex items-center justify-center gap-1">
                   <Globe className="h-3 w-3" /> International
                 </div>
-                <div className="text-2xl font-bold font-mono text-blue-400">$15</div>
+                <div className="text-2xl font-bold font-mono text-wk-info">$15</div>
                 <div className="text-xs text-muted-foreground mt-1">one-time</div>
               </div>
             </div>
@@ -110,7 +111,7 @@ export default function CheckoutPage() {
               <Button
                 onClick={() => handleCheckout("NGN")}
                 disabled={loading !== null}
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white gap-2 h-11"
+                className="w-full bg-wk-mint hover:bg-wk-mint/90 text-black gap-2 h-11"
               >
                 {loading === "NGN" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -122,7 +123,7 @@ export default function CheckoutPage() {
                 onClick={() => handleCheckout("USD")}
                 disabled={loading !== null}
                 variant="outline"
-                className="w-full border-blue-500/40 text-blue-400 hover:bg-blue-500/10 gap-2 h-11"
+                className="w-full border-wk-info/40 text-wk-info hover:bg-wk-info/10 gap-2 h-11"
               >
                 {loading === "USD" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -132,7 +133,7 @@ export default function CheckoutPage() {
             </div>
 
             {error && (
-              <div className="mt-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+              <div className="mt-4 text-sm text-wk-accent bg-wk-orange/10 border border-wk-orange/20 rounded-lg px-3 py-2">
                 {error}
               </div>
             )}
@@ -156,7 +157,7 @@ export default function CheckoutPage() {
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                     onKeyDown={(e) => e.key === "Enter" && handleInviteCode()}
                     placeholder="INVITE-CODE"
-                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-violet-500/40 font-mono uppercase tracking-widest placeholder:normal-case placeholder:tracking-normal"
+                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-wk-orange/40 font-mono uppercase tracking-widest placeholder:normal-case placeholder:tracking-normal"
                     disabled={inviteLoading}
                   />
                   <Button
@@ -172,7 +173,7 @@ export default function CheckoutPage() {
               )}
 
               {inviteError && (
-                <p className="mt-2 text-xs text-red-400">{inviteError}</p>
+                <p className="mt-2 text-xs text-wk-accent">{inviteError}</p>
               )}
             </div>
 

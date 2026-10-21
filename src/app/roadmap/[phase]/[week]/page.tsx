@@ -28,13 +28,13 @@ import { getWeek, getPhase, weeks, type Resource } from "@/lib/data/roadmap";
 import { use } from "react";
 
 const resourceIcons: Record<string, React.ReactNode> = {
-  course: <BookOpen className="h-4 w-4 text-blue-400" />,
-  docs: <FileText className="h-4 w-4 text-emerald-400" />,
-  video: <Video className="h-4 w-4 text-rose-400" />,
-  practice: <Wrench className="h-4 w-4 text-amber-400" />,
-  build: <Code className="h-4 w-4 text-violet-400" />,
-  quiz: <HelpCircle className="h-4 w-4 text-cyan-400" />,
-  reading: <BookOpen className="h-4 w-4 text-orange-400" />,
+  course: <BookOpen className="h-4 w-4 text-wk-info" />,
+  docs: <FileText className="h-4 w-4 text-wk-good" />,
+  video: <Video className="h-4 w-4 text-wk-accent" />,
+  practice: <Wrench className="h-4 w-4 text-wk-accent" />,
+  build: <Code className="h-4 w-4 text-wk-accent" />,
+  quiz: <HelpCircle className="h-4 w-4 text-wk-good" />,
+  reading: <BookOpen className="h-4 w-4 text-wk-accent" />,
 };
 
 const resourceLabels: Record<string, string> = {
@@ -61,7 +61,7 @@ function ResourceItem({
       layout
       className={`flex items-start gap-3 p-3 rounded-xl transition-all ${
         checked
-          ? "bg-emerald-500/5 border border-dashed border-emerald-500/20"
+          ? "bg-wk-good/5 border border-solid border-wk-good/20"
           : "hover:bg-muted/50 border border-transparent"
       }`}
     >
@@ -107,7 +107,7 @@ function ResourceItem({
             resource.url.startsWith("/quiz/") ? (
               <Link
                 href={resource.url}
-                className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                className="inline-flex items-center gap-1 text-[10px] text-wk-accent hover:text-wk-accent transition-colors font-medium"
                 onClick={(e) => e.stopPropagation()}
               >
                 Open <ExternalLink className="h-2.5 w-2.5" />
@@ -117,7 +117,7 @@ function ResourceItem({
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[10px] text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                className="inline-flex items-center gap-1 text-[10px] text-wk-accent hover:text-wk-accent transition-colors font-medium"
                 onClick={(e) => e.stopPropagation()}
               >
                 Open <ExternalLink className="h-2.5 w-2.5" />
@@ -245,7 +245,7 @@ export default function WeekPage({
               Phase {phase.id}: {phase.title}
             </span>
             {week.examDomains && week.examDomains.length > 0 && (
-              <span className="sticker border-violet-400/50 text-violet-400 bg-transparent text-[10px]">
+              <span className="sticker border-wk-orange/50 text-wk-accent bg-transparent text-[10px]">
                 {week.examDomains.map((d) => `D${d}`).join(", ")}
               </span>
             )}
@@ -271,22 +271,22 @@ export default function WeekPage({
                   {completedCount} / {totalCount}
                 </span>
                 {isComplete && (
-                  <span className="sticker border-emerald-400 text-emerald-400 bg-emerald-500/10 text-[10px]">
+                  <span className="sticker border-wk-good text-wk-good bg-wk-good/10 text-[10px]">
                     <Sparkles className="h-3 w-3" />
                     Complete!
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-violet-400" />
-                <span className="text-sm font-mono text-violet-400">
+                <Trophy className="h-4 w-4 text-wk-accent" />
+                <span className="text-sm font-mono text-wk-accent">
                   +{week.xp} XP
                 </span>
               </div>
             </div>
             <div className="sketch-progress h-3">
               <motion.div
-                className="h-full bg-gradient-to-r from-violet-500 to-emerald-400 rounded-[6px]"
+                className="h-full bg-wk-orange rounded-[6px]"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
@@ -298,7 +298,7 @@ export default function WeekPage({
                 <span className="font-sketch text-sm text-foreground">
                   &ldquo;{week.badge}&rdquo;
                 </span>{" "}
-                <Star className="inline h-3 w-3 text-amber-400" />
+                <Star className="inline h-3 w-3 text-wk-accent" />
               </p>
             )}
           </div>
@@ -326,7 +326,7 @@ export default function WeekPage({
 
               {optionalResources.length > 0 && (
                 <>
-                  <Separator className="my-4 border-dashed" />
+                  <Separator className="my-4 border-solid" />
                   <p className="font-sketch text-sm text-muted-foreground px-3 pb-2">
                     ✨ Bonus Resources
                   </p>

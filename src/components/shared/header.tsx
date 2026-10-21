@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { useTheme } from "@/components/shared/theme-provider";
 import { useProgress } from "@/components/shared/progress-provider";
 import { signOut } from "@/lib/auth/helpers";
+import { WekaroLogo } from "@/components/brand/wekaro-logo";
 
 export function Header() {
   const { theme, toggle } = useTheme();
@@ -44,7 +45,7 @@ export function Header() {
   ];
 
   return (
-    <header className="border-b-2 border-dashed border-border/60 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
+    <header className="border-b-2 border-solid border-border/60 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {backHref && backLabel ? (
@@ -57,12 +58,7 @@ export function Header() {
             </Link>
           ) : null}
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-            <div className="h-9 w-9 rounded-xl bg-violet-600 flex items-center justify-center sketch-border-sm rotate-[-2deg]">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight font-sketch">
-              Ultimate Study
-            </span>
+            <WekaroLogo className="text-2xl" />
           </Link>
         </div>
 
@@ -83,7 +79,7 @@ export function Header() {
 
           {/* XP pill — desktop */}
           {mounted && (
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono text-violet-400 mx-1">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-wk-orange/10 border border-wk-orange/20 text-xs font-mono text-wk-accent mx-1">
               <Zap className="h-3 w-3" />
               {progress.xp} XP
             </div>
@@ -150,7 +146,7 @@ export function Header() {
                     )}
                   </Button>
                   {mounted && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-sm font-mono text-violet-400">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-wk-orange/10 border border-wk-orange/20 text-sm font-mono text-wk-accent">
                       <Zap className="h-3.5 w-3.5" />
                       {progress.xp} XP
                     </div>

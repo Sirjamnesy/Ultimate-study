@@ -34,11 +34,11 @@ const domainNames: Record<number, string> = {
 };
 
 const domainColors: Record<number, string> = {
-  1: "text-rose-400",
-  2: "text-blue-400",
-  3: "text-emerald-400",
-  4: "text-amber-400",
-  5: "text-violet-400",
+  1: "text-wk-accent",
+  2: "text-wk-info",
+  3: "text-wk-good",
+  4: "text-wk-accent",
+  5: "text-wk-accent",
 };
 
 export default function QuizPage({ params }: { params: Promise<{ id: string }> }) {
@@ -182,7 +182,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
       <div className="min-h-screen notebook-bg">
         <Header />
         <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-4">
-          <span className="sticker border-amber-400 bg-amber-500/10 text-amber-400 text-xs inline-flex items-center gap-1">
+          <span className="sticker border-wk-orange bg-wk-orange/10 text-wk-accent text-xs inline-flex items-center gap-1">
             COMING SOON
           </span>
           <p className="font-sketch text-3xl">{quiz.title}</p>
@@ -231,8 +231,8 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
               <div className="pt-4">
                 <span className={`sticker text-xs ${
                   isPracticeExam
-                    ? "border-amber-400 bg-amber-500/10 text-amber-400"
-                    : "border-blue-400 bg-blue-500/10 text-blue-400"
+                    ? "border-wk-orange bg-wk-orange/10 text-wk-accent"
+                    : "border-wk-info bg-wk-info/10 text-wk-info"
                 }`}>
                   {isPracticeExam ? "FULL MOCK EXAM" : quiz.domain ? `DOMAIN ${quiz.domain}` : `WEEK ${quiz.week}`}
                 </span>
@@ -244,15 +244,15 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
 
               <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
                 <span className="flex items-center gap-1.5">
-                  <Sparkles className="h-4 w-4 text-violet-400" />
+                  <Sparkles className="h-4 w-4 text-wk-accent" />
                   {isPracticeExam ? PRACTICE_EXAM_CONFIG.totalQuestions : quiz.questions.length} questions
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-amber-400" />
+                  <Clock className="h-4 w-4 text-wk-accent" />
                   {quiz.timeMinutes} minutes
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Trophy className="h-4 w-4 text-emerald-400" />
+                  <Trophy className="h-4 w-4 text-wk-good" />
                   {quiz.passingScore}% to pass
                 </span>
               </div>
@@ -269,7 +269,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
 
               {!isPracticeExam && quiz.domain && (
                 <p className="text-xs text-muted-foreground">
-                  Score 90%+ to earn the <span className="text-amber-400 font-semibold">Domain Master</span> badge
+                  Score 90%+ to earn the <span className="text-wk-accent font-semibold">Domain Master</span> badge
                 </p>
               )}
 
@@ -301,8 +301,8 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
             {/* Top bar: timer + progress */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm">
-                <Clock className={`h-4 w-4 ${timeLeft <= 60 ? "text-red-400" : "text-amber-400"}`} />
-                <span className={`font-mono font-bold ${timeLeft <= 60 ? "text-red-400" : ""}`}>
+                <Clock className={`h-4 w-4 ${timeLeft <= 60 ? "text-wk-accent" : "text-wk-accent"}`} />
+                <span className={`font-mono font-bold ${timeLeft <= 60 ? "text-wk-accent" : ""}`}>
                   {formatTime(timeLeft)}
                 </span>
               </div>
@@ -315,7 +315,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
             {/* Progress bar */}
             <div className="sketch-progress h-2">
               <div
-                className="h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-[4px] transition-all duration-300"
+                className="h-full bg-wk-green rounded-[4px] transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -341,10 +341,10 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                       <button
                         key={i}
                         onClick={() => selectAnswer(i)}
-                        className={`w-full text-left p-3.5 rounded-xl border-2 border-dashed transition-all text-sm leading-relaxed
+                        className={`w-full text-left p-3.5 rounded-xl border-2 border-solid transition-all text-sm leading-relaxed
                           ${
                             isSelected
-                              ? "border-violet-500 bg-violet-500/10 text-foreground"
+                              ? "border-wk-orange bg-wk-orange/10 text-foreground"
                               : "border-border/60 hover:border-border hover:bg-accent/30 text-foreground/80"
                           }
                         `}
@@ -355,7 +355,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                             className={`flex h-7 w-7 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold mt-0.5
                               ${
                                 isSelected
-                                  ? "border-violet-500 bg-violet-500 text-white"
+                                  ? "border-wk-orange bg-wk-orange text-black"
                                   : "border-muted-foreground/30"
                               }
                             `}
@@ -421,9 +421,9 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                   className={`h-3 w-3 rounded-full border transition-all
                     ${
                       i === currentQ
-                        ? "bg-violet-500 border-violet-500 scale-125"
+                        ? "bg-wk-orange border-wk-orange scale-125"
                         : answers[questionList[i].id] !== undefined
-                        ? "bg-emerald-500 border-emerald-500"
+                        ? "bg-wk-mint border-wk-good"
                         : "bg-transparent border-muted-foreground/30"
                     }
                   `}
@@ -452,7 +452,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
             <div className="sketch-card bg-card p-6 sm:p-8 text-center space-y-4 relative">
               <div className="tape" />
               <div className="pt-4">
-                <span className={`font-sketch text-6xl font-bold ${result.score >= (quiz.passingScore) ? "text-emerald-400" : "text-rose-400"}`}>
+                <span className={`font-sketch text-6xl font-bold ${result.score >= (quiz.passingScore) ? "text-wk-good" : "text-wk-accent"}`}>
                   {result.score}%
                 </span>
               </div>
@@ -469,7 +469,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
 
               {result.score >= 90 && quiz.domain && (
                 <div className="inline-block">
-                  <span className="sticker border-amber-400 bg-amber-500/10 text-amber-400 text-sm">
+                  <span className="sticker border-wk-orange bg-wk-orange/10 text-wk-accent text-sm">
                     <Star className="h-3.5 w-3.5" />
                     Domain Master: D{quiz.domain} Earned!
                   </span>
@@ -512,7 +512,7 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                           <div className="flex-1 sketch-progress h-2.5">
                             <div
                               className={`h-full rounded-[4px] transition-all duration-500 ${
-                                pct >= 90 ? "bg-emerald-500" : pct >= 70 ? "bg-amber-500" : "bg-rose-500"
+                                pct >= 90 ? "bg-wk-mint" : pct >= 70 ? "bg-wk-orange" : "bg-wk-orange"
                               }`}
                               style={{ width: `${pct}%` }}
                             />
@@ -568,15 +568,15 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                 <div
                   key={question.id}
                   className={`sketch-card p-5 space-y-3 ${
-                    isCorrect ? "bg-emerald-500/5 border-emerald-500/20" : "bg-rose-500/5 border-rose-500/20"
+                    isCorrect ? "bg-wk-good/5 border-wk-good/20" : "bg-wk-orange/5 border-wk-orange/20"
                   }`}
                   style={{ borderLeftWidth: "4px", borderLeftColor: isCorrect ? "rgb(52 211 153 / 0.5)" : "rgb(251 113 133 / 0.5)" }}
                 >
                   <div className="flex items-start gap-2">
                     {isCorrect ? (
-                      <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-5 w-5 text-wk-good shrink-0 mt-0.5" />
                     ) : (
-                      <XCircle className="h-5 w-5 text-rose-400 shrink-0 mt-0.5" />
+                      <XCircle className="h-5 w-5 text-wk-accent shrink-0 mt-0.5" />
                     )}
                     <p className="font-semibold text-sm">
                       <span className="text-muted-foreground font-mono mr-2">Q{i + 1}</span>
@@ -593,9 +593,9 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                           key={oi}
                           className={`text-sm p-2 rounded-lg flex items-start gap-2 ${
                             isRight
-                              ? "bg-emerald-500/10 text-emerald-400 font-medium"
+                              ? "bg-wk-good/10 text-wk-good font-medium"
                               : isUserPick
-                              ? "bg-rose-500/10 text-rose-400 line-through opacity-70"
+                              ? "bg-wk-orange/10 text-wk-accent line-through opacity-70"
                               : "text-muted-foreground"
                           }`}
                         >
@@ -607,8 +607,8 @@ export default function QuizPage({ params }: { params: Promise<{ id: string }> }
                     })}
                   </div>
 
-                  <div className="ml-7 mt-2 p-3 bg-blue-500/5 border border-dashed border-blue-500/20 rounded-lg">
-                    <p className="text-xs text-blue-400">
+                  <div className="ml-7 mt-2 p-3 bg-wk-info/5 border border-solid border-wk-info/20 rounded-lg">
+                    <p className="text-xs text-wk-info">
                       <span className="font-semibold">Explanation:</span> {question.explanation}
                     </p>
                   </div>

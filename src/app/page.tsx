@@ -28,19 +28,19 @@ import { phases, weeks, getTotalResources, getTotalXP } from "@/lib/data/roadmap
 import { getXPProgress, badges as allBadges } from "@/lib/gamification/xp-engine";
 
 const phaseColors: Record<string, string> = {
-  emerald: "border-emerald-500 text-emerald-500",
-  blue: "border-blue-500 text-blue-500",
-  violet: "border-violet-500 text-violet-500",
-  amber: "border-amber-500 text-amber-500",
-  rose: "border-rose-500 text-rose-500",
+  emerald: "border-wk-good text-wk-good",
+  blue: "border-wk-info text-wk-info",
+  violet: "border-wk-orange text-wk-accent",
+  amber: "border-wk-orange text-wk-accent",
+  rose: "border-wk-orange text-wk-accent",
 };
 
 const phaseBgs: Record<string, string> = {
-  emerald: "bg-emerald-500/5",
-  blue: "bg-blue-500/5",
-  violet: "bg-violet-500/5",
-  amber: "bg-amber-500/5",
-  rose: "bg-rose-500/5",
+  emerald: "bg-wk-good/5",
+  blue: "bg-wk-info/5",
+  violet: "bg-wk-orange/5",
+  amber: "bg-wk-orange/5",
+  rose: "bg-wk-orange/5",
 };
 
 const container = {
@@ -75,8 +75,10 @@ export default function Home() {
     return daysSince >= 7;
   }, [mounted, getLatestCheckIn]);
 
-  // Show landing/sales page for unauthenticated or anonymous (unpaid) visitors
-  if (mounted && !hasPaid) {
+  // Show the landing page to visitors who haven't paid. It is also what renders
+  // before the session check finishes, so the server HTML (search engines, link
+  // previews) is the landing page and first-time visitors never see the dashboard flash.
+  if (!mounted || !hasPaid) {
     return <LandingPage />;
   }
 
@@ -111,14 +113,14 @@ export default function Home() {
           </span>
 
           <div className="inline-block">
-            <span className="sticker border-violet-400 bg-violet-500/10 text-violet-400 font-mono text-xs tracking-wider">
+            <span className="sticker border-wk-orange bg-wk-orange/10 text-wk-accent font-mono text-xs tracking-wider">
               <Pencil className="h-3 w-3" />
               26-WEEK AI ENGINEERING JOURNEY
             </span>
           </div>
           <h2 className="text-4xl sm:text-6xl font-bold tracking-tight">
             Become a{" "}
-            <span className="sketch-underline font-sketch text-violet-400 text-5xl sm:text-7xl">
+            <span className="sketch-underline font-sketch text-wk-accent text-5xl sm:text-7xl">
               Claude Architect
             </span>
           </h2>
@@ -149,28 +151,28 @@ export default function Home() {
               icon: <Trophy className="h-5 w-5" />,
               value: xp,
               label: `/ ${totalXP.toLocaleString()} XP`,
-              color: "text-violet-400 bg-violet-500/10",
+              color: "text-wk-accent bg-wk-orange/10",
               rotate: "-1deg",
             },
             {
               icon: <Flame className="h-5 w-5" />,
               value: streak,
               label: "Day Streak",
-              color: "text-amber-400 bg-amber-500/10",
+              color: "text-wk-accent bg-wk-orange/10",
               rotate: "0.5deg",
             },
             {
               icon: <BookOpen className="h-5 w-5" />,
               value: completedCount,
               label: `/ ${totalResources} Done`,
-              color: "text-emerald-400 bg-emerald-500/10",
+              color: "text-wk-good bg-wk-good/10",
               rotate: "-0.5deg",
             },
             {
               icon: <GraduationCap className="h-5 w-5" />,
               value: `Lv.${levelInfo.current.level}`,
               label: levelInfo.current.title,
-              color: "text-blue-400 bg-blue-500/10",
+              color: "text-wk-info bg-wk-info/10",
               rotate: "1deg",
               href: undefined as string | undefined,
             },
@@ -216,7 +218,7 @@ export default function Home() {
             </div>
             <div className="sketch-progress h-3">
               <div
-                className="h-full bg-gradient-to-r from-violet-500 to-violet-400 rounded-[6px] transition-all duration-500"
+                className="h-full bg-wk-orange rounded-[6px] transition-all duration-500"
                 style={{ width: `${levelInfo.progress}%` }}
               />
             </div>
@@ -235,11 +237,11 @@ export default function Home() {
         {showCheckInPrompt && (
           <motion.div variants={item}>
             <Link href="/check-ins">
-              <div className="sketch-card bg-emerald-500/5 border-emerald-500/30 border-l-4 p-4 hover:scale-[1.01] transition-transform cursor-pointer">
+              <div className="sketch-card bg-wk-good/5 border-wk-good/30 border-l-4 p-4 hover:scale-[1.01] transition-transform cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-emerald-500/10">
-                      <ClipboardCheck className="h-5 w-5 text-emerald-400" />
+                    <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-wk-good/10">
+                      <ClipboardCheck className="h-5 w-5 text-wk-good" />
                     </div>
                     <div>
                       <p className="font-sketch text-lg font-bold">
@@ -260,11 +262,11 @@ export default function Home() {
         {/* Badge Summary */}
         <motion.div variants={item}>
           <Link href="/badges">
-            <div className="sketch-card bg-amber-500/5 border-amber-500/30 p-4 relative hover:scale-[1.01] transition-transform cursor-pointer">
+            <div className="sketch-card bg-wk-orange/5 border-wk-orange/30 p-4 relative hover:scale-[1.01] transition-transform cursor-pointer">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-amber-500/10">
-                    <Trophy className="h-5 w-5 text-amber-400" />
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-wk-orange/10">
+                    <Trophy className="h-5 w-5 text-wk-accent" />
                   </div>
                   <div>
                     <p className="font-sketch text-lg font-bold">
@@ -284,10 +286,10 @@ export default function Home() {
         {/* Current Week */}
         {currentWeekData && (
           <motion.div variants={item}>
-            <div className="sketch-card bg-violet-500/5 border-violet-500/30 p-5 relative">
+            <div className="sketch-card bg-wk-orange/5 border-wk-orange/30 p-5 relative">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                  <span className="sticker border-violet-400/50 bg-violet-500/10 text-violet-400 text-[10px] mb-2">
+                  <span className="sticker border-wk-orange/50 bg-wk-orange/10 text-wk-accent text-[10px] mb-2">
                     <Target className="h-3 w-3" />
                     THIS WEEK
                   </span>
@@ -307,9 +309,9 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
                 <span>{currentWeekData.resources.length} resources</span>
-                <span className="font-mono text-violet-400">+{currentWeekData.xp} XP</span>
+                <span className="font-mono text-wk-accent">+{currentWeekData.xp} XP</span>
                 {currentWeekData.badge && (
-                  <span className="sticker border-amber-400/50 bg-amber-500/10 text-amber-400 text-[10px]">
+                  <span className="sticker border-wk-orange/50 bg-wk-orange/10 text-wk-accent text-[10px]">
                     <Star className="h-2.5 w-2.5" />
                     {currentWeekData.badge}
                   </span>
@@ -322,7 +324,7 @@ export default function Home() {
         {/* Phase Overview */}
         <motion.section variants={item} className="space-y-4">
           <h3 className="font-sketch text-3xl font-bold flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-violet-400" />
+            <Sparkles className="h-5 w-5 text-wk-accent" />
             Your Learning Path
           </h3>
           <div className="space-y-3">
@@ -365,7 +367,7 @@ export default function Home() {
                           {phase.description}
                         </p>
                         {completedInPhase > 0 && (
-                          <p className="text-xs font-mono text-emerald-400">
+                          <p className="text-xs font-mono text-wk-good">
                             {completedInPhase}/{phaseResources} completed
                           </p>
                         )}
@@ -377,7 +379,7 @@ export default function Home() {
                         <p className="font-mono text-xs">
                           {phaseResources} resources
                         </p>
-                        <p className="font-mono text-xs text-violet-400">
+                        <p className="font-mono text-xs text-wk-accent">
                           {phaseXP} XP
                         </p>
                       </div>
@@ -391,11 +393,11 @@ export default function Home() {
 
         {/* Exam Card */}
         <motion.div variants={item}>
-          <div className="sketch-card bg-gradient-to-br from-violet-500/5 to-blue-500/5 p-6 relative">
+          <div className="sketch-card bg-wk-orange/5 p-6 relative">
             <div className="tape" />
             <div className="flex items-start gap-4 pt-2">
-              <div className="h-14 w-14 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 sketch-border-sm border-violet-500/30">
-                <GraduationCap className="h-7 w-7 text-violet-400" />
+              <div className="h-14 w-14 rounded-2xl bg-wk-orange/10 flex items-center justify-center shrink-0 sketch-border-sm border-wk-orange/30">
+                <GraduationCap className="h-7 w-7 text-wk-accent" />
               </div>
               <div className="space-y-2">
                 <h4 className="font-sketch text-2xl font-bold">
@@ -405,13 +407,16 @@ export default function Home() {
                   5 domains &middot; 30 task statements &middot; 6 scenarios &middot;
                   Passing: 720/1000
                 </p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted-foreground">
+                  Independent. Not affiliated with Anthropic.
+                </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {[
-                    { name: "Agentic Architecture", weight: "27%", color: "border-rose-400 text-rose-400" },
-                    { name: "Tool Design & MCP", weight: "18%", color: "border-blue-400 text-blue-400" },
-                    { name: "Claude Code", weight: "20%", color: "border-emerald-400 text-emerald-400" },
-                    { name: "Prompt Engineering", weight: "20%", color: "border-amber-400 text-amber-400" },
-                    { name: "Context & Reliability", weight: "15%", color: "border-violet-400 text-violet-400" },
+                    { name: "Agentic Architecture", weight: "27%", color: "border-wk-orange text-wk-accent" },
+                    { name: "Tool Design & MCP", weight: "18%", color: "border-wk-info text-wk-info" },
+                    { name: "Claude Code", weight: "20%", color: "border-wk-good text-wk-good" },
+                    { name: "Prompt Engineering", weight: "20%", color: "border-wk-orange text-wk-accent" },
+                    { name: "Context & Reliability", weight: "15%", color: "border-wk-orange text-wk-accent" },
                   ].map((d) => (
                     <span
                       key={d.name}

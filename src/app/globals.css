@@ -6,9 +6,20 @@
 
 @theme inline {
   --color-background: var(--background);
+  /* Wekaro brand colours */
+  --color-wk-white: var(--wk-white);
+  --color-wk-black: var(--wk-black);
+  --color-wk-grey: var(--wk-grey);
+  --color-wk-orange: var(--wk-orange);
+  --color-wk-mint: var(--wk-mint);
+  --color-wk-green: var(--wk-green);
+  /* Theme-aware text roles: each passes WCAG AA on its own ground */
+  --color-wk-accent: var(--wk-accent);
+  --color-wk-good: var(--wk-good);
+  --color-wk-info: var(--wk-info);
   --color-foreground: var(--foreground);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-sans: var(--font-epilogue), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -48,73 +59,93 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ========= WEKARO TOKENS =========
+   Six colours. Mint = correct / new. Orange = attention / AI news.
+   Never white text on orange, never orange text on white. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --wk-white: #ffffff;
+  --wk-black: #000000;
+  --wk-grey: #c5c5c5;
+  --wk-orange: #ff6831;
+  --wk-mint: #a7ff9c;
+  --wk-green: #0d5c3a;
+
+  /* Light ground: text black, rules grey, links deep green */
+  --wk-accent: #000000;
+  --wk-good: #0d5c3a;
+  --wk-info: #0d5c3a;
+
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #f2f2f2;
+  --secondary-foreground: #000000;
+  --muted: #f2f2f2;
+  --muted-foreground: #4d4d4d;
+  --accent: #f2f2f2;
+  --accent-foreground: #000000;
+  --destructive: #b3261e;
+  --border: #c5c5c5;
+  --input: #c5c5c5;
+  --ring: #0d5c3a;
+  --chart-1: #000000;
+  --chart-2: #ff6831;
+  --chart-3: #0d5c3a;
+  --chart-4: #a7ff9c;
+  --chart-5: #c5c5c5;
+  --radius: 0.25rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #000000;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f2f2f2;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #c5c5c5;
+  --sidebar-ring: #0d5c3a;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Dark ground: secondary grey, correct mint, attention orange */
+  --wk-accent: #ff6831;
+  --wk-good: #a7ff9c;
+  --wk-info: #c5c5c5;
+
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #0d0d0d;
+  --card-foreground: #ffffff;
+  --popover: #0d0d0d;
+  --popover-foreground: #ffffff;
+  --primary: #ff6831;
+  --primary-foreground: #000000;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #c5c5c5;
+  --accent: #1f1f1f;
+  --accent-foreground: #ffffff;
+  --destructive: #ff6831;
+  --border: rgb(197 197 197 / 0.28);
+  --input: rgb(197 197 197 / 0.36);
+  --ring: #ff6831;
+  --chart-1: #ffffff;
+  --chart-2: #ff6831;
+  --chart-3: #a7ff9c;
+  --chart-4: #c5c5c5;
+  --chart-5: #0d5c3a;
+  --sidebar: #0d0d0d;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ff6831;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1f1f1f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(197 197 197 / 0.28);
+  --sidebar-ring: #ff6831;
 }
 
 @layer base {
@@ -127,95 +158,64 @@
   html {
     @apply font-sans;
   }
+  h1, h2, h3 {
+    letter-spacing: -0.035em;
+  }
 }
 
-/* ========= SKETCH DESIGN SYSTEM ========= */
+/* ========= WEKARO COMPONENT CLASSES =========
+   These keep the class names the pages already use (they came from the
+   old notebook look) but render the flat Wekaro style. */
 
-/* Hand-drawn font for headings & decorative text */
+/* Display type: Epilogue 900, tracked tight */
 .font-sketch {
-  font-family: var(--font-caveat), "Segoe Print", "Comic Sans MS", cursive;
-  letter-spacing: 0.02em;
+  font-family: var(--font-epilogue), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
 }
 
-/* Notebook paper background - light mode */
-:root {
-  --notebook-line: oklch(0.92 0 0);
-  --notebook-margin: oklch(0.85 0.08 20);
-}
-.dark {
-  --notebook-line: oklch(0.22 0 0);
-  --notebook-margin: oklch(0.35 0.06 20);
-}
-
+/* Page ground: plain, no ruled paper */
 .notebook-bg {
   position: relative;
 }
-.notebook-bg::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      transparent,
-      transparent 30.5px,
-      var(--notebook-line) 30.5px,
-      var(--notebook-line) 32.5px
-    );
-  background-size: 100% 32px;
-  opacity: 0.5;
-  filter: blur(0.4px);
-  pointer-events: none;
-  z-index: 0;
-}
 
-/* Sketch-style borders - rough, hand-drawn feel */
+/* Flat borders */
 .sketch-border {
   border: 2px solid currentColor;
-  border-radius: 12px 8px 14px 6px;
-  box-shadow:
-    2px 2px 0px 0px oklch(0 0 0 / 8%),
-    inset 0 0 0 1px oklch(1 0 0 / 3%);
+  border-radius: var(--radius);
 }
-.dark .sketch-border {
-  box-shadow:
-    2px 2px 0px 0px oklch(0 0 0 / 30%),
-    inset 0 0 0 1px oklch(1 0 0 / 3%);
-}
-
 .sketch-border-sm {
-  border: 1.5px solid currentColor;
-  border-radius: 8px 6px 10px 5px;
+  border: 2px solid currentColor;
+  border-radius: var(--radius);
 }
 
-/* Sketch-style cards */
+/* Cards: flat 2px rule, darkens on hover */
 .sketch-card {
-  border: 2px dashed var(--border);
-  border-radius: 14px 8px 12px 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 .sketch-card:hover {
-  transform: rotate(-0.5deg) translateY(-2px);
-  box-shadow: 4px 4px 0px 0px oklch(0.5 0.2 280 / 15%);
+  border-color: var(--foreground);
 }
 
-/* Sticker-style badges */
+/* Labels: mono caps tag */
 .sticker {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px 16px 22px 14px;
-  border: 2px solid;
-  font-weight: 600;
-  font-size: 0.75rem;
-  transform: rotate(-1deg);
-  transition: transform 0.15s ease;
-}
-.sticker:hover {
-  transform: rotate(1deg) scale(1.05);
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  border: 1.5px solid;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-/* Underline sketch effect */
+/* Solid bar under a word, like the week bar in the wordmark */
 .sketch-underline {
   position: relative;
   display: inline-block;
@@ -223,58 +223,40 @@
 .sketch-underline::after {
   content: "";
   position: absolute;
-  bottom: -4px;
-  left: -2px;
-  right: -2px;
-  height: 4px;
-  background: oklch(0.65 0.25 280);
-  border-radius: 3px 1px 4px 2px;
-  transform: rotate(-0.5deg);
-  opacity: 0.7;
+  bottom: -0.08em;
+  left: 0;
+  right: 0.04em;
+  height: 0.11em;
+  background: var(--wk-orange);
 }
 
-/* Wiggle animation for playful elements */
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-2deg); }
-  50% { transform: rotate(2deg); }
-}
+/* Kept for compatibility; no wobble in the Wekaro look */
 .animate-wiggle {
-  animation: wiggle 2s ease-in-out infinite;
+  animation: none;
 }
-
-/* Doodle decorations */
 .doodle-star::before {
-  content: "✦";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 1rem;
-  opacity: 0.5;
+  content: none;
 }
 
-/* Progress bar sketch style override */
+/* Progress track: flat grey */
 .sketch-progress {
-  border: 1.5px dashed var(--border);
-  border-radius: 8px 6px 10px 4px;
+  border: 0;
+  border-radius: 2px;
   overflow: hidden;
-  background: oklch(0 0 0 / 5%);
+  background: rgb(197 197 197 / 0.35);
 }
 .dark .sketch-progress {
-  background: oklch(1 0 0 / 5%);
+  background: rgb(197 197 197 / 0.18);
 }
 
-/* Tape effect for sticky-note feel */
+/* Completed marker: a mint bar along the top edge (mint = done) */
 .tape::before {
   content: "";
   position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-2deg);
-  width: 60px;
-  height: 12px;
-  background: oklch(0.85 0.04 90 / 60%);
-  border-radius: 2px;
-}
-.dark .tape::before {
-  background: oklch(0.45 0.04 90 / 40%);
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 6px;
+  background: var(--wk-mint);
+  border-radius: var(--radius) var(--radius) 0 0;
 }

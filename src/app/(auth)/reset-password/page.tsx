@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
     return (
       <div className="w-full max-w-md">
         <div className="sketch-card bg-card p-8 rounded-2xl text-center">
-          <Loader2 className="h-10 w-10 animate-spin text-violet-400 mx-auto mb-4" />
+          <Loader2 className="h-10 w-10 animate-spin text-wk-accent mx-auto mb-4" />
           <p className="text-sm text-muted-foreground font-sketch">Verifying reset link…</p>
         </div>
       </div>
@@ -84,8 +84,8 @@ export default function ResetPasswordPage() {
     return (
       <div className="w-full max-w-md">
         <div className="sketch-card bg-card p-8 rounded-2xl text-center">
-          <div className="h-14 w-14 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">
-            <KeyRound className="h-7 w-7 text-red-400" />
+          <div className="h-14 w-14 rounded-full bg-wk-orange/10 flex items-center justify-center mx-auto mb-4">
+            <KeyRound className="h-7 w-7 text-wk-accent" />
           </div>
           <h1 className="text-xl font-bold font-sketch mb-2">Link expired or invalid</h1>
           <p className="text-sm text-muted-foreground mb-6">
@@ -93,7 +93,7 @@ export default function ResetPasswordPage() {
           </p>
           <Button
             onClick={() => router.push("/forgot-password")}
-            className="w-full bg-violet-600 hover:bg-violet-500 text-white"
+            className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black"
           >
             Request new link
           </Button>
@@ -107,8 +107,8 @@ export default function ResetPasswordPage() {
     return (
       <div className="w-full max-w-md">
         <div className="sketch-card bg-card p-8 rounded-2xl text-center">
-          <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-5">
-            <CheckCircle className="h-9 w-9 text-emerald-400" />
+          <div className="h-16 w-16 rounded-full bg-wk-good/10 flex items-center justify-center mx-auto mb-5">
+            <CheckCircle className="h-9 w-9 text-wk-good" />
           </div>
           <h1 className="text-2xl font-bold font-sketch mb-2">Password updated!</h1>
           <p className="text-sm text-muted-foreground">Taking you to your dashboard…</p>
@@ -122,8 +122,8 @@ export default function ResetPasswordPage() {
     <div className="w-full max-w-md">
       <div className="sketch-card bg-card p-8 rounded-2xl">
         <div className="mb-6 text-center">
-          <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center mx-auto mb-4 sketch-border-sm border-violet-500/30">
-            <KeyRound className="h-6 w-6 text-violet-400" />
+          <div className="h-12 w-12 rounded-xl bg-wk-orange/10 flex items-center justify-center mx-auto mb-4 sketch-border-sm border-wk-orange/30">
+            <KeyRound className="h-6 w-6 text-wk-accent" />
           </div>
           <h1 className="text-2xl font-bold font-sketch mb-1">Set new password</h1>
           <p className="text-sm text-muted-foreground">Choose a strong password for your account.</p>
@@ -143,7 +143,7 @@ export default function ResetPasswordPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min. 8 characters"
-                className="w-full px-3 py-2 pr-10 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+                className="w-full px-3 py-2 pr-10 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
               />
               <button
                 type="button"
@@ -167,12 +167,12 @@ export default function ResetPasswordPage() {
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-wk-orange/50 focus:border-wk-orange transition-colors"
             />
           </div>
 
           {error && (
-            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            <div className="text-sm text-wk-accent bg-wk-orange/10 border border-wk-orange/20 rounded-lg px-3 py-2">
               {error}
             </div>
           )}
@@ -180,7 +180,7 @@ export default function ResetPasswordPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-violet-600 hover:bg-violet-500 text-white gap-2"
+            className="w-full bg-wk-orange hover:bg-wk-orange/90 text-black gap-2"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />}
             {loading ? "Updating…" : "Update Password"}
